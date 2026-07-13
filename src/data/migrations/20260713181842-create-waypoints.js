@@ -1,0 +1,44 @@
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Waypoints', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      mapId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Maps',
+          key: 'id'
+        },
+        onDelete: 'CASCADE'
+      },
+      positionX: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      positionY: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Waypoints');
+  }
+};
