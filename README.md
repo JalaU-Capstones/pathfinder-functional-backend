@@ -66,3 +66,26 @@ When running the application locally (`NODE_ENV !== 'production'`), you can acce
 
 - **Swagger UI:** [http://localhost:3000/api-docs](http://localhost:3000/api-docs) (replace `3000` with your configured port)
 - **Raw OpenAPI JSON:** [http://localhost:3000/api-docs.json](http://localhost:3000/api-docs.json)
+
+## Available Scripts
+
+### Database Migrations
+
+For a fresh setup, the correct order of operations is:
+1. Start the Docker database container (`docker compose up -d`).
+2. Run database migrations (`npm run db:migrate`).
+3. Seed the database (`npm run db:seed`).
+
+Here are all the database-related scripts defined in the project:
+
+- `npm run db:migrate`: Runs all pending Sequelize migrations to update the database schema.
+- `npm run db:migrate:undo`: Reverts the last executed migration.
+- `npm run db:migrate:undo:all`: Reverts all executed migrations, dropping the created tables.
+- `npm run db:seed`: Runs all seeders to populate the database with initial dummy data.
+- `npm run db:seed:undo`: Reverts all seeders, removing the populated initial data.
+- `npm run db:test-connection`: Tests the connection to the PostgreSQL database.
+
+### Code Quality & Testing
+
+- `npm run lint`: Runs ESLint across the codebase to check for code quality and adherence to functional programming rules.
+- `npm test`: Runs the Jest test suite to verify application functionality.
