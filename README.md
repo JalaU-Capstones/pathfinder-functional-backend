@@ -59,3 +59,10 @@ npm run dev
 ```
 
 The application will run on the port specified in your `.env` (default is 3000).
+
+## API Documentation (Development)
+
+When running the application locally (`NODE_ENV !== 'production'`), you can access the interactive Swagger UI to explore and test the API endpoints:
+
+- **Swagger UI:** [http://localhost:3000/api-docs](http://localhost:3000/api-docs) (replace `3000` with your configured port)
+- **Raw OpenAPI JSON:** [http://localhost:3000/api-docs.json](http://localhost:3000/api-docs.json)
