@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Phase 1 Complete Data Model setup.
+- Database migrations and Sequelize models for User, Map, Obstacle, Waypoint, Route.
+- Centralized model association loading in `src/data/models/index.js`.
+- Demo seeder script for initial data population.
+- Added `sequelize-cli` tooling and `.sequelizerc` configuration.
+- Added NPM scripts for migrations and seeding (`db:migrate`, `db:seed`, etc.).
 - Swagger (OpenAPI 3.0) integration for API documentation during development.
 - Base reusable schemas for Map, Obstacle, Waypoint, Route, and User.
 
