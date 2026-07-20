@@ -12,6 +12,12 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Linting:** Configured ESLint to enforce immutable and pure functional code styles.
 - **Documentation:** Integrated `swagger-ui-express` and `swagger-jsdoc` to generate OpenAPI 3.0 docs from route annotations. This UI is restricted to development environments only.
 
+## 2026-07-20
+- **Phase 2 (Map CRUD):** Established reference architecture for CRUD pipelines.
+- **Repository Pattern:** Isolated all Sequelize calls into `src/data/repositories` to keep the Service layer pure.
+- **Error Factory:** Created `src/utils/errors.js` and `createAppError` factory instead of using OOP `class` constructs.
+- **HTTP Response Helper:** Centralized error-to-status mapping into `src/utils/httpResponse.js` to eliminate duplication across controllers.
+
 ## 2026-07-13
 - **Phase 1 (Data Model):** Created database schema migrations and Sequelize models.
 - **Primary Key Strategy:** Selected Serial Integers (`id: INTEGER`) to maintain a 1:1 mapping with the OpenAPI specification created in Phase 0.
