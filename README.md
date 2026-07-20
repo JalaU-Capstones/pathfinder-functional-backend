@@ -60,6 +60,19 @@ npm run dev
 
 The application will run on the port specified in your `.env` (default is 3000).
 
+## API Endpoints
+
+The following entities have been implemented following our purely functional, three-layer architecture:
+
+### Maps
+- `POST /api/maps` - Create a new map
+- `GET /api/maps` - List all maps
+- `GET /api/maps/:id` - Get a map by ID
+- `PUT /api/maps/:id` - Update a map by ID
+- `DELETE /api/maps/:id` - Delete a map by ID
+
+For detailed request/response schemas, refer to the Swagger UI below.
+
 ## API Documentation (Development)
 
 When running the application locally (`NODE_ENV !== 'production'`), you can access the interactive Swagger UI to explore and test the API endpoints:

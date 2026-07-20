@@ -1,5 +1,5 @@
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     const now = new Date();
 
     await queryInterface.bulkInsert('Users', [{
@@ -37,7 +37,7 @@ module.exports = {
     ]);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.bulkDelete('Routes', null, {});
     await queryInterface.bulkDelete('Waypoints', null, {});
     await queryInterface.bulkDelete('Obstacles', null, {});

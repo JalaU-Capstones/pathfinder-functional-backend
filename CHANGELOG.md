@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 2 Complete Map CRUD:**
+  - Implemented full Create, Read, Update, Delete for the Map entity.
+  - Implemented Repository pattern for database access (`src/data/repositories/mapRepository.js`).
+  - Implemented functional Service layer for business logic and data mapping (`src/business/services/mapService.js`).
+  - Added shared utilities for error handling and HTTP response mapping.
+  - Full Jest test coverage for Service and Repository layers (Happy path).
+  - Swagger JSDoc route annotations for all Map endpoints.
 - Phase 1 Complete Data Model setup.
 - Database migrations and Sequelize models for User, Map, Obstacle, Waypoint, Route.
 - Centralized model association loading in `src/data/models/index.js`.

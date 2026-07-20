@@ -21,10 +21,13 @@ This project is an academic capstone for Jala University's "Programming 4" modul
 - **Start Date:** July 13, 2026
 - **Due Date:** Before September 4, 2026
 
-## Architecture Responsibilities
-1. **Presentation (`src/presentation/`):** Handles HTTP requests/responses, routes, and controllers. No business logic here.
-2. **Business Logic (`src/business/`):** Pure functional services, pathfinding algorithms, domain rules.
-3. **Data Access (`src/data/`):** Sequelize models, repository functions, database interactions.
+## Architecture Responsibilities & Non-Negotiable Rules
+1. **Presentation (`src/presentation/`):** Handles HTTP requests/responses, routes, and controllers. No business logic here. *Rule:* Delegate all error-to-status mapping to the shared HTTP response helper.
+2. **Business Logic (`src/business/`):** Pure functional services, pathfinding algorithms, domain rules. *Rule:* Contains mapping functions (`toApiShape`/`toDbShape`).
+3. **Data Access (`src/data/`):** Sequelize models, repository functions, database interactions. *Rule:* Repositories are the *only* place that call Sequelize directly.
+4. **Utilities (`src/utils/`):** Shared pure functions (like the Error Factory and HTTP Response Helper) to eliminate duplication.
+5. **Git Flow:** All feature work must happen on dedicated `feature/<entity>-crud` branches, fully tested and linted before PR.
+6. **Design Patterns:** All applied design patterns (Repository, Error Factory) must be explicitly documented in `.docs/pattern-design/`.
 
 ## Documentation Requirements
 Every technical decision must be documented in the `.docs/` directory.
