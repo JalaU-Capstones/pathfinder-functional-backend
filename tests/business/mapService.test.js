@@ -23,6 +23,7 @@ describe('Map Service', () => {
         name: 'Test Map',
         width: 100,
         height: 100,
+        obstacles: [],
         createdAt: '2026-07-20T00:00:00.000Z',
         updatedAt: '2026-07-20T00:00:00.000Z',
         toJSON: function() { return this; }
@@ -42,6 +43,7 @@ describe('Map Service', () => {
         id: 1,
         name: 'Test Map',
         dimensions: { width: 100, height: 100 },
+        obstacles: [],
         createdAt: '2026-07-20T00:00:00.000Z',
         updatedAt: '2026-07-20T00:00:00.000Z'
       });
@@ -62,6 +64,7 @@ describe('Map Service', () => {
         name: 'Test Map',
         width: 100,
         height: 100,
+        obstacles: [{ positionX: 3, positionY: 5 }],
         toJSON: function() { return this; }
       };
 
@@ -72,6 +75,7 @@ describe('Map Service', () => {
       expect(mapRepository.getMapById).toHaveBeenCalledWith(1);
       expect(result.id).toBe(1);
       expect(result.dimensions.width).toBe(100);
+      expect(result.obstacles).toEqual([{ x: 3, y: 5 }]);
     });
 
     it('should throw NOT_FOUND error when map does not exist', async () => {
