@@ -78,6 +78,13 @@ The following entities have been implemented following our purely functional, th
 - `PUT /api/obstacles/:id` - Update an obstacle by ID
 - `DELETE /api/obstacles/:id` - Delete an obstacle by ID
 
+### Waypoints
+- `POST /api/waypoints` - Create a new waypoint
+- `GET /api/waypoints` - List all waypoints (supports optional `?mapId=` query filter)
+- `GET /api/waypoints/:id` - Get a waypoint by ID
+- `PUT /api/waypoints/:id` - Update a waypoint by ID
+- `DELETE /api/waypoints/:id` - Delete a waypoint by ID
+
 For detailed request/response schemas, refer to the Swagger UI below.
 
 ## API Documentation (Development)
