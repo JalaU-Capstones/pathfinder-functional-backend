@@ -91,6 +91,13 @@ The following entities have been implemented following our purely functional, th
 - `GET /api/routes/:id` - Get a route by ID
 - `DELETE /api/routes/:id` - Delete a route by ID
 
+### Users
+- `POST /api/users` - Create a new user account
+- `GET /api/users` - Retrieve a list of all users
+- `GET /api/users/:id` - Retrieve a user by ID
+- `PUT /api/users/:id` - Update user account details
+- `DELETE /api/users/:id` - Delete a user account
+
 For detailed request/response schemas, refer to the Swagger UI below.
 
 ## API Documentation (Development)

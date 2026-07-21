@@ -6,6 +6,7 @@ const mapRoutes = require('./presentation/routes/mapRoutes');
 const obstacleRoutes = require('./presentation/routes/obstacleRoutes');
 const waypointRoutes = require('./presentation/routes/waypointRoutes');
 const routeRoutes = require('./presentation/routes/routeRoutes');
+const userRoutes = require('./presentation/routes/userRoutes');
 
 const createApp = () => {
   const app = express();
@@ -30,6 +31,7 @@ const createApp = () => {
   app.use('/api/obstacles', obstacleRoutes);
   app.use('/api/waypoints', waypointRoutes);
   app.use('/api/routes', routeRoutes);
+  app.use('/api/users', userRoutes);
 
   return app;
 };

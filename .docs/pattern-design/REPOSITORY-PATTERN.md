@@ -18,6 +18,5 @@ These functions wrap the Sequelize `Map` model calls and return plain promises.
 - **Functions**: `createObstacle`, `getObstacleById`, `getAllObstacles`, `updateObstacle`, `deleteObstacle`
 These functions isolate the Sequelize `Obstacle` model calls.
 
-- **Path**: `src/data/repositories/waypointRepository.js`
-- **Functions**: `createWaypoint`, `getWaypointById`, `getAllWaypoints`, `updateWaypoint`, `deleteWaypoint`
-These functions wrap the Sequelize `Waypoint` model calls.
+- **Phase 4 (Waypoint CRUD):** `src/data/repositories/waypointRepository.js` abstracts `Waypoint.create()`, `Waypoint.findByPk()`, `Waypoint.findAll()`, `Waypoint.update()`, and `Waypoint.destroy()`.
+- **Phase 6 (User CRUD):** `src/data/repositories/userRepository.js` abstracts `User.create()`, `User.findByPk()`, `User.findOne({ where: { email } })` for explicit uniqueness checks, `User.findAll()`, `User.update()`, and `User.destroy()`.
