@@ -11,3 +11,5 @@ This project strictly enforces the functional programming paradigm. OOP construc
 - **Functions**: `createAppError`
 - **Constants**: `ERROR_TYPES` (`NOT_FOUND`, `VALIDATION_ERROR`, `INTERNAL_ERROR`)
 - **Usage**: Used heavily in `src/business/services/mapService.js` to throw business/validation errors, which are then caught and processed by `src/utils/httpResponse.js`.
+- **Phase 4 (Waypoint CRUD):** `src/business/services/waypointService.js` throws `NOT_FOUND` if the referenced Map doesn't exist, and `VALIDATION_ERROR` for negative coordinates or empty names.
+- **Phase 6 (User CRUD):** Extended the `ERROR_TYPES` explicitly adding `CONFLICT`, returning HTTP 409 from `httpResponse.js`. The `src/business/services/userService.js` uses this to throw `CONFLICT` when an email already exists.

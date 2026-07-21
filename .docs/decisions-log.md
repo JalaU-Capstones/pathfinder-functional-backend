@@ -3,6 +3,11 @@
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
 ## 2026-07-21
+- **Phase 6 (User CRUD):** Implemented User entity CRUD operations.
+- **Explicit Uniqueness Check:** For the `email` field, decided to perform explicit uniqueness verification via the service layer (querying the repository before creating/updating) rather than passively catching Sequelize `UniqueConstraintError`. This allows domain logic to live in the service rather than leaking DB driver details to the presentation layer.
+- **409 Conflict Extension:** Extended the shared `httpResponse.js` and `errors.js` helper to return a proper `409 Conflict` HTTP status code when an explicit uniqueness check fails.
+
+## 2026-07-21
 - **Phase 5A (Route CRUD):** Implemented Route entity CRUD without the final pathfinding algorithm.
 - **Strategy Pattern (Stub):** Implemented a placeholder pure function in `src/business/pathfinder.js` for the pathfinding algorithm. This ensures that when the real algorithm is decided in Phase 5B, it can be replaced without changing the function signature, repository, service, or controller. Distance is currently approximated using Manhattan distance.
 

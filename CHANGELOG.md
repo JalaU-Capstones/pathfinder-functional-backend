@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 6 Complete User CRUD:**
+  - Implemented Create, Read, Update, and Delete for the independent User entity.
+  - Handled email uniqueness via explicit repository lookups before insertion/update.
+  - Extended shared `httpResponse.js` and `errors.js` utility to support `409 Conflict` mapping for duplicate emails.
+  - Centralized email format validation into a new `src/utils/validation.js` pure utility.
+  - Swagger JSDoc route annotations for all User endpoints.
 - **Phase 5A Complete Route CRUD:**
   - Implemented Create, Read, and Delete for the Route entity (no Update).
   - Designed a pathfinding placeholder (`src/business/pathfinder.js`) acting as a pure function to calculate distance using a temporary Manhattan approximation.

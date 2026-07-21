@@ -18,6 +18,9 @@ const sendError = (res, error) => {
     case ERROR_TYPES.VALIDATION_ERROR:
       statusCode = 400;
       break;
+    case ERROR_TYPES.CONFLICT:
+      statusCode = 409;
+      break;
     case ERROR_TYPES.INTERNAL_ERROR:
     default:
       statusCode = 500;
