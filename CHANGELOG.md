@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 5A Complete Route CRUD:**
+  - Implemented Create, Read, and Delete for the Route entity (no Update).
+  - Designed a pathfinding placeholder (`src/business/pathfinder.js`) acting as a pure function to calculate distance using a temporary Manhattan approximation.
+  - Wired `routeRepository.js`, `routeService.js`, and `routeController.js` to handle DB operations, input validation, and business logic respectively.
+  - Swagger JSDoc route annotations for all Route endpoints.
 - **Phase 4 Complete Waypoint CRUD:**
   - Implemented full Create, Read, Update, Delete for the Waypoint entity (`src/data/repositories/waypointRepository.js`, `src/business/services/waypointService.js`).
   - Added optional `?mapId` filter for listing waypoints.

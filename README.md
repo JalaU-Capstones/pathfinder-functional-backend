@@ -85,6 +85,12 @@ The following entities have been implemented following our purely functional, th
 - `PUT /api/waypoints/:id` - Update a waypoint by ID
 - `DELETE /api/waypoints/:id` - Delete a waypoint by ID
 
+### Routes
+- `POST /api/routes` - Create a new route. (Note: The distance is currently computed via a placeholder Manhattan approximation pending Phase 5B).
+- `GET /api/routes` - List all routes (supports optional `?mapId=` query filter)
+- `GET /api/routes/:id` - Get a route by ID
+- `DELETE /api/routes/:id` - Delete a route by ID
+
 For detailed request/response schemas, refer to the Swagger UI below.
 
 ## API Documentation (Development)

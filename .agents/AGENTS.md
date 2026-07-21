@@ -23,7 +23,7 @@ This project is an academic capstone for Jala University's "Programming 4" modul
 
 ## Architecture Responsibilities & Non-Negotiable Rules
 1. **Presentation (`src/presentation/`):** Handles HTTP requests/responses, routes, and controllers. No business logic here. *Rule:* Delegate all error-to-status mapping to the shared HTTP response helper.
-2. **Business Logic (`src/business/`):** Pure functional services, pathfinding algorithms, domain rules. *Rule:* Contains mapping functions (`toApiShape`/`toDbShape`). *Rule:* Cross-entity validations (e.g. checking FK existence) MUST occur here by invoking the target entity's repository. Do not rely on passive DB constraints.
+2. **Business Logic (`src/business/`):** Pure functional services, pathfinding algorithms, domain rules. *Rule:* Contains mapping functions (`toApiShape`/`toDbShape`). *Rule:* Cross-entity validations (e.g. checking FK existence) MUST occur here by invoking the target entity's repository. Do not rely on passive DB constraints. *Note:* `src/business/pathfinder.js` is intentionally a placeholder; Phase 5B will implement the real algorithm inside `calculatePath` without changing its signature or any other file.
 3. **Data Access (`src/data/`):** Sequelize models, repository functions, database interactions. *Rule:* Repositories are the *only* place that call Sequelize directly.
 4. **Utilities (`src/utils/`):** Shared pure functions (like the Error Factory and HTTP Response Helper) to eliminate duplication.
 5. **Git Flow:** All feature work must happen on dedicated `feature/<entity>-crud` branches, fully tested and linted before PR.
