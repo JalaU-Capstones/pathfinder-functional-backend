@@ -1,5 +1,6 @@
 const mapRepository = require('../../data/repositories/mapRepository');
 const { ERROR_TYPES, createAppError } = require('../../utils/errors');
+const { toApiPosition } = require('../../utils/shapeMapper');
 
 // Helpers for data shaping (single source of truth for mapping)
 const toApiShape = (dbMap) => {
@@ -7,7 +8,7 @@ const toApiShape = (dbMap) => {
   const raw = dbMap.toJSON ? dbMap.toJSON() : dbMap;
 
   const obstacles = raw.obstacles 
-    ? raw.obstacles.map(obs => ({ x: obs.positionX, y: obs.positionY }))
+    ? raw.obstacles.map(toApiPosition).filter(Boolean)
     : [];
 
   return {
