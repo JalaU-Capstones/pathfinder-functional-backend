@@ -5,6 +5,11 @@ const { ERROR_TYPES, createAppError } = require('../../utils/errors');
 const toApiShape = (dbMap) => {
   if (!dbMap) return null;
   const raw = dbMap.toJSON ? dbMap.toJSON() : dbMap;
+
+  const obstacles = raw.obstacles 
+    ? raw.obstacles.map(obs => ({ x: obs.positionX, y: obs.positionY }))
+    : [];
+
   return {
     id: raw.id,
     name: raw.name,
@@ -12,6 +17,7 @@ const toApiShape = (dbMap) => {
       width: raw.width,
       height: raw.height
     },
+    obstacles,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt
   };
