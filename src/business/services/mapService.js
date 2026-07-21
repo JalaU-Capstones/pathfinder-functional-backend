@@ -11,6 +11,10 @@ const toApiShape = (dbMap) => {
     ? raw.obstacles.map(toApiPosition).filter(Boolean)
     : [];
 
+  const waypoints = raw.waypoints
+    ? raw.waypoints.map(wp => ({ ...toApiPosition(wp), name: wp.name }))
+    : [];
+
   return {
     id: raw.id,
     name: raw.name,
@@ -19,6 +23,7 @@ const toApiShape = (dbMap) => {
       height: raw.height
     },
     obstacles,
+    waypoints,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt
   };

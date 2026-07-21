@@ -1,6 +1,6 @@
 /* global jest, beforeEach */
 const mapRepository = require('../../src/data/repositories/mapRepository');
-const { Map, Obstacle } = require('../../src/data/models');
+const { Map, Obstacle, Waypoint } = require('../../src/data/models');
 
 jest.mock('../../src/data/models', () => {
   return {
@@ -38,7 +38,10 @@ describe('Map Repository', () => {
       const result = await mapRepository.getMapById(1);
 
       expect(Map.findByPk).toHaveBeenCalledWith(1, {
-        include: [{ model: Obstacle, as: 'obstacles' }]
+        include: [
+          { model: Obstacle, as: 'obstacles' },
+          { model: Waypoint, as: 'waypoints' }
+        ]
       });
       expect(result.name).toBe('Test');
     });
@@ -49,7 +52,10 @@ describe('Map Repository', () => {
       Map.findAll.mockResolvedValue([]);
       await mapRepository.getAllMaps();
       expect(Map.findAll).toHaveBeenCalledWith({
-        include: [{ model: Obstacle, as: 'obstacles' }],
+        include: [
+          { model: Obstacle, as: 'obstacles' },
+          { model: Waypoint, as: 'waypoints' }
+        ],
         order: [['createdAt', 'DESC']]
       });
     });
