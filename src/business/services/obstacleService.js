@@ -1,6 +1,7 @@
 const obstacleRepository = require('../../data/repositories/obstacleRepository');
 const mapRepository = require('../../data/repositories/mapRepository');
 const { ERROR_TYPES, createAppError } = require('../../utils/errors');
+const { toApiPosition, toDbPosition } = require('../../utils/shapeMapper');
 
 const toApiShape = (dbObstacle) => {
   if (!dbObstacle) return null;
@@ -8,10 +9,7 @@ const toApiShape = (dbObstacle) => {
   return {
     id: raw.id,
     mapId: raw.mapId,
-    position: {
-      x: raw.positionX,
-      y: raw.positionY
-    },
+    position: toApiPosition(raw),
     size: raw.size,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt
@@ -19,10 +17,11 @@ const toApiShape = (dbObstacle) => {
 };
 
 const toDbShape = (apiData) => {
+  const { positionX, positionY } = toDbPosition(apiData.position);
   return {
     mapId: apiData.mapId,
-    positionX: apiData.position?.x,
-    positionY: apiData.position?.y,
+    positionX,
+    positionY,
     size: apiData.size
   };
 };

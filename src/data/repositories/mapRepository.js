@@ -1,4 +1,4 @@
-const { Map, Obstacle } = require('../models');
+const { Map, Obstacle, Waypoint } = require('../models');
 
 const createMap = async (mapData) => {
   return await Map.create(mapData);
@@ -6,13 +6,19 @@ const createMap = async (mapData) => {
 
 const getMapById = async (id) => {
   return await Map.findByPk(id, {
-    include: [{ model: Obstacle, as: 'obstacles' }]
+    include: [
+      { model: Obstacle, as: 'obstacles' },
+      { model: Waypoint, as: 'waypoints' }
+    ]
   });
 };
 
 const getAllMaps = async () => {
   return await Map.findAll({
-    include: [{ model: Obstacle, as: 'obstacles' }],
+    include: [
+      { model: Obstacle, as: 'obstacles' },
+      { model: Waypoint, as: 'waypoints' }
+    ],
     order: [['createdAt', 'DESC']]
   });
 };
