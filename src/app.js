@@ -5,6 +5,7 @@ const healthRoutes = require('./presentation/routes/health.routes');
 const mapRoutes = require('./presentation/routes/mapRoutes');
 const obstacleRoutes = require('./presentation/routes/obstacleRoutes');
 const waypointRoutes = require('./presentation/routes/waypointRoutes');
+const routeRoutes = require('./presentation/routes/routeRoutes');
 
 const createApp = () => {
   const app = express();
@@ -28,6 +29,7 @@ const createApp = () => {
   app.use('/api/maps', mapRoutes);
   app.use('/api/obstacles', obstacleRoutes);
   app.use('/api/waypoints', waypointRoutes);
+  app.use('/api/routes', routeRoutes);
 
   return app;
 };

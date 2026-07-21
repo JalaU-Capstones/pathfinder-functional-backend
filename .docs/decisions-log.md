@@ -2,6 +2,10 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-07-21
+- **Phase 5A (Route CRUD):** Implemented Route entity CRUD without the final pathfinding algorithm.
+- **Strategy Pattern (Stub):** Implemented a placeholder pure function in `src/business/pathfinder.js` for the pathfinding algorithm. This ensures that when the real algorithm is decided in Phase 5B, it can be replaced without changing the function signature, repository, service, or controller. Distance is currently approximated using Manhattan distance.
+
 ## 2026-07-13
 - **Initial Setup Phase (Phase 0):** Decided to use Node v26 with Express.
 - **Paradigm Choice:** Strictly committed to a functional programming paradigm (no OOP).
