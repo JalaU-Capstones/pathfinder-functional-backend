@@ -71,6 +71,13 @@ The following entities have been implemented following our purely functional, th
 - `PUT /api/maps/:id` - Update a map by ID
 - `DELETE /api/maps/:id` - Delete a map by ID
 
+### Obstacles
+- `POST /api/obstacles` - Create a new obstacle
+- `GET /api/obstacles` - List all obstacles (supports optional `?mapId=` query filter)
+- `GET /api/obstacles/:id` - Get an obstacle by ID
+- `PUT /api/obstacles/:id` - Update an obstacle by ID
+- `DELETE /api/obstacles/:id` - Delete an obstacle by ID
+
 For detailed request/response schemas, refer to the Swagger UI below.
 
 ## API Documentation (Development)
