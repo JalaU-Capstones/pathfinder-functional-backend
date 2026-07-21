@@ -13,6 +13,10 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Documentation:** Integrated `swagger-ui-express` and `swagger-jsdoc` to generate OpenAPI 3.0 docs from route annotations. This UI is restricted to development environments only.
 
 ## 2026-07-21
+- **Phase 4 (Waypoint CRUD):** Implemented Waypoint entity architecture following the pattern established by Obstacles and Maps.
+- **Code Reuse:** Extracted database shape conversion into `src/utils/shapeMapper.js` (`toApiPosition` and `toDbPosition`) to maintain DRY principles across Obstacles, Waypoints, and Map responses.
+
+## 2026-07-21
 - **Phase 3 (Obstacle CRUD):** Replicated the Map reference architecture.
 - **Cross-Entity Validation:** Decided to validate foreign keys (Map existence) explicitly inside the Service layer using `mapRepository.getMapById` instead of relying passively on SQL constraint errors. This provides clearer error messaging and better domain encapsulation.
 - **Query Filters:** Added an optional `?mapId` query parameter to the Obstacle list endpoint to facilitate retrieving obstacles for a specific map naturally.

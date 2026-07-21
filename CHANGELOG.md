@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 4 Complete Waypoint CRUD:**
+  - Implemented full Create, Read, Update, Delete for the Waypoint entity (`src/data/repositories/waypointRepository.js`, `src/business/services/waypointService.js`).
+  - Added optional `?mapId` filter for listing waypoints.
+  - Used `shapeMapper.js` for shape translation.
+  - Updated Map responses (`getMapById`, `getAllMaps`) to eagerly load and include waypoints in the API shape.
+  - Full Jest test coverage for Service and Repository layers.
+  - Swagger JSDoc route annotations for all Waypoint endpoints.
 - **Phase 3 Complete Obstacle CRUD:**
   - Implemented full Create, Read, Update, Delete for the Obstacle entity.
   - Implemented Repository pattern for database access (`src/data/repositories/obstacleRepository.js`).
