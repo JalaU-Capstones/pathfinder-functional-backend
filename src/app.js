@@ -4,6 +4,7 @@ const { swaggerSpec } = require('./config/swagger');
 const healthRoutes = require('./presentation/routes/health.routes');
 const mapRoutes = require('./presentation/routes/mapRoutes');
 const obstacleRoutes = require('./presentation/routes/obstacleRoutes');
+const waypointRoutes = require('./presentation/routes/waypointRoutes');
 
 const createApp = () => {
   const app = express();
@@ -26,6 +27,7 @@ const createApp = () => {
   app.use('/api', healthRoutes);
   app.use('/api/maps', mapRoutes);
   app.use('/api/obstacles', obstacleRoutes);
+  app.use('/api/waypoints', waypointRoutes);
 
   return app;
 };
