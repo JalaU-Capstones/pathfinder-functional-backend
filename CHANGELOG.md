@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 3 Complete Obstacle CRUD:**
+  - Implemented full Create, Read, Update, Delete for the Obstacle entity.
+  - Implemented Repository pattern for database access (`src/data/repositories/obstacleRepository.js`).
+  - Added optional `?mapId` filter for listing obstacles.
+  - Implemented Service layer for validating Map existence and mapping shapes (`src/business/services/obstacleService.js`).
+  - Full Jest test coverage for Service and Repository layers (Happy path and validation).
+  - Swagger JSDoc route annotations for all Obstacle endpoints.
 - **Phase 2 Complete Map CRUD:**
   - Implemented full Create, Read, Update, Delete for the Map entity.
   - Implemented Repository pattern for database access (`src/data/repositories/mapRepository.js`).

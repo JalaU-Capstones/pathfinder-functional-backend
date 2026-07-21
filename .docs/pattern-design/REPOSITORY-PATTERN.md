@@ -13,3 +13,7 @@ In this functional architecture, we want the business logic (Services) to be as 
 - **Path**: `src/data/repositories/mapRepository.js`
 - **Functions**: `createMap`, `getMapById`, `getAllMaps`, `updateMap`, `deleteMap`
 These functions wrap the Sequelize `Map` model calls and return plain promises.
+
+- **Path**: `src/data/repositories/obstacleRepository.js`
+- **Functions**: `createObstacle`, `getObstacleById`, `getAllObstacles`, `updateObstacle`, `deleteObstacle`
+These functions isolate the Sequelize `Obstacle` model calls.
