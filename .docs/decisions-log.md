@@ -12,6 +12,11 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Linting:** Configured ESLint to enforce immutable and pure functional code styles.
 - **Documentation:** Integrated `swagger-ui-express` and `swagger-jsdoc` to generate OpenAPI 3.0 docs from route annotations. This UI is restricted to development environments only.
 
+## 2026-07-21
+- **Phase 3 (Obstacle CRUD):** Replicated the Map reference architecture.
+- **Cross-Entity Validation:** Decided to validate foreign keys (Map existence) explicitly inside the Service layer using `mapRepository.getMapById` instead of relying passively on SQL constraint errors. This provides clearer error messaging and better domain encapsulation.
+- **Query Filters:** Added an optional `?mapId` query parameter to the Obstacle list endpoint to facilitate retrieving obstacles for a specific map naturally.
+
 ## 2026-07-20
 - **Phase 2 (Map CRUD):** Established reference architecture for CRUD pipelines.
 - **Repository Pattern:** Isolated all Sequelize calls into `src/data/repositories` to keep the Service layer pure.
