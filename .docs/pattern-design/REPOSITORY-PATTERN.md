@@ -17,3 +17,7 @@ These functions wrap the Sequelize `Map` model calls and return plain promises.
 - **Path**: `src/data/repositories/obstacleRepository.js`
 - **Functions**: `createObstacle`, `getObstacleById`, `getAllObstacles`, `updateObstacle`, `deleteObstacle`
 These functions isolate the Sequelize `Obstacle` model calls.
+
+- **Path**: `src/data/repositories/waypointRepository.js`
+- **Functions**: `createWaypoint`, `getWaypointById`, `getAllWaypoints`, `updateWaypoint`, `deleteWaypoint`
+These functions wrap the Sequelize `Waypoint` model calls.

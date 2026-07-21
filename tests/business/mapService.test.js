@@ -24,6 +24,7 @@ describe('Map Service', () => {
         width: 100,
         height: 100,
         obstacles: [],
+        waypoints: [],
         createdAt: '2026-07-20T00:00:00.000Z',
         updatedAt: '2026-07-20T00:00:00.000Z',
         toJSON: function() { return this; }
@@ -44,6 +45,7 @@ describe('Map Service', () => {
         name: 'Test Map',
         dimensions: { width: 100, height: 100 },
         obstacles: [],
+        waypoints: [],
         createdAt: '2026-07-20T00:00:00.000Z',
         updatedAt: '2026-07-20T00:00:00.000Z'
       });
@@ -65,6 +67,7 @@ describe('Map Service', () => {
         width: 100,
         height: 100,
         obstacles: [{ positionX: 3, positionY: 5 }],
+        waypoints: [{ positionX: 8, positionY: 6, name: 'Stop 1' }],
         toJSON: function() { return this; }
       };
 
@@ -76,6 +79,7 @@ describe('Map Service', () => {
       expect(result.id).toBe(1);
       expect(result.dimensions.width).toBe(100);
       expect(result.obstacles).toEqual([{ x: 3, y: 5 }]);
+      expect(result.waypoints).toEqual([{ x: 8, y: 6, name: 'Stop 1' }]);
     });
 
     it('should throw NOT_FOUND error when map does not exist', async () => {
