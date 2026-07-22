@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 7 Error Handling & Logging:**
+  - Implemented a structured `winston` logging system with environment-aware formatting (JSON for production, colorized for development).
+  - Added HTTP request logging middleware to track method, URL, status, and duration for every request.
+  - Added a global `errorHandler` middleware to centralize and standardize all API error responses.
+  - Added `notFound` middleware to cleanly handle undefined routes.
+  - Added global `uncaughtException` and `unhandledRejection` process event handlers.
+### Changed
+- **Phase 7 Controller Refactoring:**
+  - Removed all inline `try/catch -> res.status()` logic from controllers across all 5 entities. Controllers now forward errors to the global handler via `next(error)`, implementing a clean Chain of Responsibility pattern.
 - **Phase 6 Complete User CRUD:**
   - Implemented Create, Read, Update, and Delete for the independent User entity.
   - Handled email uniqueness via explicit repository lookups before insertion/update.

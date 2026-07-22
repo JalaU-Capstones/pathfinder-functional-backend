@@ -100,6 +100,13 @@ The following entities have been implemented following our purely functional, th
 
 For detailed request/response schemas, refer to the Swagger UI below.
 
+## Logging
+
+The backend utilizes `winston` for structured logging.
+- In **development**, logs are colorized and human-readable.
+- In **production**, logs are emitted as strict JSON objects for aggregation tools.
+By default, the application runs at `info` level in production and `debug` level in development.
+
 ## API Documentation (Development)
 
 When running the application locally (`NODE_ENV !== 'production'`), you can access the interactive Swagger UI to explore and test the API endpoints:
