@@ -3,6 +3,12 @@
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
 ## 2026-07-21
+- **Phase 7 (Error Handling & Logging):** Integrated structured logging and centralized error handling.
+- **Winston Logger:** Selected `winston` to support structured JSON logs in production without manual formatting.
+- **Standardized Error Shape:** Decided on a strict `{"success": false, "error": {"code": "...", "message": "..."}}` shape for all API errors. Stack traces are conditionally appended only if `NODE_ENV === 'development'` to prevent security leakage.
+- **Controller Refactor to next(error):** Removed redundant inline error formatting from all controllers. All errors are now handled by a global Express middleware (Chain of Responsibility), significantly reducing code duplication and standardizing HTTP mapping.
+
+## 2026-07-21
 - **Phase 6 (User CRUD):** Implemented User entity CRUD operations.
 - **Explicit Uniqueness Check:** For the `email` field, decided to perform explicit uniqueness verification via the service layer (querying the repository before creating/updating) rather than passively catching Sequelize `UniqueConstraintError`. This allows domain logic to live in the service rather than leaking DB driver details to the presentation layer.
 - **409 Conflict Extension:** Extended the shared `httpResponse.js` and `errors.js` helper to return a proper `409 Conflict` HTTP status code when an explicit uniqueness check fails.
