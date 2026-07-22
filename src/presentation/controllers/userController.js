@@ -1,53 +1,53 @@
 const userService = require('../../business/services/userService');
-const { sendSuccess, sendError } = require('../../utils/httpResponse');
+const { sendSuccess } = require('../../utils/httpResponse');
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   try {
     const userData = req.body;
     const newUser = await userService.createUserService(userData);
     return sendSuccess(res, 201, newUser);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const getUser = async (req, res) => {
+const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await userService.getUserService(id);
     return sendSuccess(res, 200, user);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res, next) => {
   try {
     const users = await userService.getAllUsersService();
     return sendSuccess(res, 200, users);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
     const updatedUser = await userService.updateUserService(id, updateData);
     return sendSuccess(res, 200, updatedUser);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     await userService.deleteUserService(id);
     return res.status(204).send();
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
