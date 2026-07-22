@@ -109,10 +109,13 @@ By default, the application runs at `info` level in production and `debug` level
 
 ## API Documentation (Development)
 
-When running the application locally (`NODE_ENV !== 'production'`), you can access the interactive Swagger UI to explore and test the API endpoints:
+Start the server in development mode (`npm run dev`) and visit:
+`http://localhost:3000/api-docs`
 
-- **Swagger UI:** [http://localhost:3000/api-docs](http://localhost:3000/api-docs) (replace `3000` with your configured port)
-- **Raw OpenAPI JSON:** [http://localhost:3000/api-docs.json](http://localhost:3000/api-docs.json)
+## Postman Collection
+
+For API testing, a comprehensive Postman Collection and Environment are provided.
+See the [.docs/collections/postman/README.md](.docs/collections/postman/README.md) for import instructions and details.
 
 ## Available Scripts
 
