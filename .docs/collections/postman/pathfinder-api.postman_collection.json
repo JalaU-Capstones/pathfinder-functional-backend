@@ -1,0 +1,485 @@
+{
+  "info": {
+    "name": "Pathfinder Functional Backend API",
+    "description": "This is the complete API collection for the Pathfinder Functional Backend project. It includes endpoints for Maps, Obstacles, Waypoints, Route calculation, and Users.\n\n### Usage\n1. Import this collection and the associated `pathfinder-local.postman_environment.json` into Postman.\n2. Ensure the **Pathfinder Local** environment is selected in the top right corner.\n3. Run the **Health Check** first to verify connectivity.\n\n*Note: Route distance is currently computed via a Manhattan distance placeholder pending Phase 5B algorithm implementation.*\n\nDate generated: **2026-07-22**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "🏥 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🗺️ Maps",
+      "item": [
+        {
+          "name": "Create Map",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Level 1\",\n  \"dimensions\": {\n    \"width\": 100,\n    \"height\": 100\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/maps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "maps"]
+            }
+          }
+        },
+        {
+          "name": "Get All Maps",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/maps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "maps"]
+            }
+          }
+        },
+        {
+          "name": "Get Map by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/maps/{{mapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "maps", "{{mapId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Map",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Level 1 Updated\",\n  \"dimensions\": {\n    \"width\": 150,\n    \"height\": 150\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/maps/{{mapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "maps", "{{mapId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Map",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/maps/{{mapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "maps", "{{mapId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🚧 Obstacles",
+      "item": [
+        {
+          "name": "Create Obstacle",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": {{mapId}},\n  \"position\": { \"x\": 10, \"y\": 20 },\n  \"size\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/obstacles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "obstacles"]
+            }
+          }
+        },
+        {
+          "name": "Get All Obstacles",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/obstacles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "obstacles"]
+            }
+          }
+        },
+        {
+          "name": "Get Obstacles by Map ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/obstacles?mapId={{mapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "obstacles"],
+              "query": [
+                { "key": "mapId", "value": "{{mapId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Obstacle by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/obstacles/{{obstacleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "obstacles", "{{obstacleId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Obstacle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": {{mapId}},\n  \"position\": { \"x\": 15, \"y\": 25 },\n  \"size\": 8\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/obstacles/{{obstacleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "obstacles", "{{obstacleId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Obstacle",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/obstacles/{{obstacleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "obstacles", "{{obstacleId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📍 Waypoints",
+      "item": [
+        {
+          "name": "Create Waypoint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": {{mapId}},\n  \"position\": { \"x\": 15, \"y\": 25 },\n  \"name\": \"Checkpoint Alpha\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/waypoints",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "waypoints"]
+            }
+          }
+        },
+        {
+          "name": "Get All Waypoints",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/waypoints",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "waypoints"]
+            }
+          }
+        },
+        {
+          "name": "Get Waypoints by Map ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/waypoints?mapId={{mapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "waypoints"],
+              "query": [
+                { "key": "mapId", "value": "{{mapId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Waypoint by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/waypoints/{{waypointId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "waypoints", "{{waypointId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Waypoint",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": {{mapId}},\n  \"position\": { \"x\": 20, \"y\": 30 },\n  \"name\": \"Checkpoint Beta\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/waypoints/{{waypointId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "waypoints", "{{waypointId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Waypoint",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/waypoints/{{waypointId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "waypoints", "{{waypointId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛣️ Routes",
+      "item": [
+        {
+          "name": "Create Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": {{mapId}},\n  \"start\": { \"x\": 2, \"y\": 2 },\n  \"end\": { \"x\": 8, \"y\": 8 }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/routes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "routes"]
+            }
+          }
+        },
+        {
+          "name": "Get All Routes",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/routes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "routes"]
+            }
+          }
+        },
+        {
+          "name": "Get Routes by Map ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/routes?mapId={{mapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "routes"],
+              "query": [
+                { "key": "mapId", "value": "{{mapId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Route by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/routes/{{routeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "routes", "{{routeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Route",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/routes/{{routeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "routes", "{{routeId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Diego Botina\",\n  \"age\": 22,\n  \"email\": \"diego@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Diego Botina Updated\",\n  \"age\": 23,\n  \"email\": \"diego.updated@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
