@@ -139,3 +139,12 @@ Here are all the database-related scripts defined in the project:
 
 - `npm run lint`: Runs ESLint across the codebase to check for code quality and adherence to functional programming rules.
 - `npm test`: Runs the Jest test suite to verify application functionality.
+
+## 📋 Weekly Reports
+
+Progress reports are generated at the end of each assignment period,
+documenting decisions made, features implemented, and lessons learned.
+
+| Assignment | Period | Description | Report |
+|---|---|---|---|
+| Assignment 2 | Jul 13 – Jul 28, 2026 | Project foundation, full CRUD for all 5 entities (Maps, Obstacles, Waypoints, Routes, Users), three-layer architecture, error handling, logging, and Postman collection. | [View report](.docs/reports/assignments/2/progress-report.md) |
