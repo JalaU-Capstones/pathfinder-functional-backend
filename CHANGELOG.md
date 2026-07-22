@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Postman Collection & Environment:**
+  - Added a complete Postman Collection (v2.1) covering all endpoints (Health, Maps, Obstacles, Waypoints, Routes, Users) to `.docs/collections/postman/`.
+  - Added a parameterized Postman Environment configuring local variables like `baseUrl`, `mapId`, and `userId`.
 - **Phase 7 Error Handling & Logging:**
   - Implemented a structured `winston` logging system with environment-aware formatting (JSON for production, colorized for development).
   - Added HTTP request logging middleware to track method, URL, status, and duration for every request.
