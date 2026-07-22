@@ -1,54 +1,54 @@
 const waypointService = require('../../business/services/waypointService');
-const { sendSuccess, sendError } = require('../../utils/httpResponse');
+const { sendSuccess } = require('../../utils/httpResponse');
 
-const createWaypoint = async (req, res) => {
+const createWaypoint = async (req, res, next) => {
   try {
     const waypointData = req.body;
     const newWaypoint = await waypointService.createWaypointService(waypointData);
     return sendSuccess(res, 201, newWaypoint);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const getWaypoint = async (req, res) => {
+const getWaypoint = async (req, res, next) => {
   try {
     const { id } = req.params;
     const waypoint = await waypointService.getWaypointService(id);
     return sendSuccess(res, 200, waypoint);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const getAllWaypoints = async (req, res) => {
+const getAllWaypoints = async (req, res, next) => {
   try {
     const { mapId } = req.query;
     const waypoints = await waypointService.getAllWaypointsService(mapId);
     return sendSuccess(res, 200, waypoints);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const updateWaypoint = async (req, res) => {
+const updateWaypoint = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
     const updatedWaypoint = await waypointService.updateWaypointService(id, updateData);
     return sendSuccess(res, 200, updatedWaypoint);
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
-const deleteWaypoint = async (req, res) => {
+const deleteWaypoint = async (req, res, next) => {
   try {
     const { id } = req.params;
     await waypointService.deleteWaypointService(id);
     return res.status(204).send();
   } catch (error) {
-    return sendError(res, error);
+    next(error);
   }
 };
 
