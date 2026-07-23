@@ -2,11 +2,14 @@
 **Project:** Pathfinder Functional Backend
 **Student:** Diego Alejandro Botina
 **GitHub:** https://github.com/JalaU-Capstones/pathfinder-functional-backend
+**Deliverable Branch (Assignment 2.4):** https://github.com/JalaU-Capstones/pathfinder-functional-backend/tree/deliverable/assigment2-4
 **Period:** July 13, 2026 – July 28, 2026
 **Course:** Programming 4 — Jala University
 
 #### 1. Introduction
-This progress report documents the completion of Assignment 2, which requires the delivery of a functional Node.js backend encompassing full CRUD operations for all entities, a structured three-layer architecture, integration with an ORM, and a comprehensive Postman collection. The selected project option is the **Path Finder** application (Option 2). This project was chosen over the UNO card game because its core requirement—calculating optimal routes—naturally aligns with the principles of functional programming as a pure algorithm, and its entities map cleanly to a relational schema without complex state mutations.
+This progress report documents the completion of Assignment 2, which requires the delivery of a functional Node.js backend encompassing full CRUD operations for all entities, a structured three-layer architecture, integration with an ORM, and a comprehensive Postman collection. The selected project option is the **Path Finder** application (Option 2). This project was chosen over the UNO card game because its core requirement—calculating optimal routes—naturally aligns with the principles of functional programming as a pure algorithm, and its entities map cleanly to a relational schema without complex state mutations. 
+
+*Note: The specific code and requirements delivered for Assignment 2.4 have been frozen and can be reviewed in the dedicated branch: [deliverable/assigment2-4](https://github.com/JalaU-Capstones/pathfinder-functional-backend/tree/deliverable/assigment2-4).*
 
 #### 2. Stack and Technical Decisions
 The following foundational technologies and conventions were chosen for the project:
