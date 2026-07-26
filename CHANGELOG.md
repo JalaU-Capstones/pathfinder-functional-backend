@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 5B A* Pathfinding Algorithm:**
+  - Implemented a pure functional A* algorithm in `src/business/pathfinder.js`.
+  - Added waypoint-aware pathfinding via sequential segment concatenation.
+  - Expanded pathfinder unit test suite with 7 new scenarios covering obstacles, waypoints, and edge cases.
 - **Postman Collection & Environment:**
   - Added a complete Postman Collection (v2.1) covering all endpoints (Health, Maps, Obstacles, Waypoints, Routes, Users) to `.docs/collections/postman/`.
   - Added a parameterized Postman Environment configuring local variables like `baseUrl`, `mapId`, and `userId`.

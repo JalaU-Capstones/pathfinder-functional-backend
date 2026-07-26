@@ -2,6 +2,13 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-07-26
+- **Phase 5B (Pathfinding Algorithm):** Implemented the A* (A-Star) algorithm in `src/business/pathfinder.js`.
+- **Algorithm Choice:** Chose A* over Dijkstra and BFS due to its optimality and efficiency using heuristics on a grid. Refer to `.docs/architecture/pathfinding-algorithm.md` for the full rationale.
+- **Heuristic:** Selected Manhattan distance because movement is strictly 4-directional, making it perfectly admissible and computationally cheap.
+- **Waypoint Handling:** Implemented waypoint routing by splitting the path into sequential A* segments and concatenating the results. This preserves functional composition.
+- **Tradeoffs:** Used a simple array for the open set instead of a priority queue. Given the maximum grid sizes (≤ 100x100), the functional simplicity of array methods outweighs the minimal performance gain of a heap.
+
 ## 2026-07-21
 - **Phase 7 (Error Handling & Logging):** Integrated structured logging and centralized error handling.
 - **Winston Logger:** Selected `winston` to support structured JSON logs in production without manual formatting.
