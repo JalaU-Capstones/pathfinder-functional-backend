@@ -2,6 +2,13 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-07-27
+- **Phase 8 (Functional Programming Techniques):** Introduced currying, higher-order functions, and function composition utilities.
+- **Composition utility:** Decided to use `pipe` over `compose` as the primary composition utility for validations. The left-to-right execution of `pipe` better matches the mental model of a top-to-bottom pipeline.
+- **Validation Pattern:** Adopted Railway-oriented validation where pure functions return the context on success or throw a typed error on failure. This was chosen over returning explicit `Result`/`Either` monad types to keep the Node/Express codebase simple without needing a heavyweight functional library like Ramda or fp-ts.
+- **HOFs:** Introduced `requireNonEmpty` as a higher-order function that dynamically generates validation rules. Documented existing uses of `.map()` and `.filter()` across services.
+- **Currying:** Created curried domain validators (`isPointInGrid`, `isSamePoint`) for reusability and partial application inside the validation pipeline.
+
 ## 2026-07-26
 - **Phase 5B (Pathfinding Algorithm):** Implemented the A* (A-Star) algorithm in `src/business/pathfinder.js`.
 - **Algorithm Choice:** Chose A* over Dijkstra and BFS due to its optimality and efficiency using heuristics on a grid. Refer to `.docs/architecture/pathfinding-algorithm.md` for the full rationale.
