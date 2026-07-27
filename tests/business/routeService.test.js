@@ -31,6 +31,7 @@ describe('Route Service', () => {
         endX: 5,
         endY: 7,
         distance: 12,
+        path: [{x:0,y:0}, {x:5,y:7}],
         createdAt: '2026-07-21T00:00:00.000Z',
         updatedAt: '2026-07-21T00:00:00.000Z'
       });
@@ -58,7 +59,8 @@ describe('Route Service', () => {
         startY: 0,
         endX: 5,
         endY: 7,
-        distance: 12
+        distance: 12,
+        path: [{x:0,y:0}, {x:5,y:7}]
       });
 
       expect(result).toEqual({
@@ -67,6 +69,7 @@ describe('Route Service', () => {
         start: { x: 0, y: 0 },
         end: { x: 5, y: 7 },
         distance: 12,
+        optimal_path: [{x:0,y:0}, {x:5,y:7}],
         createdAt: '2026-07-21T00:00:00.000Z',
         updatedAt: '2026-07-21T00:00:00.000Z'
       });
@@ -115,6 +118,27 @@ describe('Route Service', () => {
         message: 'Coordinates must be within map boundaries.'
       });
     });
+
+    it('should throw 422 if waypoint compliance fails', async () => {
+      const mockMap = { id: 1, width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }], waypoints: [{ positionX: 3, positionY: 3, name: 'Mid' }] };
+      mapRepository.getMapById.mockResolvedValue(mockMap);
+      
+      pathfinder.calculatePath.mockReturnValue({
+        distance: 12,
+        path: [{x:0,y:0}, {x:5,y:7}] // misses waypoint (3,3)
+      });
+
+      const routeData = {
+        mapId: 1,
+        start: { x: 0, y: 0 },
+        end: { x: 5, y: 7 }
+      };
+
+      await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
+        type: 'UNPROCESSABLE_ENTITY',
+        message: 'The computed path could not satisfy all waypoint constraints. Verify that waypoints are reachable and not blocked by obstacles.'
+      });
+    });
   });
 
   describe('getRouteService', () => {
@@ -126,12 +150,14 @@ describe('Route Service', () => {
         startY: 0,
         endX: 5,
         endY: 5,
-        distance: 10
+        distance: 10,
+        path: [{x:0,y:0}, {x:5,y:5}]
       });
 
       const result = await routeService.getRouteService(1);
       expect(result.id).toBe(1);
       expect(result.distance).toBe(10);
+      expect(result.optimal_path).toEqual([{x:0,y:0}, {x:5,y:5}]);
     });
 
     it('should throw 404 if route not found', async () => {

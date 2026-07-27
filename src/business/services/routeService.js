@@ -11,6 +11,7 @@ const {
   validateStartInBounds,
   validateEndInBounds,
   validatePointsNotEqual,
+  validateWaypointsInPath
 } = require('../../utils/routeValidators');
 
 const toApiShape = (dbRoute) => {
@@ -22,6 +23,7 @@ const toApiShape = (dbRoute) => {
     start: toApiPosition({ positionX: raw.startX, positionY: raw.startY }),
     end: toApiPosition({ positionX: raw.endX, positionY: raw.endY }),
     distance: raw.distance,
+    optimal_path: raw.path !== undefined ? raw.path : null,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt
   };
@@ -36,7 +38,8 @@ const toDbShape = (apiData) => {
     startY: dbStart.positionY,
     endX: dbEnd.positionX,
     endY: dbEnd.positionY,
-    distance: apiData.distance
+    distance: apiData.distance,
+    path: apiData.path
   };
 };
 
@@ -98,9 +101,17 @@ const createRouteService = async (routeData) => {
     waypoints
   );
 
+  if (!validateWaypointsInPath(pathResult.path, waypoints)) {
+    throw createAppError(
+      ERROR_TYPES.UNPROCESSABLE_ENTITY,
+      'The computed path could not satisfy all waypoint constraints. Verify that waypoints are reachable and not blocked by obstacles.'
+    );
+  }
+
   const routeToCreate = {
     ...routeData,
-    distance: pathResult.distance
+    distance: pathResult.distance,
+    path: pathResult.path
   };
 
   const dbShape = toDbShape(routeToCreate);

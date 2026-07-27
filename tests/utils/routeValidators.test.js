@@ -3,7 +3,8 @@ const {
   validateStartInBounds,
   validateEndInBounds,
   validatePointsNotEqual,
-  requireNonEmpty
+  requireNonEmpty,
+  validateWaypointsInPath
 } = require('../../src/utils/routeValidators');
 const { ERROR_TYPES } = require('../../src/utils/errors');
 
@@ -82,6 +83,32 @@ describe('Route Validators', () => {
     it('returns context when obstacles array has items', () => {
       const context = { map: { obstacles: [{ x: 1, y: 1 }] } };
       expect(validateMapHasObstacles(context)).toBe(context);
+    });
+  });
+
+  describe('validateWaypointsInPath', () => {
+    it('returns true when all waypoints are present in the path', () => {
+      const path = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }];
+      const waypoints = [{ x: 2, y: 2, name: 'mid' }];
+      expect(validateWaypointsInPath(path, waypoints)).toBe(true);
+    });
+
+    it('returns false when one waypoint is missing from the path', () => {
+      const path = [{ x: 1, y: 1 }, { x: 2, y: 2 }];
+      const waypoints = [{ x: 3, y: 3, name: 'end' }];
+      expect(validateWaypointsInPath(path, waypoints)).toBe(false);
+    });
+
+    it('returns true when waypoints array is empty', () => {
+      const path = [{ x: 1, y: 1 }, { x: 2, y: 2 }];
+      const waypoints = [];
+      expect(validateWaypointsInPath(path, waypoints)).toBe(true);
+    });
+
+    it('returns true when path is empty and waypoints array is empty', () => {
+      const path = [];
+      const waypoints = [];
+      expect(validateWaypointsInPath(path, waypoints)).toBe(true);
     });
   });
 });

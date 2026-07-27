@@ -77,11 +77,24 @@ const requireNonEmpty = (fieldName) => (context) => {
 const validateMapHasObstacles = requireNonEmpty('obstacles');
 // Optionally, if we needed waypoints later: const validateMapHasWaypoints = requireNonEmpty('waypoints');
 
+/**
+ * validateWaypointsInPath — pure function.
+ * Checks that every waypoint position appears in the computed path.
+ * @param {Array<{x,y}>} path - The A* computed path
+ * @param {Array<{x,y,name}>} waypoints - Waypoints that must be visited
+ * @returns {boolean} true if all waypoints are in the path
+ */
+const validateWaypointsInPath = (path, waypoints) =>
+  waypoints.every(wp =>
+    path.some(cell => cell.x === wp.x && cell.y === wp.y)
+  );
+
 module.exports = {
   validateMapExists,
   validateStartInBounds,
   validateEndInBounds,
   validatePointsNotEqual,
   requireNonEmpty,
-  validateMapHasObstacles
+  validateMapHasObstacles,
+  validateWaypointsInPath
 };

@@ -2,6 +2,12 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-07-27 (Phase 9 - Route Enrichment)
+- **Path Storage (JSONB):** Decision to use JSONB over TEXT for `path` storage in the database. JSONB enables structured storage (binary JSON format) and future indexed queries; Sequelize also handles array serialization/deserialization automatically.
+- **Path Nullability:** Decision to set `allowNull: true` on the new `path` column. This prevents breaking backward compatibility with existing rows in the DB which lack path data, without needing a complex data migration.
+- **Waypoint Validation Timing:** Decision to validate waypoint compliance AFTER pathfinding (not before) — because the path must exist to check it.
+- **Error Code for Waypoint Failure:** Decision to use 422 (Unprocessable Entity) over 400 for waypoint compliance failure — the request is well-formed but semantically unprocessable given the map configuration.
+
 ## 2026-07-27
 - **Phase 8 (Functional Programming Techniques):** Introduced currying, higher-order functions, and function composition utilities.
 - **Composition utility:** Decided to use `pipe` over `compose` as the primary composition utility for validations. The left-to-right execution of `pipe` better matches the mental model of a top-to-bottom pipeline.
