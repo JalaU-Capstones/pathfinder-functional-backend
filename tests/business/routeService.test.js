@@ -15,7 +15,7 @@ describe('Route Service', () => {
 
   describe('createRouteService', () => {
     it('should create a route successfully for valid input', async () => {
-      const mockMap = { id: 1, width: 10, height: 10, obstacles: [], waypoints: [] };
+      const mockMap = { id: 1, width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }], waypoints: [] };
       mapRepository.getMapById.mockResolvedValue(mockMap);
       
       pathfinder.calculatePath.mockReturnValue({
@@ -48,7 +48,7 @@ describe('Route Service', () => {
         { width: 10, height: 10 },
         { x: 0, y: 0 },
         { x: 5, y: 7 },
-        [],
+        [{ x: 1, y: 1 }],
         []
       );
       
@@ -87,7 +87,7 @@ describe('Route Service', () => {
     });
 
     it('should throw 400 if start and end points are the same', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1, width: 10, height: 10 });
+      mapRepository.getMapById.mockResolvedValue({ id: 1, width: 10, height: 10, obstacles: [{x:0, y:0}] });
 
       const routeData = {
         mapId: 1,
@@ -102,7 +102,7 @@ describe('Route Service', () => {
     });
 
     it('should throw 400 if coordinates are out of bounds', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1, width: 10, height: 10 });
+      mapRepository.getMapById.mockResolvedValue({ id: 1, width: 10, height: 10, obstacles: [{x:0, y:0}] });
 
       const routeData = {
         mapId: 1,
