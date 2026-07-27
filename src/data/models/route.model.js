@@ -30,6 +30,11 @@ const defineRouteModel = (sequelize) => {
     distance: {
       type: DataTypes.FLOAT,
       allowNull: false
+    },
+    path: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: null,
     }
   }, {
     tableName: 'Routes',
