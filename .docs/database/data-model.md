@@ -57,3 +57,14 @@ To properly represent positional data in a flat relational database while keepin
 - API nested `start: { x, y }` and `end: { x, y }` map to DB `startX`, `startY`, `endX`, and `endY`.
 
 The translation between these structures will occur in the business/service layer in later phases to preserve the functional programming paradigm.
+
+## Schema Evolution
+
+### 2026-07-27 — Added `path` column to Routes
+Migration: `20260727000000-add-path-to-routes.js`
+- Column: `path` (JSONB, nullable)
+- Reason: store the full A* computed coordinate array for
+  retrieval without recalculation.
+- Why JSONB: binary JSON enables structured storage and future
+  indexed queries; Sequelize auto-serializes/deserializes arrays.
+- Why nullable: backward compatibility with existing rows.
