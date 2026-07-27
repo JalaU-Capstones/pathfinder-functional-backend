@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-27 (Phase 9 - Route Enrichment & CRUD Integration):**
+  - Phase 9: added `path` JSONB column to Routes via new migration.
+  - Route create/read responses now include `optimal_path` array.
+  - Waypoint compliance validation added post-pathfinding (422 on failure).
+  - Updated Swagger Route schema with `optimal_path` field.
 - **Phase 8 Functional Programming Refactor:**
   - Introduced `pipe`, `compose`, and `curry` utilities.
   - Refactored `routeService.js` validation into a composed pipeline.
