@@ -52,3 +52,20 @@ The algorithm was carefully adapted to fit the functional paradigm of the projec
 - Algorithm: `src/business/pathfinder.js`
 - Called by: `src/business/services/routeService.js`
 - Tests: `tests/business/pathfinder.test.js`
+
+## Path Persistence (Phase 9)
+The computed path is persisted in the `path` column (JSONB) of
+the Routes table so that clients can retrieve the full route
+without triggering a recalculation on every read.
+
+The API exposes this field as `optimal_path` (per the rubric spec).
+The translation from DB column name (`path`) to API field name
+(`optimal_path`) happens exclusively in `routeService.toApiShape()`.
+
+### Waypoint Compliance (rubric point 6)
+After A* computes the path, `validateWaypointsInPath` verifies
+that every waypoint position configured on the map appears in the
+computed path. If any waypoint is missing, a 422 error is returned.
+This check uses `Array.prototype.every` and `Array.prototype.some`
+— higher-order functions consuming predicate functions, consistent
+with the functional techniques established in Phase 8.
