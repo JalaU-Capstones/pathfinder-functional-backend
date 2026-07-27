@@ -4,6 +4,15 @@ const { ERROR_TYPES, createAppError } = require('../../utils/errors');
 const { toApiPosition, toDbPosition } = require('../../utils/shapeMapper');
 const { calculatePath } = require('../pathfinder');
 
+const { pipe } = require('../../utils/compose');
+const {
+  validateMapExists,
+  validateMapHasObstacles,
+  validateStartInBounds,
+  validateEndInBounds,
+  validatePointsNotEqual,
+} = require('../../utils/routeValidators');
+
 const toApiShape = (dbRoute) => {
   if (!dbRoute) return null;
   const raw = dbRoute.toJSON ? dbRoute.toJSON() : dbRoute;
@@ -43,43 +52,41 @@ const validateCoordinate = (point, name) => {
   }
 };
 
+const validateRouteContext = pipe(
+  validateMapExists,
+  validateMapHasObstacles,
+  validateStartInBounds,
+  validateEndInBounds,
+  validatePointsNotEqual
+);
+
 const validateRouteInput = async (data) => {
   if (!data.mapId || !Number.isInteger(data.mapId)) {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be an integer.');
   }
 
-  // Validate Map Existence and Bounds
-  const mapExists = await mapRepository.getMapById(data.mapId);
-  if (!mapExists) {
-    throw createAppError(ERROR_TYPES.NOT_FOUND, `Map with id ${data.mapId} not found.`);
-  }
-
   validateCoordinate(data.start, 'Start');
   validateCoordinate(data.end, 'End');
 
-  if (data.start.x === data.end.x && data.start.y === data.end.y) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Start and end points cannot be the same.');
-  }
+  // Fetch the Map to build the validation context
+  const fetchedMap = await mapRepository.getMapById(data.mapId);
+  
+  const context = { 
+    mapId: data.mapId, 
+    start: data.start, 
+    end: data.end, 
+    map: fetchedMap 
+  };
+  
+  // Execute the composed validation pipeline
+  validateRouteContext(context);
 
-  if (data.start.x >= mapExists.width || data.start.y >= mapExists.height ||
-      data.end.x >= mapExists.width || data.end.y >= mapExists.height) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Coordinates must be within map boundaries.');
-  }
-
-  return mapExists;
+  return fetchedMap;
 };
 
 const createRouteService = async (routeData) => {
   const mapExists = await validateRouteInput(routeData);
 
-  // We have mapExists.obstacles and mapExists.waypoints from Map association? Wait, we need to map them properly.
-  // We assume Map model include associations or we just pass empty if they are not loaded, but the prompt says:
-  // "Fetches the Map with its Obstacles and Waypoints (needed as input to the pathfinding function)."
-  
-  // Actually, getMapById might not include obstacles and waypoints by default in mapRepository.
-  // Let me just check what getMapById returns. Usually we might need a dedicated method to fetch Map with associations or they might already be included.
-  // The pathfinder placeholder ignores obstacles, but we should pass them.
-  // Let's assume mapExists has `obstacles` and `waypoints` or we fetch them if not included.
   const obstacles = mapExists.obstacles ? mapExists.obstacles.map(toApiPosition) : [];
   const waypoints = mapExists.waypoints ? mapExists.waypoints.map(w => ({ ...toApiPosition(w), name: w.name })) : [];
 
