@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Phase 8 Functional Programming Refactor:**
+  - Introduced `pipe`, `compose`, and `curry` utilities.
+  - Refactored `routeService.js` validation into a composed pipeline.
+  - Added `requireNonEmpty` HOF for generating configurable map validators.
+  - Added full test coverage for the new functional utilities.
 - **Phase 5B A* Pathfinding Algorithm:**
   - Implemented a pure functional A* algorithm in `src/business/pathfinder.js`.
   - Added waypoint-aware pathfinding via sequential segment concatenation.
