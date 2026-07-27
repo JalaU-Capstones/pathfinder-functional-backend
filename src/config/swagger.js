@@ -84,7 +84,18 @@ const options = {
                 y: { type: 'integer', example: 95 }
               }
             },
-            distance: { type: 'number', example: 127.28 }
+            distance: { type: 'number', example: 127.28 },
+            optimal_path: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  x: { type: 'integer' },
+                  y: { type: 'integer' }
+                }
+              },
+              example: [{'x': 2, 'y': 2}, {'x': 3, 'y': 2}, {'x': 8, 'y': 8}]
+            }
           }
         },
         User: {
