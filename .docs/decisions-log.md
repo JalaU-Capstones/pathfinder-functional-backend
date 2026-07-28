@@ -2,6 +2,13 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-07-28 (Composite Map Creation)
+- **Atomic Map Creation:** Decision to support atomic composite creation in `POST /api/maps` (map + obstacles + waypoints) using a single Sequelize transaction.
+- **Data Integrity:** Used transaction to ensure that partial states (e.g. map created but an obstacle fails) are rolled back. Data integrity is prioritized.
+- **Bulk Insert:** Used `bulkCreate` to insert multiple obstacles and waypoints to avoid N sequential database calls and improve performance.
+- **Unknown Fields Ignored:** Decided to silently ignore unknown fields (like `type` or `description`) in obstacle and waypoint input payloads instead of throwing 400 validation errors to allow for forward compatibility with richer payloads in future schema versions.
+- **Controller/Service Boundary:** Chose to put the composite logic entirely within `mapService.js` and `mapRepository.js`, keeping the API design natural without needing a separate endpoint.
+
 ## 2026-07-27 (Phase 9 - Route Enrichment)
 - **Path Storage (JSONB):** Decision to use JSONB over TEXT for `path` storage in the database. JSONB enables structured storage (binary JSON format) and future indexed queries; Sequelize also handles array serialization/deserialization automatically.
 - **Path Nullability:** Decision to set `allowNull: true` on the new `path` column. This prevents breaking backward compatibility with existing rows in the DB which lack path data, without needing a complex data migration.

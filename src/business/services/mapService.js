@@ -1,6 +1,7 @@
 const mapRepository = require('../../data/repositories/mapRepository');
 const { ERROR_TYPES, createAppError } = require('../../utils/errors');
-const { toApiPosition } = require('../../utils/shapeMapper');
+const { toApiPosition, toDbPosition } = require('../../utils/shapeMapper');
+const { isValidObstacle, isValidWaypoint } = require('../../utils/validation');
 
 // Helpers for data shaping (single source of truth for mapping)
 const toApiShape = (dbMap) => {
@@ -55,9 +56,41 @@ const validateMapInput = (data) => {
 
 const createMapService = async (mapData) => {
   validateMapInput(mapData);
-  const dbShape = toDbShape(mapData);
-  const newMap = await mapRepository.createMap(dbShape);
-  return toApiShape(newMap);
+  
+  const { name, dimensions, obstacles = [], waypoints = [] } = mapData;
+
+  // Unknown fields (e.g. 'type', 'description') are intentionally
+  // ignored — they are not part of the current schema.
+  // Future migrations may add them if required.
+  const dbObstacles = obstacles.map(obs => {
+    if (!isValidObstacle(obs)) {
+      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid obstacle data provided.');
+    }
+    return {
+      size: obs.size,
+      ...toDbPosition(obs.position)
+    };
+  });
+
+  const dbWaypoints = waypoints.map(wp => {
+    if (!isValidWaypoint(wp)) {
+      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid waypoint data provided.');
+    }
+    return {
+      name: wp.name,
+      ...toDbPosition(wp.position)
+    };
+  });
+
+  const mapId = await mapRepository.createMapWithRelations({
+    name,
+    width: dimensions.width,
+    height: dimensions.height,
+    obstacles: dbObstacles,
+    waypoints: dbWaypoints
+  });
+
+  return await getMapService(mapId);
 };
 
 const getMapService = async (id) => {

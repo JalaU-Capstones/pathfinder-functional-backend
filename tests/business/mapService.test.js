@@ -12,7 +12,7 @@ describe('Map Service', () => {
   });
 
   describe('createMapService', () => {
-    it('should create a map when input is valid', async () => {
+    it('should create a map when input is valid (no relations)', async () => {
       const input = {
         name: 'Test Map',
         dimensions: { width: 100, height: 100 }
@@ -30,14 +30,17 @@ describe('Map Service', () => {
         toJSON: function() { return this; }
       };
 
-      mapRepository.createMap.mockResolvedValue(mockDbResponse);
+      mapRepository.createMapWithRelations.mockResolvedValue(1);
+      mapRepository.getMapById.mockResolvedValue(mockDbResponse);
 
       const result = await mapService.createMapService(input);
 
-      expect(mapRepository.createMap).toHaveBeenCalledWith({
+      expect(mapRepository.createMapWithRelations).toHaveBeenCalledWith({
         name: 'Test Map',
         width: 100,
-        height: 100
+        height: 100,
+        obstacles: [],
+        waypoints: []
       });
 
       expect(result).toEqual({
@@ -48,6 +51,67 @@ describe('Map Service', () => {
         waypoints: [],
         createdAt: '2026-07-20T00:00:00.000Z',
         updatedAt: '2026-07-20T00:00:00.000Z'
+      });
+    });
+
+    it('should create a map with obstacles and waypoints', async () => {
+      const input = {
+        name: 'Test Map',
+        dimensions: { width: 100, height: 100 },
+        obstacles: [{ position: { x: 10, y: 20 }, size: 5, unknownField: 'ignore' }],
+        waypoints: [{ position: { x: 5, y: 5 }, name: 'Start', type: 'ignore' }]
+      };
+      
+      const mockDbResponse = {
+        id: 1,
+        name: 'Test Map',
+        width: 100,
+        height: 100,
+        obstacles: [{ positionX: 10, positionY: 20, size: 5 }],
+        waypoints: [{ positionX: 5, positionY: 5, name: 'Start' }],
+        createdAt: '2026-07-20T00:00:00.000Z',
+        updatedAt: '2026-07-20T00:00:00.000Z',
+        toJSON: function() { return this; }
+      };
+
+      mapRepository.createMapWithRelations.mockResolvedValue(1);
+      mapRepository.getMapById.mockResolvedValue(mockDbResponse);
+
+      const result = await mapService.createMapService(input);
+
+      expect(mapRepository.createMapWithRelations).toHaveBeenCalledWith({
+        name: 'Test Map',
+        width: 100,
+        height: 100,
+        obstacles: [{ positionX: 10, positionY: 20, size: 5 }],
+        waypoints: [{ positionX: 5, positionY: 5, name: 'Start' }]
+      });
+
+      expect(result.obstacles).toEqual([{ x: 10, y: 20 }]);
+      expect(result.waypoints).toEqual([{ x: 5, y: 5, name: 'Start' }]);
+    });
+
+    it('should throw validation error if obstacle is invalid', async () => {
+      const input = {
+        name: 'Test Map',
+        dimensions: { width: 100, height: 100 },
+        obstacles: [{ size: 5 }] // missing position
+      };
+      await expect(mapService.createMapService(input)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Invalid obstacle data provided.'
+      });
+    });
+
+    it('should throw validation error if waypoint is invalid', async () => {
+      const input = {
+        name: 'Test Map',
+        dimensions: { width: 100, height: 100 },
+        waypoints: [{ position: { x: 5, y: 5 } }] // missing name
+      };
+      await expect(mapService.createMapService(input)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Invalid waypoint data provided.'
       });
     });
 
