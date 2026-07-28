@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-27 (Phase 10 - Documentation & Delivery):**
+  - Phase 10: Postman collection updated with `optimal_path` in Route responses and 422 example.
+  - Assignment 3.4 progress report added.
+  - README updated with A* algorithm section, functional techniques section, and Assignment 3.4 weekly report link.
 - **2026-07-27 (Phase 9 - Route Enrichment & CRUD Integration):**
   - Phase 9: added `path` JSONB column to Routes via new migration.
   - Route create/read responses now include `optimal_path` array.
