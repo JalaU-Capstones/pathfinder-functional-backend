@@ -3,8 +3,8 @@ const { sendSuccess } = require('../../utils/httpResponse');
 
 const createMap = async (req, res, next) => {
   try {
-    const mapData = req.body;
-    const newMap = await mapService.createMapService(mapData);
+    const { name, dimensions, obstacles = [], waypoints = [] } = req.body;
+    const newMap = await mapService.createMapService({ name, dimensions, obstacles, waypoints });
     return sendSuccess(res, 201, newMap);
   } catch (error) {
     next(error);

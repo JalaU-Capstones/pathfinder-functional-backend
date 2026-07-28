@@ -9,6 +9,7 @@ This project strictly adheres to functional programming paradigms. In Phase 8, w
 ### In this project:
 - `requireNonEmpty(fieldName)` in `src/utils/routeValidators.js`: This function takes a string (the field name) and returns a complete validator function. HOF was the right tool here because it allows us to dynamically generate specific validators (like `validateMapHasObstacles` or `validateMapHasWaypoints`) without duplicating the core array-checking logic.
 - `.map()` and `.filter()` in service files (e.g., `src/business/services/mapService.js`, `routeService.js`): These built-in HOFs are used extensively for data transformation (like `toApiPosition`) and shaping without mutating the original database records.
+- `.map(toDbShape)` (conceptually via `toDbPosition`) used in `mapService.createMapService` to transform input obstacle/waypoint arrays to DB column shape before passing to `mapRepository.createMapWithRelations` for `bulkCreate` — pure transformation, no mutation.
 
 ## Currying
 **Definition**: Transforming a function `f(a, b)` into a sequence of functions `f(a)(b)`, enabling partial application.
