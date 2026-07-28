@@ -86,7 +86,7 @@ The following entities have been implemented following our purely functional, th
 - `DELETE /api/waypoints/:id` - Delete a waypoint by ID
 
 ### Routes
-- `POST /api/routes` - Create a new route. (Note: The distance is currently computed via a placeholder Manhattan approximation pending Phase 5B).
+- `POST /api/routes` - Create a new route. (Note: The A* algorithm was used.).
 - `GET /api/routes` - List all routes (supports optional `?mapId=` query filter)
 - `GET /api/routes/:id` - Get a route by ID
 - `DELETE /api/routes/:id` - Delete a route by ID
