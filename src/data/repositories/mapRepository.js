@@ -1,7 +1,30 @@
-const { Map, Obstacle, Waypoint } = require('../models');
+const { Map, Obstacle, Waypoint, sequelize } = require('../models');
 
 const createMap = async (mapData) => {
   return await Map.create(mapData);
+};
+
+const createMapWithRelations = async ({ name, width, height, obstacles, waypoints }) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const map = await Map.create({ name, width, height }, { transaction });
+
+    if (obstacles && obstacles.length > 0) {
+      const dbObstacles = obstacles.map(obs => ({ ...obs, mapId: map.id }));
+      await Obstacle.bulkCreate(dbObstacles, { transaction });
+    }
+
+    if (waypoints && waypoints.length > 0) {
+      const dbWaypoints = waypoints.map(wp => ({ ...wp, mapId: map.id }));
+      await Waypoint.bulkCreate(dbWaypoints, { transaction });
+    }
+
+    await transaction.commit();
+    return map.id;
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
 };
 
 const getMapById = async (id) => {
@@ -40,6 +63,7 @@ const deleteMap = async (id) => {
 
 module.exports = {
   createMap,
+  createMapWithRelations,
   getMapById,
   getAllMaps,
   updateMap,

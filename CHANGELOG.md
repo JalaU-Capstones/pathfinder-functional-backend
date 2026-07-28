@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-28 (Composite Map Creation):**
+  - fix(maps): support atomic creation of obstacles and waypoints via `POST /api/maps` using Sequelize transactions and bulkCreate.
+  - fix(maps): silently ignore unknown fields (type, description) in obstacle and waypoint items.
+
 - **2026-07-27 (Phase 10 - Documentation & Delivery):**
   - Phase 10: Postman collection updated with `optimal_path` in Route responses and 422 example.
   - Assignment 3.4 progress report added.

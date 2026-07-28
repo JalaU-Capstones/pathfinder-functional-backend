@@ -17,11 +17,27 @@ const router = express.Router();
  *     summary: Create a new map
  *     tags: [Maps]
  *     requestBody:
+ *       description: The map data. `obstacles` and `waypoints` are optional. If omitted or empty, the map is created with no associated records. Unknown fields within each item (e.g. `type`, `description`) are ignored.
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Map'
+ *           example:
+ *             name: "Open World Map"
+ *             dimensions:
+ *               width: 500
+ *               height: 500
+ *             obstacles:
+ *               - position:
+ *                   x: 100
+ *                   y: 150
+ *                 size: 10
+ *             waypoints:
+ *               - position:
+ *                   x: 50
+ *                   y: 50
+ *                 name: "Start Zone"
  *     responses:
  *       201:
  *         description: The map was successfully created
