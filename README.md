@@ -100,6 +100,58 @@ The following entities have been implemented following our purely functional, th
 
 For detailed request/response schemas, refer to the Swagger UI below.
 
+## 🧭 Pathfinding Algorithm
+
+The core of this application is an **A\* (A-Star)** pathfinding
+algorithm implemented as a pure function in
+`src/business/pathfinder.js`.
+
+### Why A\*
+A\* was chosen for its combination of optimality and efficiency:
+it finds the guaranteed shortest path while using a **Manhattan
+distance heuristic** to explore far fewer nodes than Dijkstra
+(which explores all directions equally) or BFS (which has no
+heuristic guidance). For a 2D grid with integer coordinates —
+exactly the data model used here — A\* is the optimal choice.
+
+### Features
+- **Obstacle avoidance:** blocked cells are excluded from
+  neighbor exploration.
+- **Waypoint support:** routes pass through all configured
+  waypoints by running A\* sequentially between each checkpoint
+  pair and concatenating the path segments.
+- **Waypoint compliance validation:** after computation, the
+  path is verified to include every waypoint position; a 422
+  error is returned if any waypoint is unreachable.
+- **Immutable output:** the returned path array is frozen
+  (`Object.freeze`) consistent with the functional paradigm.
+
+### Response
+`POST /api/routes` returns:
+```json
+{
+  "distance": 12,
+  "optimal_path": [{ "x": 2, "y": 2 }, "...", { "x": 8, "y": 8 }]
+}
+```
+
+Full algorithm documentation:
+[`.docs/architecture/pathfinding-algorithm.md`](.docs/architecture/pathfinding-algorithm.md)
+
+## ⚙️ Functional Programming Techniques
+
+Beyond general functional style (`const`, pure functions,
+immutability), this project explicitly implements:
+
+| Technique | File | Example |
+|---|---|---|
+| Higher-Order Functions | `src/utils/routeValidators.js` | `requireNonEmpty(fieldName)` returns a validator |
+| Currying | `src/utils/curry.js` | `isPointInGrid(grid)(point)` pre-loads grid |
+| Function Composition | `src/utils/compose.js` | `pipe(f,g,h)` builds validation pipeline |
+
+Full documentation:
+[`.docs/architecture/functional-techniques.md`](.docs/architecture/functional-techniques.md)
+
 ## Logging
 
 The backend utilizes `winston` for structured logging.
@@ -148,3 +200,4 @@ documenting decisions made, features implemented, and lessons learned.
 | Assignment | Period | Description | Report |
 |---|---|---|---|
 | Assignment 2 | Jul 13 – Jul 28, 2026 | Project foundation, full CRUD for all 5 entities (Maps, Obstacles, Waypoints, Routes, Users), three-layer architecture, error handling, logging, and Postman collection. | [View report](.docs/reports/assignments/2/progress-report.md) |
+| Assignment 3.4 | Jul 20 – Jul 27, 2026 | A* pathfinding algorithm, functional techniques (HOF, currying, composition), route enrichment with `optimal_path`, waypoint compliance validation, schema migration. | [View report](.docs/reports/assignments/3/progress-report.md) |
