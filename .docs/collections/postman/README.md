@@ -22,5 +22,9 @@ This directory contains the exported Postman collection and environment variable
 If new endpoints or entities are added in future phases:
 1. Duplicate an existing folder or request in Postman.
 2. Update the endpoint and payload.
-3. Ensure any new IDs use environment variables (e.g. `{{newEntityId}}`).
 4. Re-export both the collection and environment, and overwrite these `.json` files in this directory.
+
+## Collection Changelog
+- **2026-07-27:** Updated Route responses to include `optimal_path`
+  array. Added 422 example for waypoint compliance failure on
+  POST /api/routes.
