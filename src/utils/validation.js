@@ -11,4 +11,40 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
-module.exports = { isValidEmail };
+const isValidObstacle = (obstacle) => {
+  if (!obstacle || typeof obstacle !== 'object') return false;
+  if (!obstacle.position || typeof obstacle.position !== 'object') return false;
+  
+  const { x, y } = obstacle.position;
+  if (!Number.isInteger(x) || x < 0) return false;
+  if (!Number.isInteger(y) || y < 0) return false;
+  
+  if (!Number.isInteger(obstacle.size) || obstacle.size <= 0) return false;
+  
+  return true;
+};
+
+/**
+ * Validates if the given waypoint object has the correct shape.
+ * 
+ * @param {Object} waypoint 
+ * @returns {boolean}
+ */
+const isValidWaypoint = (waypoint) => {
+  if (!waypoint || typeof waypoint !== 'object') return false;
+  if (!waypoint.position || typeof waypoint.position !== 'object') return false;
+  
+  const { x, y } = waypoint.position;
+  if (!Number.isInteger(x) || x < 0) return false;
+  if (!Number.isInteger(y) || y < 0) return false;
+  
+  if (!waypoint.name || typeof waypoint.name !== 'string' || waypoint.name.trim() === '') return false;
+  
+  return true;
+};
+
+module.exports = { 
+  isValidEmail,
+  isValidObstacle,
+  isValidWaypoint
+};
