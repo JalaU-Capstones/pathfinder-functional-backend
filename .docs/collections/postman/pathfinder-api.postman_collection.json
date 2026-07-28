@@ -13,12 +13,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/health",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "health"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
             }
           }
         }
@@ -32,8 +40,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -41,8 +55,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/maps",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "maps"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maps"
+              ]
             }
           }
         },
@@ -51,12 +70,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/maps",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "maps"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maps"
+              ]
             }
           }
         },
@@ -65,12 +92,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/maps/{{mapId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "maps", "{{mapId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maps",
+                "{{mapId}}"
+              ]
             }
           }
         },
@@ -79,8 +115,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -88,8 +130,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/maps/{{mapId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "maps", "{{mapId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maps",
+                "{{mapId}}"
+              ]
             }
           }
         },
@@ -98,12 +146,21 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/maps/{{mapId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "maps", "{{mapId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maps",
+                "{{mapId}}"
+              ]
             }
           }
         }
@@ -117,8 +174,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -126,8 +189,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/obstacles",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "obstacles"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "obstacles"
+              ]
             }
           }
         },
@@ -136,12 +204,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/obstacles",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "obstacles"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "obstacles"
+              ]
             }
           }
         },
@@ -150,14 +226,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/obstacles?mapId={{mapId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "obstacles"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "obstacles"
+              ],
               "query": [
-                { "key": "mapId", "value": "{{mapId}}" }
+                {
+                  "key": "mapId",
+                  "value": "{{mapId}}"
+                }
               ]
             }
           }
@@ -167,12 +254,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/obstacles/{{obstacleId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "obstacles", "{{obstacleId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "obstacles",
+                "{{obstacleId}}"
+              ]
             }
           }
         },
@@ -181,8 +277,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -190,8 +292,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/obstacles/{{obstacleId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "obstacles", "{{obstacleId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "obstacles",
+                "{{obstacleId}}"
+              ]
             }
           }
         },
@@ -200,12 +308,21 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/obstacles/{{obstacleId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "obstacles", "{{obstacleId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "obstacles",
+                "{{obstacleId}}"
+              ]
             }
           }
         }
@@ -219,8 +336,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -228,8 +351,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/waypoints",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "waypoints"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "waypoints"
+              ]
             }
           }
         },
@@ -238,12 +366,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/waypoints",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "waypoints"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "waypoints"
+              ]
             }
           }
         },
@@ -252,14 +388,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/waypoints?mapId={{mapId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "waypoints"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "waypoints"
+              ],
               "query": [
-                { "key": "mapId", "value": "{{mapId}}" }
+                {
+                  "key": "mapId",
+                  "value": "{{mapId}}"
+                }
               ]
             }
           }
@@ -269,12 +416,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/waypoints/{{waypointId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "waypoints", "{{waypointId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "waypoints",
+                "{{waypointId}}"
+              ]
             }
           }
         },
@@ -283,8 +439,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -292,8 +454,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/waypoints/{{waypointId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "waypoints", "{{waypointId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "waypoints",
+                "{{waypointId}}"
+              ]
             }
           }
         },
@@ -302,12 +470,21 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/waypoints/{{waypointId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "waypoints", "{{waypointId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "waypoints",
+                "{{waypointId}}"
+              ]
             }
           }
         }
@@ -321,8 +498,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -330,67 +513,199 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/routes",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "routes"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "routes"
+              ]
             }
-          }
+          },
+          "response": [
+            {
+              "name": "Success Example",
+              "originalRequest": {},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"mapId\": 1,\n    \"start\": {\n      \"x\": 2,\n      \"y\": 2\n    },\n    \"end\": {\n      \"x\": 8,\n      \"y\": 8\n    },\n    \"distance\": 12,\n    \"optimal_path\": [\n      {\n        \"x\": 2,\n        \"y\": 2\n      },\n      {\n        \"x\": 3,\n        \"y\": 2\n      },\n      {\n        \"x\": 4,\n        \"y\": 2\n      },\n      {\n        \"x\": 8,\n        \"y\": 8\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Route — 422 Waypoint Compliance Failure",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": {{mapId}},\n  \"start\": { \"x\": 2, \"y\": 2 },\n  \"end\": { \"x\": 8, \"y\": 8 }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/routes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "routes"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "422 Unprocessable Entity",
+              "originalRequest": {},
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNPROCESSABLE_ENTITY\",\n    \"message\": \"The computed path could not satisfy all waypoint constraints. Verify that waypoints are reachable and not blocked by obstacles.\"\n  }\n}"
+            }
+          ]
         },
         {
           "name": "Get All Routes",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/routes",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "routes"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "routes"
+              ]
             }
-          }
+          },
+          "response": [
+            {
+              "name": "Success Example",
+              "originalRequest": {},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"mapId\": 1,\n      \"start\": {\n        \"x\": 2,\n        \"y\": 2\n      },\n      \"end\": {\n        \"x\": 8,\n        \"y\": 8\n      },\n      \"distance\": 12,\n      \"optimal_path\": [\n        {\n          \"x\": 2,\n          \"y\": 2\n        },\n        {\n          \"x\": 3,\n          \"y\": 2\n        },\n        {\n          \"x\": 4,\n          \"y\": 2\n        },\n        {\n          \"x\": 8,\n          \"y\": 8\n        }\n      ]\n    }\n  ]\n}"
+            }
+          ]
         },
         {
           "name": "Get Routes by Map ID",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/routes?mapId={{mapId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "routes"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "routes"
+              ],
               "query": [
-                { "key": "mapId", "value": "{{mapId}}" }
+                {
+                  "key": "mapId",
+                  "value": "{{mapId}}"
+                }
               ]
             }
-          }
+          },
+          "response": [
+            {
+              "name": "Success Example",
+              "originalRequest": {},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"mapId\": 1,\n      \"start\": {\n        \"x\": 2,\n        \"y\": 2\n      },\n      \"end\": {\n        \"x\": 8,\n        \"y\": 8\n      },\n      \"distance\": 12,\n      \"optimal_path\": [\n        {\n          \"x\": 2,\n          \"y\": 2\n        },\n        {\n          \"x\": 3,\n          \"y\": 2\n        },\n        {\n          \"x\": 4,\n          \"y\": 2\n        },\n        {\n          \"x\": 8,\n          \"y\": 8\n        }\n      ]\n    }\n  ]\n}"
+            }
+          ]
         },
         {
           "name": "Get Route by ID",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/routes/{{routeId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "routes", "{{routeId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "routes",
+                "{{routeId}}"
+              ]
             }
-          }
+          },
+          "response": [
+            {
+              "name": "Success Example",
+              "originalRequest": {},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"mapId\": 1,\n    \"start\": {\n      \"x\": 2,\n      \"y\": 2\n    },\n    \"end\": {\n      \"x\": 8,\n      \"y\": 8\n    },\n    \"distance\": 12,\n    \"optimal_path\": [\n      {\n        \"x\": 2,\n        \"y\": 2\n      },\n      {\n        \"x\": 3,\n        \"y\": 2\n      },\n      {\n        \"x\": 4,\n        \"y\": 2\n      },\n      {\n        \"x\": 8,\n        \"y\": 8\n      }\n    ]\n  }\n}"
+            }
+          ]
         },
         {
           "name": "Delete Route",
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/routes/{{routeId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "routes", "{{routeId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "routes",
+                "{{routeId}}"
+              ]
             }
           }
         }
@@ -404,8 +719,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -413,8 +734,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
             }
           }
         },
@@ -423,12 +749,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
             }
           }
         },
@@ -437,12 +771,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/users/{{userId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "{{userId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
             }
           }
         },
@@ -451,8 +794,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -460,8 +809,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/users/{{userId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "{{userId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
             }
           }
         },
@@ -470,12 +825,21 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/users/{{userId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "{{userId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
             }
           }
         }
