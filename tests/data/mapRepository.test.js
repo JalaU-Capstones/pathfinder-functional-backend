@@ -1,15 +1,29 @@
 /* global jest, beforeEach */
 const mapRepository = require('../../src/data/repositories/mapRepository');
-const { Map, Obstacle, Waypoint } = require('../../src/data/models');
+const { Map, Obstacle, Waypoint, sequelize } = require('../../src/data/models');
+
+const mockTransaction = {
+  commit: jest.fn(),
+  rollback: jest.fn(),
+};
 
 jest.mock('../../src/data/models', () => {
   return {
+    sequelize: {
+      transaction: jest.fn()
+    },
     Map: {
       create: jest.fn(),
       findByPk: jest.fn(),
       findAll: jest.fn(),
       update: jest.fn(),
       destroy: jest.fn()
+    },
+    Obstacle: {
+      bulkCreate: jest.fn()
+    },
+    Waypoint: {
+      bulkCreate: jest.fn()
     }
   };
 });
@@ -17,6 +31,7 @@ jest.mock('../../src/data/models', () => {
 describe('Map Repository', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    sequelize.transaction.mockResolvedValue(mockTransaction);
   });
 
   describe('createMap', () => {
@@ -28,6 +43,61 @@ describe('Map Repository', () => {
 
       expect(Map.create).toHaveBeenCalledWith(data);
       expect(result.id).toBe(1);
+    });
+  });
+
+  describe('createMapWithRelations', () => {
+    it('should create map with obstacles and waypoints and commit transaction', async () => {
+      const data = {
+        name: 'Test', width: 10, height: 10,
+        obstacles: [{ positionX: 1, positionY: 1 }],
+        waypoints: [{ positionX: 2, positionY: 2 }]
+      };
+      
+      Map.create.mockResolvedValue({ id: 1 });
+      
+      const result = await mapRepository.createMapWithRelations(data);
+      
+      expect(sequelize.transaction).toHaveBeenCalled();
+      expect(Map.create).toHaveBeenCalledWith({ name: 'Test', width: 10, height: 10 }, { transaction: mockTransaction });
+      expect(Obstacle.bulkCreate).toHaveBeenCalledWith([{ positionX: 1, positionY: 1, mapId: 1 }], { transaction: mockTransaction });
+      expect(Waypoint.bulkCreate).toHaveBeenCalledWith([{ positionX: 2, positionY: 2, mapId: 1 }], { transaction: mockTransaction });
+      expect(mockTransaction.commit).toHaveBeenCalled();
+      expect(result).toBe(1);
+    });
+
+    it('should create map without obstacles or waypoints if arrays are empty', async () => {
+      const data = {
+        name: 'Test', width: 10, height: 10,
+        obstacles: [],
+        waypoints: []
+      };
+      
+      Map.create.mockResolvedValue({ id: 1 });
+      
+      const result = await mapRepository.createMapWithRelations(data);
+      
+      expect(Map.create).toHaveBeenCalledWith({ name: 'Test', width: 10, height: 10 }, { transaction: mockTransaction });
+      expect(Obstacle.bulkCreate).not.toHaveBeenCalled();
+      expect(Waypoint.bulkCreate).not.toHaveBeenCalled();
+      expect(mockTransaction.commit).toHaveBeenCalled();
+      expect(result).toBe(1);
+    });
+
+    it('should rollback transaction and propagate error if creation fails', async () => {
+      const data = {
+        name: 'Test', width: 10, height: 10,
+        obstacles: [{ positionX: 1, positionY: 1 }]
+      };
+      const error = new Error('Database Error');
+      
+      Map.create.mockResolvedValue({ id: 1 });
+      Obstacle.bulkCreate.mockRejectedValue(error);
+      
+      await expect(mapRepository.createMapWithRelations(data)).rejects.toThrow('Database Error');
+      
+      expect(mockTransaction.rollback).toHaveBeenCalled();
+      expect(mockTransaction.commit).not.toHaveBeenCalled();
     });
   });
 
