@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-30 (Phase 11A - Jest Coverage Configuration):**
+  - feat(testing): configure Jest coverage with 70% thresholds, HTML report, and CI script.
+  - chore(gitignore): exclude coverage/ directory.
+  - docs(tooling): add coverage documentation.
 - **2026-07-28 (Composite Map Creation):**
   - fix(maps): support atomic creation of obstacles and waypoints via `POST /api/maps` using Sequelize transactions and bulkCreate.
   - fix(maps): silently ignore unknown fields (type, description) in obstacle and waypoint items.
