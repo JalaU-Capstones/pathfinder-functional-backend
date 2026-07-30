@@ -190,7 +190,33 @@ Here are all the database-related scripts defined in the project:
 ### Code Quality & Testing
 
 - `npm run lint`: Runs ESLint across the codebase to check for code quality and adherence to functional programming rules.
-- `npm test`: Runs the Jest test suite to verify application functionality.
+
+## 🧪 Testing & Coverage
+
+### Run tests
+```bash
+npm test                  # fast, no coverage
+npm run test:coverage     # full coverage report
+npm run test:ci           # CI mode (strict, force exit)
+```
+
+### Coverage report
+After running `npm run test:coverage`, open
+`coverage/index.html` in a browser for an interactive
+file-by-file breakdown.
+
+### Thresholds
+Jest enforces a minimum of **70%** on statements, branches,
+functions, and lines. The test run fails if any metric drops
+below this threshold.
+
+### Current baseline
+| Metric | Coverage |
+|---|---|
+| Statements | 88.83% |
+| Branches | 78.47% |
+| Functions | 85.6% |
+| Lines | 89.42% |
 
 ## 📋 Weekly Reports
 
