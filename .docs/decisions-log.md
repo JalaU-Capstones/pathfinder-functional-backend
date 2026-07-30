@@ -2,6 +2,11 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-07-30 (Phase 11A - Coverage Configuration)
+- **Threshold Enforcement:** Decision to set 70% as the Jest coverage threshold (matches rubric minimum; enforced by Jest config, not just by convention).
+- **Exclusions:** Decision to exclude migrations, seeders, server.js, and sequelize.cli.js from coverage collection, with rationale.
+- **Reporters:** Decision to generate both `text` and `html` reporters (text for CI output, HTML for local developer inspection).
+
 ## 2026-07-28 (Composite Map Creation)
 - **Atomic Map Creation:** Decision to support atomic composite creation in `POST /api/maps` (map + obstacles + waypoints) using a single Sequelize transaction.
 - **Data Integrity:** Used transaction to ensure that partial states (e.g. map created but an obstacle fails) are rolled back. Data integrity is prioritized.

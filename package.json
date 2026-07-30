@@ -8,6 +8,9 @@
   },
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watchAll",
+    "test:ci": "jest --coverage --ci --forceExit",
     "dev": "node --watch src/server.js",
     "lint": "eslint .",
     "db:test-connection": "node scripts/test-db.js",
@@ -29,6 +32,31 @@
     "url": "https://github.com/JalaU-Capstones/pathfinder-functional-backend/issues"
   },
   "homepage": "https://github.com/JalaU-Capstones/pathfinder-functional-backend#readme",
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/config/sequelize.cli.js",
+      "!src/server.js",
+      "!src/data/migrations/**",
+      "!src/data/seeders/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 70,
+        "branches": 70,
+        "functions": 70,
+        "lines": 70
+      }
+    },
+    "coverageReporters": [
+      "text",
+      "text-summary",
+      "html",
+      "lcov"
+    ]
+  },
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
