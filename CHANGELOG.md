@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-30 (Phase 11B - Complete Repository Layer Tests):**
+  - test(repositories): add complete unit tests for routeRepository, userRepository, and mapRepository covering all CRUD operations and edge cases.
 - **2026-07-30 (Phase 11A - Jest Coverage Configuration):**
   - feat(testing): configure Jest coverage with 70% thresholds, HTML report, and CI script.
   - chore(gitignore): exclude coverage/ directory.

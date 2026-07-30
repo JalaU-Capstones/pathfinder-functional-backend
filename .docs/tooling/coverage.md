@@ -31,12 +31,12 @@ Minimum enforced thresholds (Jest fails if any drops below):
 ## Current Baseline (as of 2026-07-30)
 | Metric | % |
 |---|---|
-| Statements | 63.33% |
-| Branches | 75.78% |
-| Functions | 69.48% |
-| Lines | 62.62% |
+| Statements | 66.66% |
+| Branches | 79.21% |
+| Functions | 77.92% |
+| Lines | 65.88% |
 
-These numbers reflect the state before Phase 11B–11D test additions. They will increase as gaps are closed. (Note: Initial 88.83% was without `collectCoverageFrom` measuring all untried source files).
+These numbers reflect the state after Phase 11B test additions. (Note: Initial 88.83% was without `collectCoverageFrom` measuring all untried source files).
 
 ## Files With Known Coverage Gaps (Phase 11B–11D targets)
 - `src/app.js` (0% Stmts)
@@ -44,6 +44,6 @@ These numbers reflect the state before Phase 11B–11D test additions. They will
 - `src/presentation/controllers/*.js` (0% Stmts)
 - `src/presentation/routes/*.js` (0% Stmts)
 - `src/utils/httpResponse.js` (0% Stmts)
-- `src/data/repositories/mapRepository.js` (50% Stmts)
-- `src/data/repositories/routeRepository.js` (42.85% Stmts)
-- `src/data/repositories/userRepository.js` (50% Stmts)
+- `src/data/repositories/mapRepository.js` (Addressed in Phase 11B: 100% Stmts)
+- `src/data/repositories/routeRepository.js` (Addressed in Phase 11B: 100% Stmts)
+- `src/data/repositories/userRepository.js` (Addressed in Phase 11B: 100% Stmts)
