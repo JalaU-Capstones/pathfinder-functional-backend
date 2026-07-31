@@ -61,7 +61,7 @@ describe('Obstacle Service', () => {
       });
     });
 
-    it('should throw VALIDATION_ERROR if position is invalid', async () => {
+    it('should throw VALIDATION_ERROR if position x is invalid', async () => {
       const input = {
         mapId: 1,
         position: { x: -10, y: 15 },
@@ -69,7 +69,39 @@ describe('Obstacle Service', () => {
       };
       mapRepository.getMapById.mockResolvedValue({ id: 1 });
       await expect(obstacleService.createObstacleService(input)).rejects.toMatchObject({
-        type: ERROR_TYPES.VALIDATION_ERROR
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Position x must be a non-negative integer.'
+      });
+    });
+
+    it('should throw VALIDATION_ERROR if mapId is missing or invalid', async () => {
+      await expect(obstacleService.createObstacleService({ position: { x: 10, y: 15 }, size: 5 })).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'mapId is required and must be an integer.'
+      });
+    });
+
+    it('should throw VALIDATION_ERROR if position object is missing', async () => {
+      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      await expect(obstacleService.createObstacleService({ mapId: 1, size: 5 })).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Position object is required.'
+      });
+    });
+
+    it('should throw VALIDATION_ERROR if position y is invalid', async () => {
+      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      await expect(obstacleService.createObstacleService({ mapId: 1, position: { x: 10, y: -15 }, size: 5 })).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Position y must be a non-negative integer.'
+      });
+    });
+
+    it('should throw VALIDATION_ERROR if size is missing or invalid', async () => {
+      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      await expect(obstacleService.createObstacleService({ mapId: 1, position: { x: 10, y: 15 }, size: -5 })).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Size must be a positive integer.'
       });
     });
   });
@@ -105,6 +137,25 @@ describe('Obstacle Service', () => {
       obstacleRepository.getAllObstacles.mockResolvedValue([]);
       await obstacleService.getAllObstaclesService('123');
       expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith(123);
+    });
+
+    it('should pass null to repository if mapId is omitted', async () => {
+      obstacleRepository.getAllObstacles.mockResolvedValue([]);
+      await obstacleService.getAllObstaclesService();
+      expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith(null);
+    });
+  });
+
+  describe('toApiShape', () => {
+    it('should return null if input is falsy', () => {
+      expect(obstacleService.toApiShape(null)).toBeNull();
+    });
+
+    it('should handle input without toJSON method', () => {
+      const input = { id: 1, mapId: 1, positionX: 10, positionY: 10, size: 5 };
+      const result = obstacleService.toApiShape(input);
+      expect(result.id).toBe(1);
+      expect(result.position).toEqual({ x: 10, y: 10 });
     });
   });
 

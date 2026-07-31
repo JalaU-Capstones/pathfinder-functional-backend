@@ -14,9 +14,15 @@ describe('httpResponse', () => {
 
   describe('sendSuccess', () => {
     it('should send 200 and data', () => {
-      sendSuccess(mockRes, 200, { key: 'value' });
-      expect(mockRes.status).toHaveBeenCalledWith(200);
+      sendSuccess(mockRes, 201, { key: 'value' });
+      expect(mockRes.status).toHaveBeenCalledWith(201);
       expect(mockRes.json).toHaveBeenCalledWith({ success: true, data: { key: 'value' } });
+    });
+
+    it('should use default parameters 200 and null data', () => {
+      sendSuccess(mockRes);
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({ success: true, data: null });
     });
   });
 
