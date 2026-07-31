@@ -11,6 +11,18 @@ describe('Map Service', () => {
     jest.clearAllMocks();
   });
 
+  describe('toApiShape', () => {
+    it('should return null if input is falsy', () => {
+      expect(mapService.toApiShape(null)).toBeNull();
+    });
+
+    it('should handle input without toJSON method', () => {
+      const input = { id: 1, name: 'A', width: 10, height: 10, obstacles: [], waypoints: [] };
+      const result = mapService.toApiShape(input);
+      expect(result.id).toBe(1);
+    });
+  });
+
   describe('createMapService', () => {
     it('should create a map when input is valid (no relations)', async () => {
       const input = {
@@ -115,10 +127,43 @@ describe('Map Service', () => {
       });
     });
 
-    it('should throw validation error if name is missing', async () => {
-      const input = { dimensions: { width: 100, height: 100 } };
+    it('should throw validation error if name is not a string', async () => {
+      const input = { name: 123, dimensions: { width: 100, height: 100 } };
       await expect(mapService.createMapService(input)).rejects.toMatchObject({
-        type: ERROR_TYPES.VALIDATION_ERROR
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Name is required and must be a non-empty string.'
+      });
+    });
+
+    it('should throw validation error if name is empty string', async () => {
+      const input = { name: '   ', dimensions: { width: 100, height: 100 } };
+      await expect(mapService.createMapService(input)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Name is required and must be a non-empty string.'
+      });
+    });
+
+    it('should throw validation error if dimensions object is missing', async () => {
+      const input = { name: 'Test' };
+      await expect(mapService.createMapService(input)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Dimensions object is required.'
+      });
+    });
+
+    it('should throw validation error if width is invalid', async () => {
+      const input = { name: 'Test', dimensions: { width: -1, height: 10 } };
+      await expect(mapService.createMapService(input)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Width must be a positive integer.'
+      });
+    });
+
+    it('should throw validation error if height is invalid', async () => {
+      const input = { name: 'Test', dimensions: { width: 10, height: -1 } };
+      await expect(mapService.createMapService(input)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: 'Height must be a positive integer.'
       });
     });
   });
@@ -152,6 +197,17 @@ describe('Map Service', () => {
       await expect(mapService.getMapService(999)).rejects.toMatchObject({
         type: ERROR_TYPES.NOT_FOUND
       });
+    });
+  });
+
+  describe('getAllMapsService', () => {
+    it('should return all maps', async () => {
+      mapRepository.getAllMaps.mockResolvedValue([
+        { id: 1, name: 'A', toJSON: function() { return this; } }
+      ]);
+      const result = await mapService.getAllMapsService();
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe(1);
     });
   });
 

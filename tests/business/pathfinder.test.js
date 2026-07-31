@@ -116,4 +116,38 @@ describe('A* Pathfinder Algorithm', () => {
     expect(Object.isFrozen(wpResult)).toBe(true);
     expect(Object.isFrozen(wpResult.path)).toBe(true);
   });
+
+  it('Scenario 8 — Impossible waypoint route', () => {
+    // start (0,0), waypoint at (2,0), end (4,0)
+    // obstacle at (1,0) blocks the first segment
+    const grid = { width: 5, height: 1 };
+    const start = { x: 0, y: 0 };
+    const waypoint = { x: 2, y: 0, name: 'Checkpoint' };
+    const end = { x: 4, y: 0 };
+    const obstacles = [{ x: 1, y: 0 }];
+    
+    const result = calculatePath(grid, start, end, obstacles, [waypoint]);
+    
+    expect(result.distance).toBe(-1);
+    expect(result.path).toEqual([]);
+  });
+
+  it('Scenario 9 — Defensive branch for fScore (mocking Map)', () => {
+    const grid = { width: 3, height: 3 };
+    const start = { x: 0, y: 0 };
+    const end = { x: 0, y: 1 }; // one step away
+    
+    // Temporarily spy on Map.prototype.has to force the false branch in `fScore.has`
+    const originalHas = Map.prototype.has;
+    const mapSpy = jest.spyOn(Map.prototype, 'has').mockImplementation(function (key) {
+      // Return false for the start node in fScore to trigger `Infinity` branch
+      if (key === '0,0') return false; 
+      return originalHas.call(this, key);
+    });
+
+    const result = calculatePath(grid, start, end, [], []);
+    
+    mapSpy.mockRestore();
+    expect(result.distance).toBe(1);
+  });
 });
