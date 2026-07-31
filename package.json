@@ -38,6 +38,7 @@
     "collectCoverageFrom": [
       "src/**/*.js",
       "!src/config/sequelize.cli.js",
+      "!src/config/swagger.js",
       "!src/server.js",
       "!src/data/migrations/**",
       "!src/data/seeders/**"
