@@ -1,6 +1,26 @@
-const { isValidObstacle, isValidWaypoint } = require('../../src/utils/validation');
+const { isValidObstacle, isValidWaypoint, isValidEmail } = require('../../src/utils/validation');
 
 describe('validation utils', () => {
+  describe('isValidEmail', () => {
+    it('should return true for valid emails', () => {
+      expect(isValidEmail('test@example.com')).toBe(true);
+      expect(isValidEmail('user.name+tag@domain.co')).toBe(true);
+    });
+
+    it('should return false for invalid emails', () => {
+      expect(isValidEmail('test@example')).toBe(false);
+      expect(isValidEmail('test.com')).toBe(false);
+      expect(isValidEmail('@example.com')).toBe(false);
+      expect(isValidEmail('test@.com')).toBe(false);
+    });
+
+    it('should return false for non-string types', () => {
+      expect(isValidEmail(null)).toBe(false);
+      expect(isValidEmail(123)).toBe(false);
+      expect(isValidEmail({})).toBe(false);
+    });
+  });
+
   describe('isValidObstacle', () => {
     it('should return true for a valid obstacle', () => {
       expect(isValidObstacle({ position: { x: 10, y: 20 }, size: 5 })).toBe(true);

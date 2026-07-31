@@ -72,6 +72,15 @@ describe('Obstacle Controller', () => {
       expect(response.status).toBe(200);
       expect(obstacleService.getAllObstaclesService).toHaveBeenCalledWith('1');
     });
+
+    it('should return 500 on unexpected error', async () => {
+      const error = createAppError(ERROR_TYPES.INTERNAL_ERROR, 'Internal error');
+      obstacleService.getAllObstaclesService.mockRejectedValue(error);
+
+      const response = await request(app).get('/api/obstacles');
+
+      expect(response.status).toBe(500);
+    });
   });
 
   describe('GET /api/obstacles/:id', () => {

@@ -84,6 +84,16 @@ describe('Map Controller', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data).toEqual([]);
     });
+
+    it('should return 500 on unexpected error', async () => {
+      const error = createAppError(ERROR_TYPES.INTERNAL_ERROR, 'Internal error');
+      mapService.getAllMapsService.mockRejectedValue(error);
+
+      const response = await request(app).get('/api/maps');
+
+      expect(response.status).toBe(500);
+      expect(response.body.success).toBe(false);
+    });
   });
 
   describe('GET /api/maps/:id', () => {

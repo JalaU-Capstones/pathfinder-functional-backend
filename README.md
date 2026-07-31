@@ -210,13 +210,13 @@ Jest enforces a minimum of **70%** on statements, branches,
 functions, and lines. The test run fails if any metric drops
 below this threshold.
 
-### Current baseline
+## Current baseline
 | Metric | Coverage |
 |---|---|
-| Statements | 88.83% |
-| Branches | 78.47% |
-| Functions | 85.6% |
-| Lines | 89.42% |
+| Statements | 100% |
+| Branches | 100% |
+| Functions | 100% |
+| Lines | 100% |
 
 ## 📋 Weekly Reports
 
@@ -227,3 +227,4 @@ documenting decisions made, features implemented, and lessons learned.
 |---|---|---|---|
 | Assignment 2 | Jul 13 – Jul 28, 2026 | Project foundation, full CRUD for all 5 entities (Maps, Obstacles, Waypoints, Routes, Users), three-layer architecture, error handling, logging, and Postman collection. | [View report](.docs/reports/assignments/2/progress-report.md) |
 | Assignment 3.4 | Jul 20 – Jul 27, 2026 | A* pathfinding algorithm, functional techniques (HOF, currying, composition), route enrichment with `optimal_path`, waypoint compliance validation, schema migration. | [View report](.docs/reports/assignments/3/progress-report.md) |
+| Assignment 4.4 | Jul 27 – Jul 30, 2026 | Comprehensive unit test suite (270+ tests, 100% statement coverage, 100% branch coverage). Covers all layers: pure functions, services, repositories, controllers, middlewares. Jest coverage thresholds enforced at 70% minimum. | [View report](.docs/reports/assignments/4/progress-report.md) |
