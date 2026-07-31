@@ -24,6 +24,7 @@ Minimum enforced thresholds (Jest fails if any drops below):
 
 ## What Is Excluded and Why
 - `sequelize.cli.js`: Sequelize CLI config file, not application logic — no business value in testing it.
+- `swagger.js`: Swagger config is a declarative OpenAPI definition, not business logic — testing it would only verify that the swagger-jsdoc library works, which is not the project's responsibility.
 - `server.js`: Entry point that starts the HTTP server — testing it would require spinning up a real server, which is an integration concern outside the scope of unit tests.
 - `migrations/**`: Sequelize migration files are SQL schema definitions, not application logic. They are verified by running `db:migrate`, not by unit tests.
 - `seeders/**`: Seed data files are for development/demo setup only, not production logic.
@@ -31,19 +32,19 @@ Minimum enforced thresholds (Jest fails if any drops below):
 ## Current Baseline (as of 2026-07-30)
 | Metric | % |
 |---|---|
-| Statements | 66.66% |
-| Branches | 79.21% |
-| Functions | 77.92% |
-| Lines | 65.88% |
+| Statements | 94.70% |
+| Branches | 82.10% |
+| Functions | 96.75% |
+| Lines | 95.14% |
 
-These numbers reflect the state after Phase 11B test additions. (Note: Initial 88.83% was without `collectCoverageFrom` measuring all untried source files).
+These numbers reflect the state after Phase 11C test additions. Controller coverage uses integration tests (supertest) rather than pure unit tests because controllers are HTTP adapters — integration testing is the appropriate level to test parsing, routing, and HTTP responses.
 
 ## Files With Known Coverage Gaps (Phase 11B–11D targets)
-- `src/app.js` (0% Stmts)
-- `src/config/swagger.js` (0% Stmts)
-- `src/presentation/controllers/*.js` (0% Stmts)
-- `src/presentation/routes/*.js` (0% Stmts)
-- `src/utils/httpResponse.js` (0% Stmts)
+- `src/app.js` (Addressed in Phase 11C: 93% Stmts)
+- `src/config/swagger.js` (Excluded in Phase 11C)
+- `src/presentation/controllers/*.js` (Addressed in Phase 11C: > 96% Stmts)
+- `src/presentation/routes/*.js` (Addressed in Phase 11C: 100% Stmts)
+- `src/utils/httpResponse.js` (Addressed in Phase 11C: 100% Stmts)
 - `src/data/repositories/mapRepository.js` (Addressed in Phase 11B: 100% Stmts)
 - `src/data/repositories/routeRepository.js` (Addressed in Phase 11B: 100% Stmts)
 - `src/data/repositories/userRepository.js` (Addressed in Phase 11B: 100% Stmts)

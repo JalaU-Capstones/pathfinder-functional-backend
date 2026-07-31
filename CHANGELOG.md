@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-30 (Phase 11C - Controller & Route Integration Tests):**
+  - test(controllers): add supertest integration tests for all 5 entity controllers and health endpoint.
+  - chore(coverage): exclude swagger.js from coverage collection.
 - **2026-07-30 (Phase 11B - Complete Repository Layer Tests):**
   - test(repositories): add complete unit tests for routeRepository, userRepository, and mapRepository covering all CRUD operations and edge cases.
 - **2026-07-30 (Phase 11A - Jest Coverage Configuration):**
