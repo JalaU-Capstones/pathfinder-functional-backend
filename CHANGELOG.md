@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-30 (Phase 11D - Surgical Branch Coverage Gaps):**
+  - test(services): complete branch coverage testing for all services, reaching 100% statement and branch coverage.
+  - test(utils): cover defensive logic and falsy branches in `shapeMapper.js`, `httpResponse.js`, and `errorHandler.js`.
+  - test(app): mock environment variables in `logger.js` and `app.js` via `jest.isolateModules` and `jest.resetModules` for 100% coverage.
+  - test(pathfinder): mock `Map.prototype.has` to cover impossible/defensive pathfinding branches.
 - **2026-07-30 (Phase 11C - Controller & Route Integration Tests):**
   - test(controllers): add supertest integration tests for all 5 entity controllers and health endpoint.
   - chore(coverage): exclude swagger.js from coverage collection.

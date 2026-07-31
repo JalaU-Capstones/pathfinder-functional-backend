@@ -13,6 +13,25 @@ describe('Route Service', () => {
     jest.clearAllMocks();
   });
 
+  describe('toApiShape', () => {
+    it('should return null if input is falsy', () => {
+      expect(routeService.toApiShape(null)).toBeNull();
+    });
+
+    it('should handle input without toJSON method and path', () => {
+      const input = { id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5, distance: 10 };
+      const result = routeService.toApiShape(input);
+      expect(result.id).toBe(1);
+      expect(result.optimal_path).toBeNull();
+    });
+
+    it('should handle input with toJSON method', () => {
+      const input = { toJSON: () => ({ id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5, distance: 10 }) };
+      const result = routeService.toApiShape(input);
+      expect(result.id).toBe(1);
+    });
+  });
+
   describe('createRouteService', () => {
     it('should create a route successfully for valid input', async () => {
       const mockMap = { id: 1, width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }], waypoints: [] };
@@ -73,6 +92,24 @@ describe('Route Service', () => {
         createdAt: '2026-07-21T00:00:00.000Z',
         updatedAt: '2026-07-21T00:00:00.000Z'
       });
+    });
+
+    it('should handle map without waypoints', async () => {
+      const mockMap = { id: 1, width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }] }; // no waypoints
+      mapRepository.getMapById.mockResolvedValue(mockMap);
+      
+      pathfinder.calculatePath.mockReturnValue({
+        distance: 12,
+        path: [{x:0,y:0}, {x:5,y:7}]
+      });
+
+      routeRepository.createRoute.mockResolvedValue({
+        id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 7, distance: 12, path: []
+      });
+
+      const routeData = { mapId: 1, start: { x: 0, y: 0 }, end: { x: 5, y: 7 } };
+      const result = await routeService.createRouteService(routeData);
+      expect(result.id).toBe(1);
     });
 
     it('should throw 404 if map does not exist', async () => {
@@ -138,6 +175,92 @@ describe('Route Service', () => {
         type: 'UNPROCESSABLE_ENTITY',
         message: 'The computed path could not satisfy all waypoint constraints. Verify that waypoints are reachable and not blocked by obstacles.'
       });
+    });
+  });
+
+  describe('createRouteService with isolated modules', () => {
+    let isolatedRouteService;
+    beforeEach(() => {
+      jest.isolateModules(() => {
+        jest.doMock('../../src/utils/compose', () => ({
+          pipe: () => (context) => context // bypass validation
+        }));
+        isolatedRouteService = require('../../src/business/services/routeService');
+      });
+    });
+
+    it('should handle map without obstacles and waypoints (bypassing validation)', async () => {
+      const mockMap = { id: 1, width: 10, height: 10 }; // no obstacles, no waypoints
+      const mapRepo = require('../../src/data/repositories/mapRepository');
+      mapRepo.getMapById.mockResolvedValue(mockMap);
+      
+      const pFinder = require('../../src/business/pathfinder');
+      pFinder.calculatePath.mockReturnValue({
+        distance: 12,
+        path: [{x:0,y:0}, {x:5,y:7}]
+      });
+
+      const routeRepo = require('../../src/data/repositories/routeRepository');
+      routeRepo.createRoute.mockResolvedValue({
+        id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 7, distance: 12, path: []
+      });
+
+      const routeData = { mapId: 1, start: { x: 0, y: 0 }, end: { x: 5, y: 7 } };
+      const result = await isolatedRouteService.createRouteService(routeData);
+      expect(result.id).toBe(1);
+    });
+  });
+
+  describe('createRouteService validations', () => {
+    it('should throw 400 if mapId is missing or not an integer', async () => {
+      const routeData = { start: { x: 0, y: 0 }, end: { x: 5, y: 5 } };
+      await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
+        type: 'VALIDATION_ERROR',
+        message: 'mapId is required and must be an integer.'
+      });
+      await expect(routeService.createRouteService({ ...routeData, mapId: '1' })).rejects.toMatchObject({
+        type: 'VALIDATION_ERROR'
+      });
+    });
+
+    it('should throw 400 if point object is missing', async () => {
+      const routeData = { mapId: 1, end: { x: 5, y: 5 } };
+      await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
+        type: 'VALIDATION_ERROR',
+        message: 'Start object is required.'
+      });
+    });
+
+    it('should throw 400 if point x is negative or not integer', async () => {
+      const routeData = { mapId: 1, start: { x: -1, y: 0 }, end: { x: 5, y: 5 } };
+      await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
+        type: 'VALIDATION_ERROR',
+        message: 'Start x must be a non-negative integer.'
+      });
+    });
+
+    it('should throw 400 if point y is negative or not integer', async () => {
+      const routeData = { mapId: 1, start: { x: 0, y: -1 }, end: { x: 5, y: 5 } };
+      await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
+        type: 'VALIDATION_ERROR',
+        message: 'Start y must be a non-negative integer.'
+      });
+    });
+  });
+
+  describe('getAllRoutesService', () => {
+    it('should return all routes without mapId', async () => {
+      routeRepository.getAllRoutes.mockResolvedValue([{ id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5 }]);
+      const result = await routeService.getAllRoutesService();
+      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith(null);
+      expect(result).toHaveLength(1);
+    });
+
+    it('should return all routes with mapId', async () => {
+      routeRepository.getAllRoutes.mockResolvedValue([{ id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5 }]);
+      const result = await routeService.getAllRoutesService('1');
+      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith(1);
+      expect(result).toHaveLength(1);
     });
   });
 

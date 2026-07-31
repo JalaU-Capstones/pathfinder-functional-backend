@@ -104,4 +104,21 @@ describe('errorHandler Middleware', () => {
       }
     });
   });
+
+  it('should fallback to 500 if error type has no mapped status code', () => {
+    const err = createAppError('UNKNOWN_TYPE', 'Unknown error');
+    errorHandler(err, req, res, next);
+    expect(res.status).toHaveBeenCalledWith(500);
+  });
+
+  it('should not log if statusCode < 400', () => {
+    const { ERROR_STATUS_MAP } = require('../../../src/utils/errors');
+    ERROR_STATUS_MAP['WEIRD_SUCCESS'] = 200;
+    const err = createAppError('WEIRD_SUCCESS', 'Weird error');
+    errorHandler(err, req, res, next);
+    expect(logger.warn).not.toHaveBeenCalled();
+    expect(logger.error).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(200);
+    delete ERROR_STATUS_MAP['WEIRD_SUCCESS'];
+  });
 });
