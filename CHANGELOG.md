@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-07-30 (Phase 11E - Final Coverage Gaps & Assignment 4.4):**
+  - test(final): close last coverage gaps in pathfinder, env config, and validation.
+  - docs(reports): add assignment 4.4 progress report.
+  - docs(readme): update coverage baseline and weekly reports.
 - **2026-07-30 (Phase 11D - Surgical Branch Coverage Gaps):**
   - test(services): complete branch coverage testing for all services, reaching 100% statement and branch coverage.
   - test(utils): cover defensive logic and falsy branches in `shapeMapper.js`, `httpResponse.js`, and `errorHandler.js`.
