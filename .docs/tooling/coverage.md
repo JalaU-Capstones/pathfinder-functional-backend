@@ -32,12 +32,12 @@ Minimum enforced thresholds (Jest fails if any drops below):
 ## Current Baseline (as of 2026-07-30)
 | Metric | % |
 |---|---|
-| Statements | 94.70% |
-| Branches | 82.10% |
-| Functions | 96.75% |
-| Lines | 95.14% |
+| Statements | 99.35% |
+| Branches | 97.89% |
+| Functions | 100% |
+| Lines | 99.43% |
 
-These numbers reflect the state after Phase 11C test additions. Controller coverage uses integration tests (supertest) rather than pure unit tests because controllers are HTTP adapters — integration testing is the appropriate level to test parsing, routing, and HTTP responses.
+These numbers reflect the state after Phase 11D test additions. Controller coverage uses integration tests (supertest) rather than pure unit tests because controllers are HTTP adapters — integration testing is the appropriate level to test parsing, routing, and HTTP responses.
 
 ## Files With Known Coverage Gaps (Phase 11B–11D targets)
 - `src/app.js` (Addressed in Phase 11C: 93% Stmts)
