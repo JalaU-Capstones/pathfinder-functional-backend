@@ -70,6 +70,25 @@ describe('Route Controller', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data).toEqual(mockObjs);
     });
+
+    it('should return 200 and empty array', async () => {
+      routeService.getAllRoutesService.mockResolvedValue([]);
+
+      const response = await request(app).get('/api/routes');
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+      expect(response.body.data).toEqual([]);
+    });
+
+    it('should return 500 on unexpected error', async () => {
+      const error = createAppError(ERROR_TYPES.INTERNAL_ERROR, 'Internal error');
+      routeService.getAllRoutesService.mockRejectedValue(error);
+
+      const response = await request(app).get('/api/routes');
+
+      expect(response.status).toBe(500);
+    });
   });
 
   describe('GET /api/routes/:id', () => {
