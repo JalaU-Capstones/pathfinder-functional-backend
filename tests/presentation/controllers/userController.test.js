@@ -62,6 +62,15 @@ describe('User Controller', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data).toEqual(mockObjs);
     });
+
+    it('should return 500 on unexpected error', async () => {
+      const error = createAppError(ERROR_TYPES.INTERNAL_ERROR, 'Internal error');
+      userService.getAllUsersService.mockRejectedValue(error);
+
+      const response = await request(app).get('/api/users');
+
+      expect(response.status).toBe(500);
+    });
   });
 
   describe('GET /api/users/:id', () => {
