@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-08-04 (Phase 12A - SOLID Principles):**
+  - docs(solid): add SOLID principles documentation with functional paradigm adaptations (SRP, OCP, LSP, ISP, DIP).
+  - refactor(services): extract helper functions in `mapService.js` to improve SRP compliance.
 - **2026-07-30 (Phase 11E - Final Coverage Gaps & Assignment 4.4):**
   - test(final): close last coverage gaps in pathfinder, env config, and validation.
   - docs(reports): add assignment 4.4 progress report.
