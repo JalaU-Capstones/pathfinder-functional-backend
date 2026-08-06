@@ -31,6 +31,7 @@ This project is an academic capstone for Jala University's "Programming 4" modul
 
 ## Documentation Requirements
 Every technical decision must be documented in the `.docs/` directory.
+- **SOLID Principles:** The adaptation of SOLID principles for this functional codebase is formally documented in `.docs/solid/`. Future code additions must consult these files to maintain consistency.
 
 ## Git Workflow
 - Always use **Conventional Commits** (e.g., `feat(setup): initialize project structure`).
