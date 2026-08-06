@@ -2,6 +2,11 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-04 (Phase 12A - SOLID Documentation)
+- **Functional SOLID Adaptations:** Decision to document SOLID formally in `.docs/solid/` rather than retrofitting OOP patterns.
+- **Paradigm Consistency:** Decision to interpret SOLID in functional terms (e.g., function signatures as interfaces for LSP, modules as units of responsibility for SRP).
+- **Service Refactor:** Refactored `mapService.js` to extract `buildObstacleRecords` and `buildWaypointRecords` to strictly adhere to SRP.
+
 ## 2026-07-30 (Phase 11A - Coverage Configuration)
 - **Threshold Enforcement:** Decision to set 70% as the Jest coverage threshold (matches rubric minimum; enforced by Jest config, not just by convention).
 - **Exclusions:** Decision to exclude migrations, seeders, server.js, and sequelize.cli.js from coverage collection, with rationale.

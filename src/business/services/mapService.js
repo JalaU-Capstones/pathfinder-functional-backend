@@ -54,6 +54,26 @@ const validateMapInput = (data) => {
   }
 };
 
+const buildObstacleRecords = (obstacles) => obstacles.map(obs => {
+  if (!isValidObstacle(obs)) {
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid obstacle data provided.');
+  }
+  return {
+    size: obs.size,
+    ...toDbPosition(obs.position)
+  };
+});
+
+const buildWaypointRecords = (waypoints) => waypoints.map(wp => {
+  if (!isValidWaypoint(wp)) {
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid waypoint data provided.');
+  }
+  return {
+    name: wp.name,
+    ...toDbPosition(wp.position)
+  };
+});
+
 const createMapService = async (mapData) => {
   validateMapInput(mapData);
   
@@ -62,25 +82,8 @@ const createMapService = async (mapData) => {
   // Unknown fields (e.g. 'type', 'description') are intentionally
   // ignored — they are not part of the current schema.
   // Future migrations may add them if required.
-  const dbObstacles = obstacles.map(obs => {
-    if (!isValidObstacle(obs)) {
-      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid obstacle data provided.');
-    }
-    return {
-      size: obs.size,
-      ...toDbPosition(obs.position)
-    };
-  });
-
-  const dbWaypoints = waypoints.map(wp => {
-    if (!isValidWaypoint(wp)) {
-      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid waypoint data provided.');
-    }
-    return {
-      name: wp.name,
-      ...toDbPosition(wp.position)
-    };
-  });
+  const dbObstacles = buildObstacleRecords(obstacles);
+  const dbWaypoints = buildWaypointRecords(waypoints);
 
   const mapId = await mapRepository.createMapWithRelations({
     name,
