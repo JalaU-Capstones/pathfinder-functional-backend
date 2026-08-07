@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-08-07 (Phase 12B - Promise as Monad):**
+  - feat(monad): introduce `src/utils/monad.js` with `of`, `chain`, `map`, `tryCatch`, and `pipeAsync`.
+  - refactor(services): refactor `routeService.js` to explicitly use `pipeAsync` monadic composition.
+  - docs(monad): add `.docs/architecture/monad-promise.md` documenting Monad laws and implementation details.
+  - test(monad): add full coverage for monad utilities and explicitly test Monad laws.
 - **2026-08-04 (Phase 12A - SOLID Principles):**
   - docs(solid): add SOLID principles documentation with functional paradigm adaptations (SRP, OCP, LSP, ISP, DIP).
   - refactor(services): extract helper functions in `mapService.js` to improve SRP compliance.
