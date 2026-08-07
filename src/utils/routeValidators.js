@@ -1,3 +1,6 @@
+/**
+ * Pure validation functions for route creation pipelines.
+ */
 const { ERROR_TYPES, createAppError } = require('./errors');
 const { isPointInGrid, isSamePoint } = require('./curry');
 

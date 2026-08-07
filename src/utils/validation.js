@@ -1,4 +1,8 @@
 /**
+ * Shared primitive validation utilities for entities.
+ */
+
+/**
  * Validates if the given string is a valid email format.
  * 
  * @param {string} email 
