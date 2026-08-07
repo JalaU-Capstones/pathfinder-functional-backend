@@ -111,19 +111,19 @@ describe('Map Service', () => {
       };
       await expect(mapService.createMapService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
-        message: 'Invalid obstacle data provided.'
+        message: 'Obstacle must have a valid size and a position object with non-negative integer x and y coordinates.'
       });
     });
 
     it('should throw validation error if waypoint is invalid', async () => {
       const input = {
         name: 'Test Map',
-        dimensions: { width: 100, height: 100 },
+        dimensions: { width: 10, height: 10 },
         waypoints: [{ position: { x: 5, y: 5 } }] // missing name
       };
       await expect(mapService.createMapService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
-        message: 'Invalid waypoint data provided.'
+        message: 'Waypoint must have a non-empty string name and a position object with non-negative integer x and y coordinates.'
       });
     });
 
