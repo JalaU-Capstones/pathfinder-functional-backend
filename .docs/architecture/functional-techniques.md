@@ -55,3 +55,8 @@ The pipe version is vastly easier to extend (just add a new validator to the pip
 | Currying | `src/utils/curry.js` | `isSamePoint` | Checks point equality safely |
 | Composition | `src/utils/compose.js` | `pipe` | Chains validators into a left-to-right pipeline |
 | Composition | `src/business/services/routeService.js` | `validateRouteContext` | Ordered railway-oriented validation pipeline |
+| Monads | `src/utils/monad.js` | `of`, `chain`, `pipeAsync` | Manages async computation context declaratively |
+
+## Promise as a Monad
+In Phase 12B, we explicitly documented and utilized JavaScript's native Promise as a Monad. A detailed exploration of this pattern, including the verification of the Monad laws (Left Identity, Right Identity, Associativity) and the distinction between Functors and Monads, can be found in the dedicated documentation:
+[monad-promise.md](./monad-promise.md).
