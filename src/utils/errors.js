@@ -1,3 +1,6 @@
+/**
+ * Standardized error factory and types for domain and validation errors.
+ */
 const ERROR_TYPES = {
   NOT_FOUND: 'NOT_FOUND',
   VALIDATION_ERROR: 'VALIDATION_ERROR',

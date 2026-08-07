@@ -1,3 +1,6 @@
+/**
+ * Shared HTTP response formatter for success and error mapping.
+ */
 const { ERROR_TYPES } = require('./errors');
 
 const sendSuccess = (res, statusCode = 200, data = null) => {
