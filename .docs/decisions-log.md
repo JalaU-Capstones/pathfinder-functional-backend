@@ -2,6 +2,10 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-07 (Phase 12B - Promise as Monad)
+- **Monad Implementation:** Decided to explicitly document and use JavaScript's native Promise as a Monad rather than introducing a new third-party functional library (like `fp-ts` or `ramda`).
+- **Pipeline Refactoring:** Refactored `routeService.js` to use `pipeAsync` (monadic function composition) to manage the async validation and computation flow, adhering strictly to mathematical Monad laws.
+
 ## 2026-08-04 (Phase 12A - SOLID Documentation)
 - **Functional SOLID Adaptations:** Decision to document SOLID formally in `.docs/solid/` rather than retrofitting OOP patterns.
 - **Paradigm Consistency:** Decision to interpret SOLID in functional terms (e.g., function signatures as interfaces for LSP, modules as units of responsibility for SRP).

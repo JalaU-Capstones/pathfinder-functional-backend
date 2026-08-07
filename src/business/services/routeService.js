@@ -43,6 +43,8 @@ const toDbShape = (apiData) => {
   };
 };
 
+const { pipeAsync } = require('../../utils/monad');
+
 const validateCoordinate = (point, name) => {
   if (!point || typeof point !== 'object') {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, `${name} object is required.`);
@@ -63,51 +65,62 @@ const validateRouteContext = pipe(
   validatePointsNotEqual
 );
 
-const validateRouteInput = async (data) => {
-  if (!data.mapId || !Number.isInteger(data.mapId)) {
+// Each step is a named pure async function — single responsibility
+const fetchMapContext = async (routeData) => {
+  if (!routeData.mapId || !Number.isInteger(routeData.mapId)) {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be an integer.');
   }
 
-  validateCoordinate(data.start, 'Start');
-  validateCoordinate(data.end, 'End');
+  validateCoordinate(routeData.start, 'Start');
+  validateCoordinate(routeData.end, 'End');
 
-  // Fetch the Map to build the validation context
-  const fetchedMap = await mapRepository.getMapById(data.mapId);
+  const fetchedMap = await mapRepository.getMapById(routeData.mapId);
   
-  const context = { 
-    mapId: data.mapId, 
-    start: data.start, 
-    end: data.end, 
-    map: fetchedMap 
+  return { 
+    routeData,
+    context: {
+      mapId: routeData.mapId, 
+      start: routeData.start, 
+      end: routeData.end, 
+      map: fetchedMap 
+    }
   };
-  
-  // Execute the composed validation pipeline
-  validateRouteContext(context);
-
-  return fetchedMap;
 };
 
-const createRouteService = async (routeData) => {
-  const mapExists = await validateRouteInput(routeData);
+const validateContext = (state) => {
+  validateRouteContext(state.context);
+  return state;
+};
 
-  const obstacles = mapExists.obstacles ? mapExists.obstacles.map(toApiPosition) : [];
-  const waypoints = mapExists.waypoints ? mapExists.waypoints.map(w => ({ ...toApiPosition(w), name: w.name })) : [];
+const computePath = (state) => {
+  const { routeData, context: { map } } = state;
+  const obstacles = map.obstacles ? map.obstacles.map(toApiPosition) : [];
+  const waypoints = map.waypoints ? map.waypoints.map(w => ({ ...toApiPosition(w), name: w.name })) : [];
 
   const pathResult = calculatePath(
-    { width: mapExists.width, height: mapExists.height },
+    { width: map.width, height: map.height },
     routeData.start,
     routeData.end,
     obstacles,
     waypoints
   );
 
+  return { ...state, pathResult, waypoints };
+};
+
+const validatePath = (state) => {
+  const { pathResult, waypoints } = state;
   if (!validateWaypointsInPath(pathResult.path, waypoints)) {
     throw createAppError(
       ERROR_TYPES.UNPROCESSABLE_ENTITY,
       'The computed path could not satisfy all waypoint constraints. Verify that waypoints are reachable and not blocked by obstacles.'
     );
   }
+  return state;
+};
 
+const persistRoute = async (state) => {
+  const { routeData, pathResult } = state;
   const routeToCreate = {
     ...routeData,
     distance: pathResult.distance,
@@ -116,8 +129,24 @@ const createRouteService = async (routeData) => {
 
   const dbShape = toDbShape(routeToCreate);
   const newRoute = await routeRepository.createRoute(dbShape);
+  return newRoute;
+};
+
+const toResponse = (newRoute) => {
   return toApiShape(newRoute);
 };
+
+// The monadic pipeline — reads like a specification:
+const createRouteService = async (data) =>
+  pipeAsync(
+    fetchMapContext,
+    validateContext,
+    computePath,
+    validatePath,
+    persistRoute,
+    toResponse
+  )(data);
+
 
 const getRouteService = async (id) => {
   const route = await routeRepository.getRouteById(id);
