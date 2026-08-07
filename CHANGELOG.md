@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-08-07 (Phase 12C - Clean Code Audit & Assignment 5.4 Report):**
+  - refactor(services): improve validation error messages in `mapService.js` to be more explicit.
+  - docs(utils): add file-level JSDoc comments to all shared utilities.
+  - docs(reports): add Assignment 5.4 and Week 5 Lab Monad reports.
 - **2026-08-07 (Phase 12B - Promise as Monad):**
   - feat(monad): introduce `src/utils/monad.js` with `of`, `chain`, `map`, `tryCatch`, and `pipeAsync`.
   - refactor(services): refactor `routeService.js` to explicitly use `pipeAsync` monadic composition.

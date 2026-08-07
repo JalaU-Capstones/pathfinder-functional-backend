@@ -1,3 +1,6 @@
+/**
+ * Centralized Winston logging configuration for the application.
+ */
 const winston = require('winston');
 
 const logLevels = {

@@ -56,7 +56,7 @@ const validateMapInput = (data) => {
 
 const buildObstacleRecords = (obstacles) => obstacles.map(obs => {
   if (!isValidObstacle(obs)) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid obstacle data provided.');
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Obstacle must have a valid size and a position object with non-negative integer x and y coordinates.');
   }
   return {
     size: obs.size,
@@ -66,7 +66,7 @@ const buildObstacleRecords = (obstacles) => obstacles.map(obs => {
 
 const buildWaypointRecords = (waypoints) => waypoints.map(wp => {
   if (!isValidWaypoint(wp)) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid waypoint data provided.');
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Waypoint must have a non-empty string name and a position object with non-negative integer x and y coordinates.');
   }
   return {
     name: wp.name,
