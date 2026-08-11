@@ -17,9 +17,9 @@ describe('Map Service', () => {
     });
 
     it('should handle input without toJSON method', () => {
-      const input = { id: 1, name: 'A', width: 10, height: 10, obstacles: [], waypoints: [] };
+      const input = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'A', width: 10, height: 10, obstacles: [], waypoints: [] };
       const result = mapService.toApiShape(input);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
 
@@ -31,7 +31,7 @@ describe('Map Service', () => {
       };
       
       const mockDbResponse = {
-        id: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         name: 'Test Map',
         width: 100,
         height: 100,
@@ -56,7 +56,7 @@ describe('Map Service', () => {
       });
 
       expect(result).toEqual({
-        id: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         name: 'Test Map',
         dimensions: { width: 100, height: 100 },
         obstacles: [],
@@ -75,7 +75,7 @@ describe('Map Service', () => {
       };
       
       const mockDbResponse = {
-        id: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         name: 'Test Map',
         width: 100,
         height: 100,
@@ -171,7 +171,7 @@ describe('Map Service', () => {
   describe('getMapService', () => {
     it('should return a map when found', async () => {
       const mockDbResponse = {
-        id: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         name: 'Test Map',
         width: 100,
         height: 100,
@@ -182,10 +182,10 @@ describe('Map Service', () => {
 
       mapRepository.getMapById.mockResolvedValue(mockDbResponse);
 
-      const result = await mapService.getMapService(1);
+      const result = await mapService.getMapService('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       
-      expect(mapRepository.getMapById).toHaveBeenCalledWith(1);
-      expect(result.id).toBe(1);
+      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.dimensions.width).toBe(100);
       expect(result.obstacles).toEqual([{ x: 3, y: 5 }]);
       expect(result.waypoints).toEqual([{ x: 8, y: 6, name: 'Stop 1' }]);
@@ -203,20 +203,20 @@ describe('Map Service', () => {
   describe('getAllMapsService', () => {
     it('should return all maps', async () => {
       mapRepository.getAllMaps.mockResolvedValue([
-        { id: 1, name: 'A', toJSON: function() { return this; } }
+        { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'A', toJSON: function() { return this; } }
       ]);
       const result = await mapService.getAllMapsService();
       expect(result).toHaveLength(1);
-      expect(result[0].id).toBe(1);
+      expect(result[0].id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
 
   describe('updateMapService', () => {
     it('should update a map when valid and existing', async () => {
       const updateData = { name: 'Updated Map', dimensions: { width: 200, height: 200 } };
-      const existingMap = { id: 1, name: 'Old Map', width: 100, height: 100 };
+      const existingMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Old Map', width: 100, height: 100 };
       const updatedMock = {
-        id: 1, name: 'Updated Map', width: 200, height: 200, toJSON: function() { return this; }
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Updated Map', width: 200, height: 200, toJSON: function() { return this; }
       };
 
       mapRepository.getMapById.mockResolvedValue(existingMap);
@@ -241,8 +241,8 @@ describe('Map Service', () => {
   describe('deleteMapService', () => {
     it('should return true if map deleted', async () => {
       mapRepository.deleteMap.mockResolvedValue(true);
-      const result = await mapService.deleteMapService(1);
-      expect(mapRepository.deleteMap).toHaveBeenCalledWith(1);
+      const result = await mapService.deleteMapService('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(mapRepository.deleteMap).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result).toBe(true);
     });
 
