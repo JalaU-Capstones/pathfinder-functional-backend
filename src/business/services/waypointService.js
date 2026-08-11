@@ -25,8 +25,8 @@ const toDbShape = (apiData) => {
 };
 
 const validateWaypointInput = async (data) => {
-  if (!data.mapId || !Number.isInteger(data.mapId)) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be an integer.');
+  if (!data.mapId || typeof data.mapId !== 'string') {
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be a string.');
   }
 
   // Validate Map Existence
@@ -68,7 +68,7 @@ const getWaypointService = async (id) => {
 };
 
 const getAllWaypointsService = async (mapId = null) => {
-  const parsedMapId = mapId ? parseInt(mapId, 10) : null;
+  const parsedMapId = mapId || null;
   const waypoints = await waypointRepository.getAllWaypoints(parsedMapId);
   return waypoints.map(toApiShape);
 };
