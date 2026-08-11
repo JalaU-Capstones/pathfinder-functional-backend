@@ -1,4 +1,10 @@
 # Changelog
+## [Unreleased] - 2026-08-11
+### Changed
+- Migrated all primary keys (Maps, Users, Obstacles, Waypoints, Routes) to UUIDs.
+- Updated services to validate UUIDs instead of integers.
+- Updated database seeders and tests to use UUIDs.
+
 
 All notable changes to this project will be documented in this file.
 
