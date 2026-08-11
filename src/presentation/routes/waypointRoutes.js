@@ -52,13 +52,12 @@ router.post('/', waypointController.createWaypoint);
  *     parameters:
  *       - in: query
  *         name: mapId
- *       schema:
- *         type: string
- *         format: uuid
- *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
- *       description: "Filter by Map UUID"
  *         required: false
- *         description: Filter waypoints by Map ID
+ *         description: "Filter by Map UUID"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *     responses:
  *       200:
  *         description: A list of waypoints
@@ -87,13 +86,12 @@ router.get('/', waypointController.getAllWaypoints);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'd4e5f6a7-b8c9-0123-defa-234567890123'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The waypoint ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'd4e5f6a7-b8c9-0123-defa-234567890123'
  *     responses:
  *       200:
  *         description: The waypoint description by id
@@ -122,13 +120,12 @@ router.get('/:id', waypointController.getWaypoint);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'd4e5f6a7-b8c9-0123-defa-234567890123'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The waypoint ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'd4e5f6a7-b8c9-0123-defa-234567890123'
  *     requestBody:
  *       required: true
  *       content:
@@ -165,13 +162,12 @@ router.put('/:id', waypointController.updateWaypoint);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'd4e5f6a7-b8c9-0123-defa-234567890123'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The waypoint ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'd4e5f6a7-b8c9-0123-defa-234567890123'
  *     responses:
  *       204:
  *         description: The waypoint was deleted
