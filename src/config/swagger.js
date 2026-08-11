@@ -14,7 +14,7 @@ const options = {
         Map: {
           type: 'object',
           properties: {
-            id: { type: 'integer', example: 1 },
+            id: { type: 'string', format: 'uuid', example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' },
             name: { type: 'string', example: 'Level 1' },
             dimensions: {
               type: 'object',
@@ -38,8 +38,8 @@ const options = {
         Obstacle: {
           type: 'object',
           properties: {
-            id: { type: 'integer', example: 1 },
-            mapId: { type: 'integer', example: 1 },
+            id: { type: 'string', format: 'uuid', example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901' },
+            mapId: { type: 'string', format: 'uuid', example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' },
             position: {
               type: 'object',
               properties: {
@@ -53,8 +53,8 @@ const options = {
         Waypoint: {
           type: 'object',
           properties: {
-            id: { type: 'integer', example: 1 },
-            mapId: { type: 'integer', example: 1 },
+            id: { type: 'string', format: 'uuid', example: 'd4e5f6a7-b8c9-0123-defa-234567890123' },
+            mapId: { type: 'string', format: 'uuid', example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' },
             position: {
               type: 'object',
               properties: {
@@ -68,8 +68,8 @@ const options = {
         Route: {
           type: 'object',
           properties: {
-            id: { type: 'integer', example: 1 },
-            mapId: { type: 'integer', example: 1 },
+            id: { type: 'string', format: 'uuid', example: 'f6a7b8c9-d0e1-2345-fabc-456789012345' },
+            mapId: { type: 'string', format: 'uuid', example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' },
             start: {
               type: 'object',
               properties: {
@@ -101,7 +101,7 @@ const options = {
         User: {
           type: 'object',
           properties: {
-            id: { type: 'integer', example: 1 },
+            id: { type: 'string', format: 'uuid', example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' },
             name: { type: 'string', example: 'Jane Doe' },
             age: { type: 'integer', example: 25 },
             email: { type: 'string', example: 'jane.doe@example.com' },

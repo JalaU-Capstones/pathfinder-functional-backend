@@ -25,8 +25,9 @@ const router = express.Router();
  *             type: object
  *             properties:
  *               mapId:
- *                 type: integer
- *                 example: 1
+ *                 type: string
+ *                 format: uuid
+ *                 example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *               start:
  *                 type: object
  *                 properties:
@@ -73,10 +74,12 @@ router.post('/', routeController.createRoute);
  *     parameters:
  *       - in: query
  *         name: mapId
- *         schema:
- *           type: integer
  *         required: false
- *         description: Filter routes by Map ID
+ *         description: "Filter by Map UUID"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *     responses:
  *       200:
  *         description: A list of routes
@@ -105,10 +108,12 @@ router.get('/', routeController.getAllRoutes);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
  *         required: true
- *         description: The route ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'f6a7b8c9-d0e1-2345-fabc-456789012345'
  *     responses:
  *       200:
  *         description: The route description by id
@@ -137,10 +142,12 @@ router.get('/:id', routeController.getRoute);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
  *         required: true
- *         description: The route ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'f6a7b8c9-d0e1-2345-fabc-456789012345'
  *     responses:
  *       204:
  *         description: The route was deleted
