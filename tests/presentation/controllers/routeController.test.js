@@ -22,7 +22,7 @@ describe('Route Controller', () => {
       const mockObj = { distance: 10, optimal_path: [] };
       routeService.createRouteService.mockResolvedValue(mockObj);
 
-      const response = await request(app).post('/api/routes').send({ mapId: 1 });
+      const response = await request(app).post('/api/routes').send({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
@@ -61,7 +61,7 @@ describe('Route Controller', () => {
 
   describe('GET /api/routes', () => {
     it('should return 200 and array of routes', async () => {
-      const mockObjs = [{ id: 1 }];
+      const mockObjs = [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }];
       routeService.getAllRoutesService.mockResolvedValue(mockObjs);
 
       const response = await request(app).get('/api/routes');
@@ -93,10 +93,10 @@ describe('Route Controller', () => {
 
   describe('GET /api/routes/:id', () => {
     it('should return 200 and route', async () => {
-      const mockObj = { id: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       routeService.getRouteService.mockResolvedValue(mockObj);
 
-      const response = await request(app).get('/api/routes/1');
+      const response = await request(app).get('/api/routes/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(mockObj);
@@ -106,7 +106,7 @@ describe('Route Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       routeService.getRouteService.mockRejectedValue(error);
 
-      const response = await request(app).get('/api/routes/999');
+      const response = await request(app).get('/api/routes/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });
@@ -116,7 +116,7 @@ describe('Route Controller', () => {
     it('should return 204 on success', async () => {
       routeService.deleteRouteService.mockResolvedValue(true);
 
-      const response = await request(app).delete('/api/routes/1');
+      const response = await request(app).delete('/api/routes/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(204);
     });
@@ -125,7 +125,7 @@ describe('Route Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       routeService.deleteRouteService.mockRejectedValue(error);
 
-      const response = await request(app).delete('/api/routes/999');
+      const response = await request(app).delete('/api/routes/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });

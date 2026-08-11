@@ -37,12 +37,12 @@ describe('Map Repository', () => {
   describe('createMap', () => {
     it('should call Map.create with correct data', async () => {
       const data = { name: 'Test', width: 10, height: 10 };
-      Map.create.mockResolvedValue({ id: 1, ...data });
+      Map.create.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', ...data });
 
       const result = await mapRepository.createMap(data);
 
       expect(Map.create).toHaveBeenCalledWith(data);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
 
@@ -54,16 +54,16 @@ describe('Map Repository', () => {
         waypoints: [{ positionX: 2, positionY: 2 }]
       };
       
-      Map.create.mockResolvedValue({ id: 1 });
+      Map.create.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       
       const result = await mapRepository.createMapWithRelations(data);
       
       expect(sequelize.transaction).toHaveBeenCalled();
       expect(Map.create).toHaveBeenCalledWith({ name: 'Test', width: 10, height: 10 }, { transaction: mockTransaction });
-      expect(Obstacle.bulkCreate).toHaveBeenCalledWith([{ positionX: 1, positionY: 1, mapId: 1 }], { transaction: mockTransaction });
-      expect(Waypoint.bulkCreate).toHaveBeenCalledWith([{ positionX: 2, positionY: 2, mapId: 1 }], { transaction: mockTransaction });
+      expect(Obstacle.bulkCreate).toHaveBeenCalledWith([{ positionX: 1, positionY: 1, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }], { transaction: mockTransaction });
+      expect(Waypoint.bulkCreate).toHaveBeenCalledWith([{ positionX: 2, positionY: 2, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }], { transaction: mockTransaction });
       expect(mockTransaction.commit).toHaveBeenCalled();
-      expect(result).toBe(1);
+      expect(result).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should create map without obstacles or waypoints if arrays are empty', async () => {
@@ -73,7 +73,7 @@ describe('Map Repository', () => {
         waypoints: []
       };
       
-      Map.create.mockResolvedValue({ id: 1 });
+      Map.create.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       
       const result = await mapRepository.createMapWithRelations(data);
       
@@ -81,7 +81,7 @@ describe('Map Repository', () => {
       expect(Obstacle.bulkCreate).not.toHaveBeenCalled();
       expect(Waypoint.bulkCreate).not.toHaveBeenCalled();
       expect(mockTransaction.commit).toHaveBeenCalled();
-      expect(result).toBe(1);
+      expect(result).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should rollback transaction and propagate error if creation fails', async () => {
@@ -91,7 +91,7 @@ describe('Map Repository', () => {
       };
       const error = new Error('Database Error');
       
-      Map.create.mockResolvedValue({ id: 1 });
+      Map.create.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       Obstacle.bulkCreate.mockRejectedValue(error);
       
       await expect(mapRepository.createMapWithRelations(data)).rejects.toThrow('Database Error');
@@ -103,11 +103,11 @@ describe('Map Repository', () => {
 
   describe('getMapById', () => {
     it('should call Map.findByPk', async () => {
-      Map.findByPk.mockResolvedValue({ id: 1, name: 'Test' });
+      Map.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Test' });
 
-      const result = await mapRepository.getMapById(1);
+      const result = await mapRepository.getMapById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
-      expect(Map.findByPk).toHaveBeenCalledWith(1, {
+      expect(Map.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', {
         include: [
           { model: Obstacle, as: 'obstacles' },
           { model: Waypoint, as: 'waypoints' }
@@ -134,17 +134,17 @@ describe('Map Repository', () => {
   describe('updateMap', () => {
     it('should call Map.update and return updated row', async () => {
       const data = { name: 'Updated' };
-      Map.update.mockResolvedValue([1, [{ id: 1, ...data }]]);
+      Map.update.mockResolvedValue([1, [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', ...data }]]);
 
-      const result = await mapRepository.updateMap(1, data);
+      const result = await mapRepository.updateMap('3b47e69f-788d-4b19-b81b-0b4a2fd92799', data);
 
-      expect(Map.update).toHaveBeenCalledWith(data, { where: { id: 1 }, returning: true });
+      expect(Map.update).toHaveBeenCalledWith(data, { where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }, returning: true });
       expect(result.name).toBe('Updated');
     });
     
     it('should return null if no rows updated', async () => {
       Map.update.mockResolvedValue([0, []]);
-      const result = await mapRepository.updateMap(999, { name: 'Test' });
+      const result = await mapRepository.updateMap('99999999-9999-9999-9999-999999999999', { name: 'Test' });
       expect(result).toBeNull();
     });
   });
@@ -153,15 +153,15 @@ describe('Map Repository', () => {
     it('should call Map.destroy and return true if row deleted', async () => {
       Map.destroy.mockResolvedValue(1);
 
-      const result = await mapRepository.deleteMap(1);
+      const result = await mapRepository.deleteMap('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
-      expect(Map.destroy).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(Map.destroy).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
       expect(result).toBe(true);
     });
 
     it('should return false if no row deleted', async () => {
       Map.destroy.mockResolvedValue(0);
-      const result = await mapRepository.deleteMap(999);
+      const result = await mapRepository.deleteMap('99999999-9999-9999-9999-999999999999');
       expect(result).toBe(false);
     });
   });
