@@ -11,3 +11,4 @@ logs/
 # Jest coverage reports
 coverage/
 postgres-data/
+.agents/
