@@ -15,14 +15,14 @@ describe('Obstacle Service', () => {
   describe('createObstacleService', () => {
     it('should create an obstacle when input is valid', async () => {
       const input = {
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         position: { x: 10, y: 15 },
         size: 5
       };
 
       const mockDbResponse = {
-        id: 1,
-        mapId: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         positionX: 10,
         positionY: 15,
         size: 5,
@@ -31,25 +31,25 @@ describe('Obstacle Service', () => {
         toJSON: function() { return this; }
       };
 
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       obstacleRepository.createObstacle.mockResolvedValue(mockDbResponse);
 
       const result = await obstacleService.createObstacleService(input);
 
-      expect(mapRepository.getMapById).toHaveBeenCalledWith(1);
+      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(obstacleRepository.createObstacle).toHaveBeenCalledWith({
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         positionX: 10,
         positionY: 15,
         size: 5
       });
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.position.x).toBe(10);
     });
 
     it('should throw NOT_FOUND error if map does not exist', async () => {
       const input = {
-        mapId: 999,
+        mapId: '99999999-9999-9999-9999-999999999999',
         position: { x: 10, y: 15 },
         size: 5
       };
@@ -63,11 +63,11 @@ describe('Obstacle Service', () => {
 
     it('should throw VALIDATION_ERROR if position x is invalid', async () => {
       const input = {
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         position: { x: -10, y: 15 },
         size: 5
       };
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       await expect(obstacleService.createObstacleService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
         message: 'Position x must be a non-negative integer.'
@@ -77,29 +77,29 @@ describe('Obstacle Service', () => {
     it('should throw VALIDATION_ERROR if mapId is missing or invalid', async () => {
       await expect(obstacleService.createObstacleService({ position: { x: 10, y: 15 }, size: 5 })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
-        message: 'mapId is required and must be an integer.'
+        message: 'mapId is required and must be a string.'
       });
     });
 
     it('should throw VALIDATION_ERROR if position object is missing', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
-      await expect(obstacleService.createObstacleService({ mapId: 1, size: 5 })).rejects.toMatchObject({
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      await expect(obstacleService.createObstacleService({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', size: 5 })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
         message: 'Position object is required.'
       });
     });
 
     it('should throw VALIDATION_ERROR if position y is invalid', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
-      await expect(obstacleService.createObstacleService({ mapId: 1, position: { x: 10, y: -15 }, size: 5 })).rejects.toMatchObject({
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      await expect(obstacleService.createObstacleService({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: -15 }, size: 5 })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
         message: 'Position y must be a non-negative integer.'
       });
     });
 
     it('should throw VALIDATION_ERROR if size is missing or invalid', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
-      await expect(obstacleService.createObstacleService({ mapId: 1, position: { x: 10, y: 15 }, size: -5 })).rejects.toMatchObject({
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      await expect(obstacleService.createObstacleService({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: 15 }, size: -5 })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
         message: 'Size must be a positive integer.'
       });
@@ -109,8 +109,8 @@ describe('Obstacle Service', () => {
   describe('getObstacleService', () => {
     it('should return an obstacle when found', async () => {
       const mockDbResponse = {
-        id: 1,
-        mapId: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         positionX: 10,
         positionY: 15,
         size: 5,
@@ -120,7 +120,7 @@ describe('Obstacle Service', () => {
       obstacleRepository.getObstacleById.mockResolvedValue(mockDbResponse);
 
       const result = await obstacleService.getObstacleService(1);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.position.x).toBe(10);
     });
 
@@ -136,7 +136,7 @@ describe('Obstacle Service', () => {
     it('should pass parsed mapId to repository', async () => {
       obstacleRepository.getAllObstacles.mockResolvedValue([]);
       await obstacleService.getAllObstaclesService('123');
-      expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith(123);
+      expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith('123');
     });
 
     it('should pass null to repository if mapId is omitted', async () => {
@@ -152,29 +152,29 @@ describe('Obstacle Service', () => {
     });
 
     it('should handle input without toJSON method', () => {
-      const input = { id: 1, mapId: 1, positionX: 10, positionY: 10, size: 5 };
+      const input = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10, positionY: 10, size: 5 };
       const result = obstacleService.toApiShape(input);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.position).toEqual({ x: 10, y: 10 });
     });
   });
 
   describe('updateObstacleService', () => {
     it('should update an obstacle when valid and existing', async () => {
-      const existingObstacle = { id: 1, mapId: 1, positionX: 5, positionY: 5, size: 2 };
-      const updateData = { mapId: 1, position: { x: 10, y: 10 }, size: 3 };
+      const existingObstacle = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 5, positionY: 5, size: 2 };
+      const updateData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: 10 }, size: 3 };
       const updatedMock = {
-        id: 1, mapId: 1, positionX: 10, positionY: 10, size: 3, toJSON: function() { return this; }
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10, positionY: 10, size: 3, toJSON: function() { return this; }
       };
 
       obstacleRepository.getObstacleById.mockResolvedValue(existingObstacle);
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       obstacleRepository.updateObstacle.mockResolvedValue(updatedMock);
 
       const result = await obstacleService.updateObstacleService(1, updateData);
 
       expect(obstacleRepository.updateObstacle).toHaveBeenCalledWith(1, {
-        mapId: 1, positionX: 10, positionY: 10, size: 3
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10, positionY: 10, size: 3
       });
       expect(result.size).toBe(3);
     });

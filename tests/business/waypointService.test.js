@@ -14,22 +14,22 @@ describe('Waypoint Service', () => {
 
   describe('createWaypointService', () => {
     it('should create a waypoint when input is valid', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       waypointRepository.createWaypoint.mockResolvedValue({
-        id: 1, mapId: 1, positionX: 5, positionY: 5, name: 'A', toJSON: function() { return this; }
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 5, positionY: 5, name: 'A', toJSON: function() { return this; }
       });
 
-      const input = { mapId: 1, position: { x: 5, y: 5 }, name: 'A' };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 5, y: 5 }, name: 'A' };
       const result = await waypointService.createWaypointService(input);
 
-      expect(mapRepository.getMapById).toHaveBeenCalledWith(1);
-      expect(waypointRepository.createWaypoint).toHaveBeenCalledWith({ mapId: 1, positionX: 5, positionY: 5, name: 'A' });
+      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(waypointRepository.createWaypoint).toHaveBeenCalledWith({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 5, positionY: 5, name: 'A' });
       expect(result.position).toEqual({ x: 5, y: 5 });
       expect(result.name).toEqual('A');
     });
 
     it('should throw validation error if name is missing', async () => {
-      const input = { mapId: 1, position: { x: 5, y: 5 } };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 5, y: 5 } };
       await expect(waypointService.createWaypointService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR
       });
@@ -38,29 +38,29 @@ describe('Waypoint Service', () => {
     it('should throw validation error if mapId is missing or invalid', async () => {
       await expect(waypointService.createWaypointService({ position: { x: 5, y: 5 }, name: 'A' })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
-        message: 'mapId is required and must be an integer.'
+        message: 'mapId is required and must be a string.'
       });
     });
 
     it('should throw validation error if position object is missing', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
-      await expect(waypointService.createWaypointService({ mapId: 1, name: 'A' })).rejects.toMatchObject({
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      await expect(waypointService.createWaypointService({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'A' })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
         message: 'Position object is required.'
       });
     });
 
     it('should throw validation error if position x is missing or negative', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
-      await expect(waypointService.createWaypointService({ mapId: 1, position: { x: -5, y: 5 }, name: 'A' })).rejects.toMatchObject({
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      await expect(waypointService.createWaypointService({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: -5, y: 5 }, name: 'A' })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
         message: 'Position x must be a non-negative integer.'
       });
     });
 
     it('should throw validation error if position y is missing or negative', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
-      await expect(waypointService.createWaypointService({ mapId: 1, position: { x: 5, y: -5 }, name: 'A' })).rejects.toMatchObject({
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      await expect(waypointService.createWaypointService({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 5, y: -5 }, name: 'A' })).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
         message: 'Position y must be a non-negative integer.'
       });
@@ -68,7 +68,7 @@ describe('Waypoint Service', () => {
 
     it('should throw NOT_FOUND error if map does not exist', async () => {
       mapRepository.getMapById.mockResolvedValue(null);
-      const input = { mapId: 99, position: { x: 5, y: 5 }, name: 'A' };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 5, y: 5 }, name: 'A' };
       await expect(waypointService.createWaypointService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.NOT_FOUND
       });
@@ -78,11 +78,11 @@ describe('Waypoint Service', () => {
   describe('getWaypointService', () => {
     it('should return a waypoint when found', async () => {
       waypointRepository.getWaypointById.mockResolvedValue({
-        id: 1, mapId: 1, positionX: 5, positionY: 5, name: 'A', toJSON: function() { return this; }
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 5, positionY: 5, name: 'A', toJSON: function() { return this; }
       });
 
       const result = await waypointService.getWaypointService(1);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.position).toEqual({ x: 5, y: 5 });
     });
 
@@ -98,7 +98,7 @@ describe('Waypoint Service', () => {
     it('should pass parsed mapId to repository', async () => {
       waypointRepository.getAllWaypoints.mockResolvedValue([]);
       await waypointService.getAllWaypointsService('123');
-      expect(waypointRepository.getAllWaypoints).toHaveBeenCalledWith(123);
+      expect(waypointRepository.getAllWaypoints).toHaveBeenCalledWith('123');
     });
 
     it('should pass null to repository if mapId is omitted', async () => {
@@ -114,31 +114,31 @@ describe('Waypoint Service', () => {
     });
 
     it('should handle input without toJSON method', () => {
-      const input = { id: 1, mapId: 1, positionX: 10, positionY: 10, name: 'A' };
+      const input = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10, positionY: 10, name: 'A' };
       const result = waypointService.toApiShape(input);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.position).toEqual({ x: 10, y: 10 });
     });
   });
 
   describe('updateWaypointService', () => {
     it('should update a waypoint when valid and existing', async () => {
-      waypointRepository.getWaypointById.mockResolvedValue({ id: 1, mapId: 1 });
-      mapRepository.getMapById.mockResolvedValue({ id: 1 });
+      waypointRepository.getWaypointById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       waypointRepository.updateWaypoint.mockResolvedValue({
-        id: 1, mapId: 1, positionX: 10, positionY: 10, name: 'B', toJSON: function() { return this; }
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10, positionY: 10, name: 'B', toJSON: function() { return this; }
       });
 
-      const input = { mapId: 1, position: { x: 10, y: 10 }, name: 'B' };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: 10 }, name: 'B' };
       const result = await waypointService.updateWaypointService(1, input);
 
-      expect(waypointRepository.updateWaypoint).toHaveBeenCalledWith(1, { mapId: 1, positionX: 10, positionY: 10, name: 'B' });
+      expect(waypointRepository.updateWaypoint).toHaveBeenCalledWith(1, { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10, positionY: 10, name: 'B' });
       expect(result.position).toEqual({ x: 10, y: 10 });
     });
 
     it('should throw NOT_FOUND error if updating non-existent waypoint', async () => {
       waypointRepository.getWaypointById.mockResolvedValue(null);
-      const input = { mapId: 1, position: { x: 10, y: 10 }, name: 'B' };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: 10 }, name: 'B' };
       await expect(waypointService.updateWaypointService(99, input)).rejects.toMatchObject({
         type: ERROR_TYPES.NOT_FOUND
       });

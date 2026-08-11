@@ -21,7 +21,7 @@ describe('Waypoint Repository', () => {
 
   describe('createWaypoint', () => {
     it('should call Waypoint.create', async () => {
-      const data = { mapId: 1, positionX: 5, positionY: 5, name: 'A' };
+      const data = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 5, positionY: 5, name: 'A' };
       Waypoint.create.mockResolvedValue(data);
       const result = await waypointRepository.createWaypoint(data);
       expect(Waypoint.create).toHaveBeenCalledWith(data);
@@ -31,10 +31,10 @@ describe('Waypoint Repository', () => {
 
   describe('getWaypointById', () => {
     it('should call Waypoint.findByPk', async () => {
-      Waypoint.findByPk.mockResolvedValue({ id: 1 });
-      const result = await waypointRepository.getWaypointById(1);
-      expect(Waypoint.findByPk).toHaveBeenCalledWith(1);
-      expect(result.id).toBe(1);
+      Waypoint.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      const result = await waypointRepository.getWaypointById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(Waypoint.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
 
@@ -49,9 +49,9 @@ describe('Waypoint Repository', () => {
 
     it('should call Waypoint.findAll with mapId', async () => {
       Waypoint.findAll.mockResolvedValue([]);
-      await waypointRepository.getAllWaypoints(2);
+      await waypointRepository.getAllWaypoints('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(Waypoint.findAll).toHaveBeenCalledWith({
-        where: { mapId: 2 },
+        where: { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' },
         order: [['createdAt', 'DESC']]
       });
     });
@@ -60,9 +60,9 @@ describe('Waypoint Repository', () => {
   describe('updateWaypoint', () => {
     it('should call Waypoint.update and return updated row', async () => {
       const data = { positionX: 10 };
-      Waypoint.update.mockResolvedValue([1, [{ id: 1, positionX: 10 }]]);
-      const result = await waypointRepository.updateWaypoint(1, data);
-      expect(Waypoint.update).toHaveBeenCalledWith(data, { where: { id: 1 }, returning: true });
+      Waypoint.update.mockResolvedValue([1, [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10 }]]);
+      const result = await waypointRepository.updateWaypoint('3b47e69f-788d-4b19-b81b-0b4a2fd92799', data);
+      expect(Waypoint.update).toHaveBeenCalledWith(data, { where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }, returning: true });
       expect(result.positionX).toBe(10);
     });
 
@@ -76,8 +76,8 @@ describe('Waypoint Repository', () => {
   describe('deleteWaypoint', () => {
     it('should call Waypoint.destroy and return true if deleted', async () => {
       Waypoint.destroy.mockResolvedValue(1);
-      const result = await waypointRepository.deleteWaypoint(1);
-      expect(Waypoint.destroy).toHaveBeenCalledWith({ where: { id: 1 } });
+      const result = await waypointRepository.deleteWaypoint('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(Waypoint.destroy).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
       expect(result).toBe(true);
     });
 

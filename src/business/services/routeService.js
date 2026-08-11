@@ -67,8 +67,8 @@ const validateRouteContext = pipe(
 
 // Each step is a named pure async function — single responsibility
 const fetchMapContext = async (routeData) => {
-  if (!routeData.mapId || !Number.isInteger(routeData.mapId)) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be an integer.');
+  if (!routeData.mapId || typeof routeData.mapId !== 'string') {
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be a string.');
   }
 
   validateCoordinate(routeData.start, 'Start');
@@ -157,7 +157,7 @@ const getRouteService = async (id) => {
 };
 
 const getAllRoutesService = async (mapId = null) => {
-  const parsedMapId = mapId ? parseInt(mapId, 10) : null;
+  const parsedMapId = mapId || null;
   const routes = await routeRepository.getAllRoutes(parsedMapId);
   return routes.map(toApiShape);
 };

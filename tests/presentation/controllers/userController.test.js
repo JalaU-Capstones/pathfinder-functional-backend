@@ -20,7 +20,7 @@ describe('User Controller', () => {
 
   describe('POST /api/users', () => {
     it('should return 201 and created user on success', async () => {
-      const mockObj = { id: 1, email: 'a@a.com' };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'a@a.com' };
       userService.createUserService.mockResolvedValue(mockObj);
 
       const response = await request(app).post('/api/users').send({ email: 'a@a.com' });
@@ -53,7 +53,7 @@ describe('User Controller', () => {
 
   describe('GET /api/users', () => {
     it('should return 200 and array of users', async () => {
-      const mockObjs = [{ id: 1 }];
+      const mockObjs = [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }];
       userService.getAllUsersService.mockResolvedValue(mockObjs);
 
       const response = await request(app).get('/api/users');
@@ -75,10 +75,10 @@ describe('User Controller', () => {
 
   describe('GET /api/users/:id', () => {
     it('should return 200 and user', async () => {
-      const mockObj = { id: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       userService.getUserService.mockResolvedValue(mockObj);
 
-      const response = await request(app).get('/api/users/1');
+      const response = await request(app).get('/api/users/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(mockObj);
@@ -88,7 +88,7 @@ describe('User Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       userService.getUserService.mockRejectedValue(error);
 
-      const response = await request(app).get('/api/users/999');
+      const response = await request(app).get('/api/users/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });
@@ -96,10 +96,10 @@ describe('User Controller', () => {
 
   describe('PUT /api/users/:id', () => {
     it('should return 200 and updated user', async () => {
-      const mockObj = { id: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       userService.updateUserService.mockResolvedValue(mockObj);
 
-      const response = await request(app).put('/api/users/1').send({ email: 'a@a.com' });
+      const response = await request(app).put('/api/users/3b47e69f-788d-4b19-b81b-0b4a2fd92799').send({ email: 'a@a.com' });
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(mockObj);
@@ -109,7 +109,7 @@ describe('User Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       userService.updateUserService.mockRejectedValue(error);
 
-      const response = await request(app).put('/api/users/999').send({ email: 'a@a.com' });
+      const response = await request(app).put('/api/users/99999999-9999-9999-9999-999999999999').send({ email: 'a@a.com' });
 
       expect(response.status).toBe(404);
     });
@@ -118,7 +118,7 @@ describe('User Controller', () => {
       const error = createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid');
       userService.updateUserService.mockRejectedValue(error);
 
-      const response = await request(app).put('/api/users/1').send({});
+      const response = await request(app).put('/api/users/3b47e69f-788d-4b19-b81b-0b4a2fd92799').send({});
 
       expect(response.status).toBe(400);
     });
@@ -127,7 +127,7 @@ describe('User Controller', () => {
       const error = createAppError(ERROR_TYPES.CONFLICT, 'Duplicate');
       userService.updateUserService.mockRejectedValue(error);
 
-      const response = await request(app).put('/api/users/1').send({ email: 'a@a.com' });
+      const response = await request(app).put('/api/users/3b47e69f-788d-4b19-b81b-0b4a2fd92799').send({ email: 'a@a.com' });
 
       expect(response.status).toBe(409);
     });
@@ -137,7 +137,7 @@ describe('User Controller', () => {
     it('should return 204 on success', async () => {
       userService.deleteUserService.mockResolvedValue(true);
 
-      const response = await request(app).delete('/api/users/1');
+      const response = await request(app).delete('/api/users/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(204);
     });
@@ -146,7 +146,7 @@ describe('User Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       userService.deleteUserService.mockRejectedValue(error);
 
-      const response = await request(app).delete('/api/users/999');
+      const response = await request(app).delete('/api/users/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });

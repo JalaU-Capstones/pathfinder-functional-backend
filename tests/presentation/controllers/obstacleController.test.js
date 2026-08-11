@@ -20,10 +20,10 @@ describe('Obstacle Controller', () => {
 
   describe('POST /api/obstacles', () => {
     it('should return 201 and created obstacle on success', async () => {
-      const mockObj = { id: 1, mapId: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       obstacleService.createObstacleService.mockResolvedValue(mockObj);
 
-      const response = await request(app).post('/api/obstacles').send({ mapId: 1 });
+      const response = await request(app).post('/api/obstacles').send({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
@@ -54,7 +54,7 @@ describe('Obstacle Controller', () => {
 
   describe('GET /api/obstacles', () => {
     it('should return 200 and array of obstacles', async () => {
-      const mockObjs = [{ id: 1 }];
+      const mockObjs = [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }];
       obstacleService.getAllObstaclesService.mockResolvedValue(mockObjs);
 
       const response = await request(app).get('/api/obstacles');
@@ -85,10 +85,10 @@ describe('Obstacle Controller', () => {
 
   describe('GET /api/obstacles/:id', () => {
     it('should return 200 and obstacle', async () => {
-      const mockObj = { id: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       obstacleService.getObstacleService.mockResolvedValue(mockObj);
 
-      const response = await request(app).get('/api/obstacles/1');
+      const response = await request(app).get('/api/obstacles/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(mockObj);
@@ -98,7 +98,7 @@ describe('Obstacle Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       obstacleService.getObstacleService.mockRejectedValue(error);
 
-      const response = await request(app).get('/api/obstacles/999');
+      const response = await request(app).get('/api/obstacles/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });
@@ -106,10 +106,10 @@ describe('Obstacle Controller', () => {
 
   describe('PUT /api/obstacles/:id', () => {
     it('should return 200 and updated obstacle', async () => {
-      const mockObj = { id: 1, size: 2 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', size: 2 };
       obstacleService.updateObstacleService.mockResolvedValue(mockObj);
 
-      const response = await request(app).put('/api/obstacles/1').send({ size: 2 });
+      const response = await request(app).put('/api/obstacles/3b47e69f-788d-4b19-b81b-0b4a2fd92799').send({ size: 2 });
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(mockObj);
@@ -119,7 +119,7 @@ describe('Obstacle Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       obstacleService.updateObstacleService.mockRejectedValue(error);
 
-      const response = await request(app).put('/api/obstacles/999').send({});
+      const response = await request(app).put('/api/obstacles/99999999-9999-9999-9999-999999999999').send({});
 
       expect(response.status).toBe(404);
     });
@@ -129,7 +129,7 @@ describe('Obstacle Controller', () => {
     it('should return 204 on success', async () => {
       obstacleService.deleteObstacleService.mockResolvedValue(true);
 
-      const response = await request(app).delete('/api/obstacles/1');
+      const response = await request(app).delete('/api/obstacles/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(204);
     });
@@ -138,7 +138,7 @@ describe('Obstacle Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       obstacleService.deleteObstacleService.mockRejectedValue(error);
 
-      const response = await request(app).delete('/api/obstacles/999');
+      const response = await request(app).delete('/api/obstacles/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });

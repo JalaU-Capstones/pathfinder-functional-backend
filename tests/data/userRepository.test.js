@@ -23,11 +23,11 @@ describe('User Repository', () => {
   describe('createUser', () => {
     it('should create and return a user', async () => {
       const data = { email: 'test@example.com' };
-      User.create.mockResolvedValue({ id: 1, ...data });
+      User.create.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', ...data });
 
       const result = await userRepository.createUser(data);
       expect(User.create).toHaveBeenCalledWith(data);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should propagate errors from Sequelize', async () => {
@@ -42,26 +42,26 @@ describe('User Repository', () => {
 
   describe('getUserById', () => {
     it('should call User.findByPk and return a user', async () => {
-      User.findByPk.mockResolvedValue({ id: 1, email: 'test@example.com' });
-      const result = await userRepository.getUserById(1);
-      expect(User.findByPk).toHaveBeenCalledWith(1);
+      User.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'test@example.com' });
+      const result = await userRepository.getUserById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(User.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.email).toBe('test@example.com');
     });
 
     it('should return null when user is not found', async () => {
       User.findByPk.mockResolvedValue(null);
-      const result = await userRepository.getUserById(999);
-      expect(User.findByPk).toHaveBeenCalledWith(999);
+      const result = await userRepository.getUserById('99999999-9999-9999-9999-999999999999');
+      expect(User.findByPk).toHaveBeenCalledWith('99999999-9999-9999-9999-999999999999');
       expect(result).toBeNull();
     });
   });
 
   describe('getUserByEmail', () => {
     it('should call User.findOne with email and return a user', async () => {
-      User.findOne.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      User.findOne.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'test@example.com' });
       const result = await userRepository.getUserByEmail('test@example.com');
       expect(User.findOne).toHaveBeenCalledWith({ where: { email: 'test@example.com' } });
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should return null when user is not found by email', async () => {
@@ -84,15 +84,15 @@ describe('User Repository', () => {
   describe('updateUser', () => {
     it('should call User.update and return updated row', async () => {
       const data = { email: 'updated@example.com' };
-      User.update.mockResolvedValue([1, [{ id: 1, ...data }]]);
-      const result = await userRepository.updateUser(1, data);
-      expect(User.update).toHaveBeenCalledWith(data, { where: { id: 1 }, returning: true });
+      User.update.mockResolvedValue([1, [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', ...data }]]);
+      const result = await userRepository.updateUser('3b47e69f-788d-4b19-b81b-0b4a2fd92799', data);
+      expect(User.update).toHaveBeenCalledWith(data, { where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }, returning: true });
       expect(result.email).toBe('updated@example.com');
     });
 
     it('should return null if no rows updated', async () => {
       User.update.mockResolvedValue([0, []]);
-      const result = await userRepository.updateUser(999, {});
+      const result = await userRepository.updateUser('99999999-9999-9999-9999-999999999999', {});
       expect(result).toBeNull();
     });
   });
@@ -100,15 +100,15 @@ describe('User Repository', () => {
   describe('deleteUser', () => {
     it('should call User.destroy and return true if deleted', async () => {
       User.destroy.mockResolvedValue(1);
-      const result = await userRepository.deleteUser(1);
-      expect(User.destroy).toHaveBeenCalledWith({ where: { id: 1 } });
+      const result = await userRepository.deleteUser('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(User.destroy).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
       expect(result).toBe(true);
     });
 
     it('should return false if no row deleted', async () => {
       User.destroy.mockResolvedValue(0);
-      const result = await userRepository.deleteUser(999);
-      expect(User.destroy).toHaveBeenCalledWith({ where: { id: 999 } });
+      const result = await userRepository.deleteUser('99999999-9999-9999-9999-999999999999');
+      expect(User.destroy).toHaveBeenCalledWith({ where: { id: '99999999-9999-9999-9999-999999999999' } });
       expect(result).toBe(false);
     });
   });

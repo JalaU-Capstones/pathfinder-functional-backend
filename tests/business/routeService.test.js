@@ -19,22 +19,22 @@ describe('Route Service', () => {
     });
 
     it('should handle input without toJSON method and path', () => {
-      const input = { id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5, distance: 10 };
+      const input = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 5, distance: 10 };
       const result = routeService.toApiShape(input);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.optimal_path).toBeNull();
     });
 
     it('should handle input with toJSON method', () => {
-      const input = { toJSON: () => ({ id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5, distance: 10 }) };
+      const input = { toJSON: () => ({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 5, distance: 10 }) };
       const result = routeService.toApiShape(input);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
 
   describe('createRouteService', () => {
     it('should create a route successfully for valid input', async () => {
-      const mockMap = { id: 1, width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }], waypoints: [] };
+      const mockMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }], waypoints: [] };
       mapRepository.getMapById.mockResolvedValue(mockMap);
       
       pathfinder.calculatePath.mockReturnValue({
@@ -43,8 +43,8 @@ describe('Route Service', () => {
       });
 
       routeRepository.createRoute.mockResolvedValue({
-        id: 1,
-        mapId: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         startX: 0,
         startY: 0,
         endX: 5,
@@ -56,14 +56,14 @@ describe('Route Service', () => {
       });
 
       const routeData = {
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         start: { x: 0, y: 0 },
         end: { x: 5, y: 7 }
       };
 
       const result = await routeService.createRouteService(routeData);
 
-      expect(mapRepository.getMapById).toHaveBeenCalledWith(1);
+      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(pathfinder.calculatePath).toHaveBeenCalledWith(
         { width: 10, height: 10 },
         { x: 0, y: 0 },
@@ -73,7 +73,7 @@ describe('Route Service', () => {
       );
       
       expect(routeRepository.createRoute).toHaveBeenCalledWith({
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         startX: 0,
         startY: 0,
         endX: 5,
@@ -83,8 +83,8 @@ describe('Route Service', () => {
       });
 
       expect(result).toEqual({
-        id: 1,
-        mapId: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         start: { x: 0, y: 0 },
         end: { x: 5, y: 7 },
         distance: 12,
@@ -95,7 +95,7 @@ describe('Route Service', () => {
     });
 
     it('should handle map without waypoints', async () => {
-      const mockMap = { id: 1, width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }] }; // no waypoints
+      const mockMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }] }; // no waypoints
       mapRepository.getMapById.mockResolvedValue(mockMap);
       
       pathfinder.calculatePath.mockReturnValue({
@@ -104,19 +104,19 @@ describe('Route Service', () => {
       });
 
       routeRepository.createRoute.mockResolvedValue({
-        id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 7, distance: 12, path: []
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 7, distance: 12, path: []
       });
 
-      const routeData = { mapId: 1, start: { x: 0, y: 0 }, end: { x: 5, y: 7 } };
+      const routeData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', start: { x: 0, y: 0 }, end: { x: 5, y: 7 } };
       const result = await routeService.createRouteService(routeData);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should throw 404 if map does not exist', async () => {
       mapRepository.getMapById.mockResolvedValue(null);
 
       const routeData = {
-        mapId: 999,
+        mapId: '99999999-9999-9999-9999-999999999999',
         start: { x: 0, y: 0 },
         end: { x: 5, y: 5 }
       };
@@ -127,10 +127,10 @@ describe('Route Service', () => {
     });
 
     it('should throw 400 if start and end points are the same', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1, width: 10, height: 10, obstacles: [{x:0, y:0}] });
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', width: 10, height: 10, obstacles: [{x:0, y:0}] });
 
       const routeData = {
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         start: { x: 5, y: 5 },
         end: { x: 5, y: 5 }
       };
@@ -142,10 +142,10 @@ describe('Route Service', () => {
     });
 
     it('should throw 400 if coordinates are out of bounds', async () => {
-      mapRepository.getMapById.mockResolvedValue({ id: 1, width: 10, height: 10, obstacles: [{x:0, y:0}] });
+      mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', width: 10, height: 10, obstacles: [{x:0, y:0}] });
 
       const routeData = {
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         start: { x: 15, y: 5 },
         end: { x: 5, y: 5 }
       };
@@ -157,7 +157,7 @@ describe('Route Service', () => {
     });
 
     it('should throw 422 if waypoint compliance fails', async () => {
-      const mockMap = { id: 1, width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }], waypoints: [{ positionX: 3, positionY: 3, name: 'Mid' }] };
+      const mockMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', width: 10, height: 10, obstacles: [{ positionX: 1, positionY: 1 }], waypoints: [{ positionX: 3, positionY: 3, name: 'Mid' }] };
       mapRepository.getMapById.mockResolvedValue(mockMap);
       
       pathfinder.calculatePath.mockReturnValue({
@@ -166,7 +166,7 @@ describe('Route Service', () => {
       });
 
       const routeData = {
-        mapId: 1,
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         start: { x: 0, y: 0 },
         end: { x: 5, y: 7 }
       };
@@ -190,7 +190,7 @@ describe('Route Service', () => {
     });
 
     it('should handle map without obstacles and waypoints (bypassing validation)', async () => {
-      const mockMap = { id: 1, width: 10, height: 10 }; // no obstacles, no waypoints
+      const mockMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', width: 10, height: 10 }; // no obstacles, no waypoints
       const mapRepo = require('../../src/data/repositories/mapRepository');
       mapRepo.getMapById.mockResolvedValue(mockMap);
       
@@ -202,12 +202,12 @@ describe('Route Service', () => {
 
       const routeRepo = require('../../src/data/repositories/routeRepository');
       routeRepo.createRoute.mockResolvedValue({
-        id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 7, distance: 12, path: []
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 7, distance: 12, path: []
       });
 
-      const routeData = { mapId: 1, start: { x: 0, y: 0 }, end: { x: 5, y: 7 } };
+      const routeData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', start: { x: 0, y: 0 }, end: { x: 5, y: 7 } };
       const result = await isolatedRouteService.createRouteService(routeData);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
 
@@ -216,7 +216,7 @@ describe('Route Service', () => {
       const routeData = { start: { x: 0, y: 0 }, end: { x: 5, y: 5 } };
       await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
         type: 'VALIDATION_ERROR',
-        message: 'mapId is required and must be an integer.'
+        message: 'mapId is required and must be a string.'
       });
       await expect(routeService.createRouteService({ ...routeData, mapId: '1' })).rejects.toMatchObject({
         type: 'VALIDATION_ERROR'
@@ -224,7 +224,7 @@ describe('Route Service', () => {
     });
 
     it('should throw 400 if point object is missing', async () => {
-      const routeData = { mapId: 1, end: { x: 5, y: 5 } };
+      const routeData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', end: { x: 5, y: 5 } };
       await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
         type: 'VALIDATION_ERROR',
         message: 'Start object is required.'
@@ -232,7 +232,7 @@ describe('Route Service', () => {
     });
 
     it('should throw 400 if point x is negative or not integer', async () => {
-      const routeData = { mapId: 1, start: { x: -1, y: 0 }, end: { x: 5, y: 5 } };
+      const routeData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', start: { x: -1, y: 0 }, end: { x: 5, y: 5 } };
       await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
         type: 'VALIDATION_ERROR',
         message: 'Start x must be a non-negative integer.'
@@ -240,7 +240,7 @@ describe('Route Service', () => {
     });
 
     it('should throw 400 if point y is negative or not integer', async () => {
-      const routeData = { mapId: 1, start: { x: 0, y: -1 }, end: { x: 5, y: 5 } };
+      const routeData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', start: { x: 0, y: -1 }, end: { x: 5, y: 5 } };
       await expect(routeService.createRouteService(routeData)).rejects.toMatchObject({
         type: 'VALIDATION_ERROR',
         message: 'Start y must be a non-negative integer.'
@@ -250,16 +250,16 @@ describe('Route Service', () => {
 
   describe('getAllRoutesService', () => {
     it('should return all routes without mapId', async () => {
-      routeRepository.getAllRoutes.mockResolvedValue([{ id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5 }]);
+      routeRepository.getAllRoutes.mockResolvedValue([{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 5 }]);
       const result = await routeService.getAllRoutesService();
       expect(routeRepository.getAllRoutes).toHaveBeenCalledWith(null);
       expect(result).toHaveLength(1);
     });
 
     it('should return all routes with mapId', async () => {
-      routeRepository.getAllRoutes.mockResolvedValue([{ id: 1, mapId: 1, startX: 0, startY: 0, endX: 5, endY: 5 }]);
-      const result = await routeService.getAllRoutesService('1');
-      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith(1);
+      routeRepository.getAllRoutes.mockResolvedValue([{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 5 }]);
+      const result = await routeService.getAllRoutesService('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result).toHaveLength(1);
     });
   });
@@ -267,8 +267,8 @@ describe('Route Service', () => {
   describe('getRouteService', () => {
     it('should return route by id', async () => {
       routeRepository.getRouteById.mockResolvedValue({
-        id: 1,
-        mapId: 1,
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         startX: 0,
         startY: 0,
         endX: 5,
@@ -278,7 +278,7 @@ describe('Route Service', () => {
       });
 
       const result = await routeService.getRouteService(1);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.distance).toBe(10);
       expect(result.optimal_path).toEqual([{x:0,y:0}, {x:5,y:5}]);
     });

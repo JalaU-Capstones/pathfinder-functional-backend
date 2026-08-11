@@ -20,7 +20,7 @@ describe('Map Controller', () => {
 
   describe('POST /api/maps', () => {
     it('should return 201 and created map on success', async () => {
-      const mockMap = { id: 1, name: 'Test Map' };
+      const mockMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Test Map' };
       mapService.createMapService.mockResolvedValue(mockMap);
 
       const response = await request(app).post('/api/maps').send({ name: 'Test Map' });
@@ -65,7 +65,7 @@ describe('Map Controller', () => {
 
   describe('GET /api/maps', () => {
     it('should return 200 and array of maps', async () => {
-      const mockMaps = [{ id: 1, name: 'Map 1' }];
+      const mockMaps = [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Map 1' }];
       mapService.getAllMapsService.mockResolvedValue(mockMaps);
 
       const response = await request(app).get('/api/maps');
@@ -98,10 +98,10 @@ describe('Map Controller', () => {
 
   describe('GET /api/maps/:id', () => {
     it('should return 200 and map', async () => {
-      const mockMap = { id: 1, name: 'Map 1' };
+      const mockMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Map 1' };
       mapService.getMapService.mockResolvedValue(mockMap);
 
-      const response = await request(app).get('/api/maps/1');
+      const response = await request(app).get('/api/maps/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
@@ -112,7 +112,7 @@ describe('Map Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       mapService.getMapService.mockRejectedValue(error);
 
-      const response = await request(app).get('/api/maps/999');
+      const response = await request(app).get('/api/maps/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
       expect(response.body.success).toBe(false);
@@ -121,10 +121,10 @@ describe('Map Controller', () => {
 
   describe('PUT /api/maps/:id', () => {
     it('should return 200 and updated map', async () => {
-      const mockMap = { id: 1, name: 'Updated' };
+      const mockMap = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Updated' };
       mapService.updateMapService.mockResolvedValue(mockMap);
 
-      const response = await request(app).put('/api/maps/1').send({ name: 'Updated' });
+      const response = await request(app).put('/api/maps/3b47e69f-788d-4b19-b81b-0b4a2fd92799').send({ name: 'Updated' });
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
@@ -135,7 +135,7 @@ describe('Map Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       mapService.updateMapService.mockRejectedValue(error);
 
-      const response = await request(app).put('/api/maps/999').send({});
+      const response = await request(app).put('/api/maps/99999999-9999-9999-9999-999999999999').send({});
 
       expect(response.status).toBe(404);
     });
@@ -144,7 +144,7 @@ describe('Map Controller', () => {
       const error = createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid');
       mapService.updateMapService.mockRejectedValue(error);
 
-      const response = await request(app).put('/api/maps/1').send({});
+      const response = await request(app).put('/api/maps/3b47e69f-788d-4b19-b81b-0b4a2fd92799').send({});
 
       expect(response.status).toBe(400);
     });
@@ -154,7 +154,7 @@ describe('Map Controller', () => {
     it('should return 204 on success', async () => {
       mapService.deleteMapService.mockResolvedValue(true);
 
-      const response = await request(app).delete('/api/maps/1');
+      const response = await request(app).delete('/api/maps/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(204);
     });
@@ -163,7 +163,7 @@ describe('Map Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       mapService.deleteMapService.mockRejectedValue(error);
 
-      const response = await request(app).delete('/api/maps/999');
+      const response = await request(app).delete('/api/maps/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });
