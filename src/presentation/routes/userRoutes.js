@@ -77,8 +77,11 @@ router.get('/', userController.getAllUsers);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The user ID
  *     responses:
@@ -109,8 +112,11 @@ router.get('/:id', userController.getUser);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The user ID
  *     requestBody:
@@ -151,8 +157,11 @@ router.put('/:id', userController.updateUser);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The user ID
  *     responses:

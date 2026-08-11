@@ -91,8 +91,11 @@ router.get('/', mapController.getAllMaps);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The map ID
  *     responses:
@@ -123,8 +126,11 @@ router.get('/:id', mapController.getMap);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The map ID
  *     requestBody:
@@ -163,8 +169,11 @@ router.put('/:id', mapController.updateMap);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The map ID
  *     responses:

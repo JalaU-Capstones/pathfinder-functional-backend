@@ -52,8 +52,11 @@ router.post('/', obstacleController.createObstacle);
  *     parameters:
  *       - in: query
  *         name: mapId
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
+ *       description: "Filter by Map UUID"
  *         required: false
  *         description: Filter obstacles by Map ID
  *     responses:
@@ -84,8 +87,11 @@ router.get('/', obstacleController.getAllObstacles);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The obstacle ID
  *     responses:
@@ -116,8 +122,11 @@ router.get('/:id', obstacleController.getObstacle);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The obstacle ID
  *     requestBody:
@@ -156,8 +165,11 @@ router.put('/:id', obstacleController.updateObstacle);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The obstacle ID
  *     responses:
