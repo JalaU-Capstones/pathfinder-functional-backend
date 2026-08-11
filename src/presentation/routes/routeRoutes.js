@@ -25,8 +25,9 @@ const router = express.Router();
  *             type: object
  *             properties:
  *               mapId:
- *                 type: integer
- *                 example: 1
+ *                 type: string
+ *                 format: uuid
+ *                 example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *               start:
  *                 type: object
  *                 properties:
