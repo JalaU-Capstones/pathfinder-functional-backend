@@ -88,3 +88,9 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Primary Key Strategy:** Selected Serial Integers (`id: INTEGER`) to maintain a 1:1 mapping with the OpenAPI specification created in Phase 0.
 - **ORM Functional Abstraction:** Models are instantiated via `sequelize.define` rather than classes.
 - **API vs Database Flattening:** Complex nested objects like `position: { x, y }` were flattened into relational columns `positionX` and `positionY`. Translation will occur purely in the business logic layer later on.
+
+## Phase 13A: Migration to UUID Primary Keys
+- **Date:** 2026-08-11
+- **Decision:** Migrated all entity Primary Keys (and corresponding Foreign Keys) from Integer to UUID.
+- **Rationale:** To comply with Assignment 6.4 requirements and provide globally unique identifiers for distributed systems.
+- **Implementation:** Created immutable migration files (20260811000001 to 20260811000005) to recreate tables with UUIDs. Updated models, seeders, services, and tests.
