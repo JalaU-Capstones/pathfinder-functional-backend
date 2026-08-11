@@ -73,8 +73,11 @@ router.post('/', routeController.createRoute);
  *     parameters:
  *       - in: query
  *         name: mapId
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
+ *       description: "Filter by Map UUID"
  *         required: false
  *         description: Filter routes by Map ID
  *     responses:
@@ -105,8 +108,11 @@ router.get('/', routeController.getAllRoutes);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'f6a7b8c9-d0e1-2345-fabc-456789012345'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The route ID
  *     responses:
@@ -137,8 +143,11 @@ router.get('/:id', routeController.getRoute);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: 'f6a7b8c9-d0e1-2345-fabc-456789012345'
+ *       description: "UUID of the resource"
  *         required: true
  *         description: The route ID
  *     responses:
