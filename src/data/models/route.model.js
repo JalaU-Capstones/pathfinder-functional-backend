@@ -3,13 +3,20 @@ const { DataTypes } = require('sequelize');
 const defineRouteModel = (sequelize) => {
   const Route = sequelize.define('Route', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false,
     },
     mapId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Maps',
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
     startX: {
       type: DataTypes.INTEGER,

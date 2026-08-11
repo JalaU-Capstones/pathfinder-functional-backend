@@ -3,13 +3,20 @@ const { DataTypes } = require('sequelize');
 const defineObstacleModel = (sequelize) => {
   const Obstacle = sequelize.define('Obstacle', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false,
     },
     mapId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Maps',
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
     positionX: {
       type: DataTypes.INTEGER,
