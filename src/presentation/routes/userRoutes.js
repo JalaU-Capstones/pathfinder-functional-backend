@@ -77,13 +77,12 @@ router.get('/', userController.getAllUsers);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The user ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
  *     responses:
  *       200:
  *         description: The user description by id
@@ -112,13 +111,12 @@ router.get('/:id', userController.getUser);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The user ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
  *     requestBody:
  *       required: true
  *       content:
@@ -157,13 +155,12 @@ router.put('/:id', userController.updateUser);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The user ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
  *     responses:
  *       204:
  *         description: The user was deleted

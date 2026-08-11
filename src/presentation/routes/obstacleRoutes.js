@@ -52,13 +52,12 @@ router.post('/', obstacleController.createObstacle);
  *     parameters:
  *       - in: query
  *         name: mapId
- *       schema:
- *         type: string
- *         format: uuid
- *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
- *       description: "Filter by Map UUID"
  *         required: false
- *         description: Filter obstacles by Map ID
+ *         description: "Filter by Map UUID"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *     responses:
  *       200:
  *         description: A list of obstacles
@@ -87,13 +86,12 @@ router.get('/', obstacleController.getAllObstacles);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The obstacle ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
  *     responses:
  *       200:
  *         description: The obstacle description by id
@@ -122,13 +120,12 @@ router.get('/:id', obstacleController.getObstacle);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The obstacle ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
  *     requestBody:
  *       required: true
  *       content:
@@ -165,13 +162,12 @@ router.put('/:id', obstacleController.updateObstacle);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The obstacle ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
  *     responses:
  *       204:
  *         description: The obstacle was deleted

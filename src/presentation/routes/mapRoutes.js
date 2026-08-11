@@ -91,13 +91,12 @@ router.get('/', mapController.getAllMaps);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The map ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *     responses:
  *       200:
  *         description: The map description by id
@@ -126,13 +125,12 @@ router.get('/:id', mapController.getMap);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The map ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *     requestBody:
  *       required: true
  *       content:
@@ -169,13 +167,12 @@ router.put('/:id', mapController.updateMap);
  *     parameters:
  *       - in: path
  *         name: id
- *       schema:
- *         type: string
- *         format: uuid
- *       example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
- *       description: "UUID of the resource"
  *         required: true
- *         description: The map ID
+ *         description: "UUID of the resource"
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: '3b47e69f-788d-4b19-b81b-0b4a2fd92799'
  *     responses:
  *       204:
  *         description: The map was deleted
