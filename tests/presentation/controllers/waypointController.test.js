@@ -20,10 +20,10 @@ describe('Waypoint Controller', () => {
 
   describe('POST /api/waypoints', () => {
     it('should return 201 and created waypoint on success', async () => {
-      const mockObj = { id: 1, mapId: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       waypointService.createWaypointService.mockResolvedValue(mockObj);
 
-      const response = await request(app).post('/api/waypoints').send({ mapId: 1 });
+      const response = await request(app).post('/api/waypoints').send({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
@@ -54,7 +54,7 @@ describe('Waypoint Controller', () => {
 
   describe('GET /api/waypoints', () => {
     it('should return 200 and array of waypoints', async () => {
-      const mockObjs = [{ id: 1 }];
+      const mockObjs = [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }];
       waypointService.getAllWaypointsService.mockResolvedValue(mockObjs);
 
       const response = await request(app).get('/api/waypoints');
@@ -76,10 +76,10 @@ describe('Waypoint Controller', () => {
 
   describe('GET /api/waypoints/:id', () => {
     it('should return 200 and waypoint', async () => {
-      const mockObj = { id: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       waypointService.getWaypointService.mockResolvedValue(mockObj);
 
-      const response = await request(app).get('/api/waypoints/1');
+      const response = await request(app).get('/api/waypoints/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(mockObj);
@@ -89,7 +89,7 @@ describe('Waypoint Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       waypointService.getWaypointService.mockRejectedValue(error);
 
-      const response = await request(app).get('/api/waypoints/999');
+      const response = await request(app).get('/api/waypoints/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });
@@ -97,10 +97,10 @@ describe('Waypoint Controller', () => {
 
   describe('PUT /api/waypoints/:id', () => {
     it('should return 200 and updated waypoint', async () => {
-      const mockObj = { id: 1 };
+      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       waypointService.updateWaypointService.mockResolvedValue(mockObj);
 
-      const response = await request(app).put('/api/waypoints/1').send({});
+      const response = await request(app).put('/api/waypoints/3b47e69f-788d-4b19-b81b-0b4a2fd92799').send({});
 
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(mockObj);
@@ -110,7 +110,7 @@ describe('Waypoint Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       waypointService.updateWaypointService.mockRejectedValue(error);
 
-      const response = await request(app).put('/api/waypoints/999').send({});
+      const response = await request(app).put('/api/waypoints/99999999-9999-9999-9999-999999999999').send({});
 
       expect(response.status).toBe(404);
     });
@@ -120,7 +120,7 @@ describe('Waypoint Controller', () => {
     it('should return 204 on success', async () => {
       waypointService.deleteWaypointService.mockResolvedValue(true);
 
-      const response = await request(app).delete('/api/waypoints/1');
+      const response = await request(app).delete('/api/waypoints/3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
       expect(response.status).toBe(204);
     });
@@ -129,7 +129,7 @@ describe('Waypoint Controller', () => {
       const error = createAppError(ERROR_TYPES.NOT_FOUND, 'Not found');
       waypointService.deleteWaypointService.mockRejectedValue(error);
 
-      const response = await request(app).delete('/api/waypoints/999');
+      const response = await request(app).delete('/api/waypoints/99999999-9999-9999-9999-999999999999');
 
       expect(response.status).toBe(404);
     });

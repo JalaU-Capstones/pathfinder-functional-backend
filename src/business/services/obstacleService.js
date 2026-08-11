@@ -27,8 +27,8 @@ const toDbShape = (apiData) => {
 };
 
 const validateObstacleInput = async (data) => {
-  if (!data.mapId || !Number.isInteger(data.mapId)) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be an integer.');
+  if (!data.mapId || typeof data.mapId !== 'string') {
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be a string.');
   }
 
   // Validate Map Existence
@@ -70,7 +70,7 @@ const getObstacleService = async (id) => {
 };
 
 const getAllObstaclesService = async (mapId = null) => {
-  const parsedMapId = mapId ? parseInt(mapId, 10) : null;
+  const parsedMapId = mapId || null;
   const obstacles = await obstacleRepository.getAllObstacles(parsedMapId);
   return obstacles.map(toApiShape);
 };

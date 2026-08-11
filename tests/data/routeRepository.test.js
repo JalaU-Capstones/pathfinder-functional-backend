@@ -20,16 +20,16 @@ describe('Route Repository', () => {
 
   describe('createRoute', () => {
     it('should create and return a route', async () => {
-      const data = { mapId: 1, path: [] };
-      Route.create.mockResolvedValue({ id: 1, ...data });
+      const data = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', path: [] };
+      Route.create.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', ...data });
 
       const result = await routeRepository.createRoute(data);
       expect(Route.create).toHaveBeenCalledWith(data);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should propagate errors from Sequelize', async () => {
-      const data = { mapId: 1 };
+      const data = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
       const error = new Error('Sequelize error');
       Route.create.mockRejectedValue(error);
 
@@ -40,16 +40,16 @@ describe('Route Repository', () => {
 
   describe('getRouteById', () => {
     it('should call Route.findByPk and return a route', async () => {
-      Route.findByPk.mockResolvedValue({ id: 1, mapId: 1 });
-      const result = await routeRepository.getRouteById(1);
-      expect(Route.findByPk).toHaveBeenCalledWith(1);
-      expect(result.mapId).toBe(1);
+      Route.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+      const result = await routeRepository.getRouteById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(Route.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(result.mapId).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should return null when route is not found', async () => {
       Route.findByPk.mockResolvedValue(null);
-      const result = await routeRepository.getRouteById(999);
-      expect(Route.findByPk).toHaveBeenCalledWith(999);
+      const result = await routeRepository.getRouteById('99999999-9999-9999-9999-999999999999');
+      expect(Route.findByPk).toHaveBeenCalledWith('99999999-9999-9999-9999-999999999999');
       expect(result).toBeNull();
     });
   });
@@ -63,10 +63,10 @@ describe('Route Repository', () => {
 
     it('should call Route.findAll with mapId filter when provided', async () => {
       Route.findAll.mockResolvedValue([]);
-      await routeRepository.getAllRoutes(1);
+      await routeRepository.getAllRoutes('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(Route.findAll).toHaveBeenCalledWith({
         order: [['createdAt', 'DESC']],
-        where: { mapId: 1 }
+        where: { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }
       });
     });
   });
@@ -74,15 +74,15 @@ describe('Route Repository', () => {
   describe('deleteRoute', () => {
     it('should call Route.destroy and return true if deleted', async () => {
       Route.destroy.mockResolvedValue(1);
-      const result = await routeRepository.deleteRoute(1);
-      expect(Route.destroy).toHaveBeenCalledWith({ where: { id: 1 } });
+      const result = await routeRepository.deleteRoute('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(Route.destroy).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
       expect(result).toBe(true);
     });
 
     it('should return false if no row deleted', async () => {
       Route.destroy.mockResolvedValue(0);
-      const result = await routeRepository.deleteRoute(999);
-      expect(Route.destroy).toHaveBeenCalledWith({ where: { id: 999 } });
+      const result = await routeRepository.deleteRoute('99999999-9999-9999-9999-999999999999');
+      expect(Route.destroy).toHaveBeenCalledWith({ where: { id: '99999999-9999-9999-9999-999999999999' } });
       expect(result).toBe(false);
     });
   });

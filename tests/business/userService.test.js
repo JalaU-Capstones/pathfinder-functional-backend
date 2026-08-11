@@ -14,7 +14,7 @@ describe('User Service', () => {
     it('should create a user when input is valid and email is unique', async () => {
       userRepository.getUserByEmail.mockResolvedValue(null);
       userRepository.createUser.mockResolvedValue({
-        id: 1, name: 'Alice', age: 30, email: 'alice@example.com', toJSON: function() { return this; }
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Alice', age: 30, email: 'alice@example.com', toJSON: function() { return this; }
       });
 
       const input = { name: 'Alice', age: 30, email: 'alice@example.com' };
@@ -22,7 +22,7 @@ describe('User Service', () => {
 
       expect(userRepository.getUserByEmail).toHaveBeenCalledWith('alice@example.com');
       expect(userRepository.createUser).toHaveBeenCalledWith(input);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.name).toEqual('Alice');
     });
 
@@ -59,10 +59,10 @@ describe('User Service', () => {
 
   describe('updateUserService', () => {
     it('should update a user when valid and email is unique', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'alice@example.com' });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'alice@example.com' });
       userRepository.getUserByEmail.mockResolvedValue(null);
       userRepository.updateUser.mockResolvedValue({
-        id: 1, name: 'Alice Updated', age: 31, email: 'newalice@example.com', toJSON: function() { return this; }
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Alice Updated', age: 31, email: 'newalice@example.com', toJSON: function() { return this; }
       });
 
       const input = { name: 'Alice Updated', age: 31, email: 'newalice@example.com' };
@@ -73,7 +73,7 @@ describe('User Service', () => {
     });
 
     it('should throw CONFLICT error if new email already exists for another user', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'alice@example.com' });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'alice@example.com' });
       userRepository.getUserByEmail.mockResolvedValue({ id: 2, email: 'newalice@example.com' });
 
       const input = { email: 'newalice@example.com' };
@@ -83,7 +83,7 @@ describe('User Service', () => {
     });
 
     it('should throw VALIDATION_ERROR if update body is empty', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'alice@example.com' });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'alice@example.com' });
       await expect(userService.updateUserService(1, {})).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR
       });
@@ -95,30 +95,30 @@ describe('User Service', () => {
     });
 
     it('should throw VALIDATION_ERROR if updated name is invalid', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'a@b.com' });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'a@b.com' });
       await expect(userService.updateUserService(1, { name: ' ' })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
     });
 
     it('should throw VALIDATION_ERROR if updated age is negative', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'a@b.com' });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'a@b.com' });
       await expect(userService.updateUserService(1, { age: -5 })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
     });
 
     it('should throw VALIDATION_ERROR if updated email is invalid format', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'a@b.com' });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'a@b.com' });
       await expect(userService.updateUserService(1, { email: 'bad' })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
     });
 
     it('should update name only', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'a@b.com' });
-      userRepository.updateUser.mockResolvedValue({ id: 1, name: 'Alice2', age: 30, email: 'a@b.com', toJSON: function() { return this; } });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'a@b.com' });
+      userRepository.updateUser.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Alice2', age: 30, email: 'a@b.com', toJSON: function() { return this; } });
       const result = await userService.updateUserService(1, { name: 'Alice2' });
       expect(result.name).toBe('Alice2');
     });
 
     it('should update age only', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, email: 'a@b.com' });
-      userRepository.updateUser.mockResolvedValue({ id: 1, name: 'Alice', age: 31, email: 'a@b.com', toJSON: function() { return this; } });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'a@b.com' });
+      userRepository.updateUser.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Alice', age: 31, email: 'a@b.com', toJSON: function() { return this; } });
       const result = await userService.updateUserService(1, { age: 31 });
       expect(result.age).toBe(31);
     });
@@ -126,10 +126,10 @@ describe('User Service', () => {
 
   describe('getAllUsersService', () => {
     it('should return all users mapped to API shape', async () => {
-      userRepository.getAllUsers.mockResolvedValue([{ id: 1, name: 'A', toJSON: function() { return this; } }]);
+      userRepository.getAllUsers.mockResolvedValue([{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'A', toJSON: function() { return this; } }]);
       const result = await userService.getAllUsersService();
       expect(result).toHaveLength(1);
-      expect(result[0].id).toBe(1);
+      expect(result[0].id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
 
@@ -149,9 +149,9 @@ describe('User Service', () => {
     });
 
     it('should return user when found on get', async () => {
-      userRepository.getUserById.mockResolvedValue({ id: 1, name: 'A', toJSON: function() { return this; } });
+      userRepository.getUserById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'A', toJSON: function() { return this; } });
       const result = await userService.getUserService(1);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should return true when user is deleted', async () => {
@@ -167,9 +167,9 @@ describe('User Service', () => {
     });
 
     it('should handle input without toJSON method', () => {
-      const input = { id: 1, name: 'A', age: 30, email: 'a@b.com' };
+      const input = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'A', age: 30, email: 'a@b.com' };
       const result = userService.toApiShape(input);
-      expect(result.id).toBe(1);
+      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.name).toBe('A');
     });
   });

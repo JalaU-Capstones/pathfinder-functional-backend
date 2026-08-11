@@ -11,7 +11,7 @@ const { ERROR_TYPES } = require('../../src/utils/errors');
 describe('Route Validators', () => {
   describe('validateMapExists', () => {
     it('throws 404 NOT_FOUND when context.map is null', () => {
-      const context = { mapId: 1, map: null };
+      const context = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', map: null };
       expect(() => validateMapExists(context)).toThrow();
       try {
         validateMapExists(context);
@@ -21,7 +21,7 @@ describe('Route Validators', () => {
     });
 
     it('returns context when map exists', () => {
-      const context = { mapId: 1, map: { id: 1 } };
+      const context = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', map: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } };
       expect(validateMapExists(context)).toBe(context);
     });
   });
