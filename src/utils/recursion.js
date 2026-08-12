@@ -1,5 +1,7 @@
 'use strict';
 
+const logger = require('./logger');
+
 /**
  * @fileoverview Pure recursive utility functions for the
  * Pathfinder backend. Each function uses recursion to solve
@@ -29,6 +31,10 @@ const validateUuidFormat = (uuid, segmentIndex = 0) => {
   // Base case 1: not a string or empty
   if (typeof uuid !== 'string' || uuid.length === 0) {
     return false;
+  }
+  
+  if (segmentIndex > 2) {
+    logger.logRecursionDepth('validateUuidFormat', segmentIndex, uuid);
   }
 
   const segments = uuid.split('-');
@@ -83,6 +89,10 @@ const validateMapConfigStructure = (config, depth = 0) => {
   // on circular references or unexpectedly deep objects)
   if (depth > 3) {
     return { valid: true, error: null };
+  }
+
+  if (depth > 2) {
+    logger.logRecursionDepth('validateMapConfigStructure', depth, typeof config === 'object' && config !== null ? Object.keys(config) : config);
   }
 
   // Depth 0: validate top-level structure
@@ -164,7 +174,10 @@ const MAP_CONSTRAINTS = Object.freeze({
  *   Defaults to the standard MAP_CONSTRAINTS rules.
  * @returns {{ valid: boolean, error: string|null }}
  */
-const validateMapDimensions = (dimensions, rules = null) => {
+const validateMapDimensions = (dimensions, rules = null, depth = 0) => {
+  if (depth > 2) {
+    logger.logRecursionDepth('validateMapDimensions', depth, dimensions);
+  }
   // Build default rules array on first call
   const constraintRules = rules || [
     (d) => typeof d.width !== 'number' || typeof d.height !== 'number'
@@ -198,7 +211,7 @@ const validateMapDimensions = (dimensions, rules = null) => {
   }
 
   // Recursive case: check remaining rules
-  return validateMapDimensions(dimensions, remainingRules);
+  return validateMapDimensions(dimensions, remainingRules, depth + 1);
 };
 
 /**
@@ -234,6 +247,9 @@ const detectCyclicDependencies = (
   // Inner recursive DFS function (pure — receives state
   // as parameters, returns new state)
   const dfs = (node, vis, currentPath) => {
+    if (currentPath.size > 2) {
+      logger.logRecursionDepth('dfs', currentPath.size, node);
+    }
     // Base case: node already in current path = cycle found
     if (currentPath.has(node)) {
       return { hasCycle: true, cycle: [...currentPath, node] };
