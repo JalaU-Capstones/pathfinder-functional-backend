@@ -127,4 +127,87 @@ describe('validationController', () => {
     });
   });
 
+  // ─── Phase 13C controllers ────────────────────────────────────────────────────
+
+  describe('POST /api/validation/start-end-obstructed', () => {
+    it('should return 200 on success', async () => {
+      validationService.validateStartEndNotObstructed.mockResolvedValue({ message: 'ok' });
+      const res = await request(app).post('/api/validation/start-end-obstructed').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.success).toBe(true);
+    });
+
+    it('should return error if validation fails', async () => {
+      const error = createAppError(ERROR_TYPES.VALIDATION_ERROR, 'failed');
+      validationService.validateStartEndNotObstructed.mockRejectedValue(error);
+      const res = await request(app).post('/api/validation/start-end-obstructed').send({});
+      expect(res.statusCode).toEqual(400);
+    });
+  });
+
+  describe('POST /api/validation/valid-path', () => {
+    it('should return 200 on success', async () => {
+      validationService.validateAtLeastOneValidPath.mockResolvedValue({ message: 'ok' });
+      const res = await request(app).post('/api/validation/valid-path').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.success).toBe(true);
+    });
+  });
+
+  describe('POST /api/validation/performance', () => {
+    it('should return 200 with analysis', async () => {
+      validationService.analyzeRoutePerformance.mockResolvedValue({ analysis: { runs: 5 } });
+      const res = await request(app).post('/api/validation/performance').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.data.analysis.runs).toBe(5);
+    });
+  });
+
+  describe('POST /api/validation/route-intersections', () => {
+    it('should return 200 if valid', async () => {
+      validationService.validateRouteNoIntersections.mockReturnValue({ message: 'ok' });
+      const res = await request(app).post('/api/validation/route-intersections').send({});
+      expect(res.statusCode).toEqual(200);
+    });
+
+    it('should handle sync errors', async () => {
+      const error = createAppError(ERROR_TYPES.VALIDATION_ERROR, 'failed');
+      validationService.validateRouteNoIntersections.mockImplementation(() => { throw error; });
+      const res = await request(app).post('/api/validation/route-intersections').send({});
+      expect(res.statusCode).toEqual(400);
+    });
+  });
+
+  describe('POST /api/validation/route-length', () => {
+    it('should return 200 if valid', async () => {
+      validationService.validateRouteLength.mockReturnValue({ message: 'ok' });
+      const res = await request(app).post('/api/validation/route-length').send({});
+      expect(res.statusCode).toEqual(200);
+    });
+  });
+
+  describe('POST /api/validation/same-point', () => {
+    it('should return 200 with samePoint bool', async () => {
+      validationService.handleSameStartEnd.mockReturnValue({ samePoint: true });
+      const res = await request(app).post('/api/validation/same-point').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.data.samePoint).toBe(true);
+    });
+  });
+
+  describe('POST /api/validation/comprehensive', () => {
+    it('should return 200 on success', async () => {
+      validationService.validateRouteComprehensive.mockResolvedValue({ results: [] });
+      const res = await request(app).post('/api/validation/comprehensive').send({});
+      expect(res.statusCode).toEqual(200);
+    });
+
+    it('should return 400 on error', async () => {
+      const error = createAppError(ERROR_TYPES.VALIDATION_ERROR, 'failed');
+      validationService.validateRouteComprehensive.mockRejectedValue(error);
+      const res = await request(app).post('/api/validation/comprehensive').send({});
+      expect(res.statusCode).toEqual(400);
+    });
+  });
+
 });

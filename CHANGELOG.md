@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-08-11 (Phase 13C - Concurrency & Parallel Validations):**
+  - feat(utils): add concurrency helpers (`runParallel`, `runParallelSettled`, `validateAll`).
+  - feat(validation): add parallel validation functions to `validationService`.
+  - feat(routes): add 7 new validation endpoints for Phase 13C.
+  - test(concurrency): add full unit tests for concurrency utilities and new validation methods.
+  - docs(architecture): add concurrency architecture documentation.
 - **2026-08-11 (Phase 13B - Recursive Validation Functions):**
   - feat(utils): add recursive validation functions (UUID, map config, dimensions, cycle detection).
   - feat(validation): add validation service and controller.

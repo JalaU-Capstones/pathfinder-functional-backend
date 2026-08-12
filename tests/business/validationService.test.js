@@ -117,4 +117,169 @@ describe('validationService', () => {
     });
   });
 
+  // ─── Phase 13C: Concurrency & Parallel Validations ───────────────────────────
+
+  describe('validateStartEndNotObstructed', () => {
+    it('should resolve if valid path exists and obstacles is array', async () => {
+      // MapId is valid UUID, obstacles is array. Start (0,0) to End (0,2). Obstacle at (1,1) shouldn't block.
+      const data = {
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 0, y: 2 },
+        obstacles: [{ x: 1, y: 1 }],
+      };
+      await expect(validationService.validateStartEndNotObstructed(data)).resolves.toEqual({
+        message: expect.stringContaining('At least one valid path exists'),
+      });
+    });
+
+    it('should throw if path is blocked', async () => {
+      // Start (0,0) to End (2,0) blocked by obstacles at (1,-1), (1,0), (1,1) - wait, A* allows diagonal unless blocked.
+      // Easiest block is surround start.
+      const data = {
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 2, y: 0 },
+        obstacles: [
+          { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 },
+          { x: -1, y: 0 }, { x: 0, y: -1 }, { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 1 }
+        ],
+      };
+      await expect(validationService.validateStartEndNotObstructed(data)).rejects.toMatchObject({
+        type: ERROR_TYPES.NOT_FOUND,
+      });
+    });
+
+    it('should throw VALIDATION_ERROR if obstacles is not an array', async () => {
+      const data = {
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 0, y: 2 },
+        obstacles: null,
+      };
+      await expect(validationService.validateStartEndNotObstructed(data)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+      });
+    });
+  });
+
+  describe('validateAtLeastOneValidPath', () => {
+    it('should resolve if valid path exists on stored map', async () => {
+      mapRepository.getMapById.mockResolvedValueOnce({
+        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        width: 10, height: 10, obstacles: []
+      });
+      const data = {
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', // Matches mock
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 0, y: 2 },
+      };
+      await expect(validationService.validateAtLeastOneValidPath(data)).resolves.toEqual({
+        message: expect.stringContaining('A valid path exists'),
+      });
+    });
+
+    it('should throw NOT_FOUND if map does not exist', async () => {
+      mapRepository.getMapById.mockResolvedValueOnce(null);
+      const data = {
+        mapId: '999e4567-e89b-42d3-a456-426614174999', // Unknown
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 0, y: 2 },
+      };
+      await expect(validationService.validateAtLeastOneValidPath(data)).rejects.toMatchObject({
+        type: ERROR_TYPES.NOT_FOUND,
+      });
+    });
+  });
+
+  describe('analyzeRoutePerformance', () => {
+    it('should resolve with 5 runs and timing data', async () => {
+      const data = {
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 0, y: 2 },
+        obstacles: [],
+      };
+      const res = await validationService.analyzeRoutePerformance(data);
+      expect(res.analysis).toBeDefined();
+      expect(res.analysis.runs).toBe(5);
+      expect(res.analysis.consistent).toBe(true);
+      expect(res.analysis.pathFound).toBe(true);
+    });
+  });
+
+  describe('validateRouteNoIntersections', () => {
+    it('should pass if route has no intersections', () => {
+      const res = validationService.validateRouteNoIntersections({
+        path: [{ x: 0, y: 0 }, { x: 1, y: 0 }],
+        obstacles: [{ x: 2, y: 2 }],
+      });
+      expect(res.message).toBeDefined();
+    });
+
+    it('should throw VALIDATION_ERROR if path intersects obstacle', () => {
+      expect(() => validationService.validateRouteNoIntersections({
+        path: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
+        obstacles: [{ x: 1, y: 1 }],
+      })).toThrow(/intersects with an obstacle/);
+    });
+  });
+
+  describe('validateRouteLength', () => {
+    it('should pass if route length is within limits', () => {
+      const res = validationService.validateRouteLength({
+        path: [{ x: 0, y: 0 }, { x: 1, y: 0 }],
+      });
+      expect(res.length).toBe(2);
+    });
+
+    it('should throw VALIDATION_ERROR if route length exceeds MAX_ROUTE_LENGTH', () => {
+      // Mock an array of length MAX_ROUTE_LENGTH + 1
+      const path = new Array(validationService.MAX_ROUTE_LENGTH + 1).fill({ x: 0, y: 0 });
+      expect(() => validationService.validateRouteLength({ path })).toThrow(/exceeds the maximum/);
+    });
+  });
+
+  describe('handleSameStartEnd', () => {
+    it('should return samePoint: true if points are identical', () => {
+      const res = validationService.handleSameStartEnd({
+        startPoint: { x: 5, y: 5 }, endPoint: { x: 5, y: 5 },
+      });
+      expect(res.samePoint).toBe(true);
+    });
+
+    it('should return samePoint: false if points differ', () => {
+      const res = validationService.handleSameStartEnd({
+        startPoint: { x: 5, y: 5 }, endPoint: { x: 5, y: 6 },
+      });
+      expect(res.samePoint).toBe(false);
+    });
+  });
+
+  describe('validateRouteComprehensive', () => {
+    it('should pass all checks concurrently if valid', async () => {
+      const data = {
+        mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 1, y: 0 },
+        obstacles: [{ x: 5, y: 5 }],
+        path: [{ x: 0, y: 0 }, { x: 1, y: 0 }],
+      };
+      const res = await validationService.validateRouteComprehensive(data);
+      expect(res.results).toHaveLength(4);
+    });
+
+    it('should throw combined errors if multiple checks fail', async () => {
+      const data = {
+        mapId: 'invalid-uuid',
+        startPoint: { x: 0, y: 0 },
+        endPoint: { x: 1, y: 0 },
+        obstacles: [{ x: 1, y: 0 }], // intersects
+        path: [{ x: 0, y: 0 }, { x: 1, y: 0 }], // length is fine
+      };
+      await expect(validationService.validateRouteComprehensive(data)).rejects.toMatchObject({
+        type: ERROR_TYPES.VALIDATION_ERROR,
+        message: expect.stringMatching(/invalid-uuid.*intersects/i), // Matches both errors loosely
+      });
+    });
+  });
 });

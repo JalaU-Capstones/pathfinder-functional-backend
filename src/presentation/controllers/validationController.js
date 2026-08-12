@@ -52,10 +52,100 @@ const checkCyclicDependencies = (req, res, next) => {
   }
 };
 
+// ─── Phase 13C controllers ────────────────────────────────────────────────────
+
+const checkStartEndObstructed = async (req, res, next) => {
+  try {
+    const { mapId, startPoint, endPoint, obstacles } = req.body;
+    const result = await validationService.validateStartEndNotObstructed({
+      mapId, startPoint, endPoint, obstacles,
+    });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const checkValidPath = async (req, res, next) => {
+  try {
+    const { mapId, startPoint, endPoint } = req.body;
+    const result = await validationService.validateAtLeastOneValidPath({
+      mapId, startPoint, endPoint,
+    });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const analyzePerformance = async (req, res, next) => {
+  try {
+    const { startPoint, endPoint, obstacles } = req.body;
+    const result = await validationService.analyzeRoutePerformance({
+      startPoint, endPoint, obstacles,
+    });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const checkRouteIntersections = (req, res, next) => {
+  try {
+    const { path, obstacles } = req.body;
+    const result = validationService.validateRouteNoIntersections({
+      path, obstacles,
+    });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const checkRouteLength = (req, res, next) => {
+  try {
+    const { path } = req.body;
+    const result = validationService.validateRouteLength({ path });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const checkSamePoint = (req, res, next) => {
+  try {
+    const { startPoint, endPoint } = req.body;
+    const result = validationService.handleSameStartEnd({ startPoint, endPoint });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const checkComprehensive = async (req, res, next) => {
+  try {
+    const { mapId, startPoint, endPoint, obstacles, path } = req.body;
+    const result = await validationService.validateRouteComprehensive({
+      mapId, startPoint, endPoint, obstacles, path,
+    });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   validateMapId,
   checkMapExists,
   validateConfig,
   validateDimensions,
   checkCyclicDependencies,
+  // Phase 13C
+  checkStartEndObstructed,
+  checkValidPath,
+  analyzePerformance,
+  checkRouteIntersections,
+  checkRouteLength,
+  checkSamePoint,
+  checkComprehensive,
 };
