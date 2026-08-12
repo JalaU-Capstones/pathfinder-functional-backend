@@ -844,6 +844,448 @@
           }
         }
       ]
+    },
+    {
+      "name": "🔍 Validation",
+      "item": [
+        {
+          "name": "Point 1: Validate Map ID Format (Valid)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/map-id/{{mapId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "map-id",
+                "{{mapId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 1: Validate Map ID Format (Invalid)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/map-id/invalid-id-here",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "map-id",
+                "invalid-id-here"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 2: Verify Map Exists (Found)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/map-exists/{{mapId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "map-exists",
+                "{{mapId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 2: Verify Map Exists (Not Found)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/map-exists/00000000-0000-4000-8000-000000000000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "map-exists",
+                "00000000-0000-4000-8000-000000000000"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 3: Validate Map Config (Valid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"mapConfig\": {\n    \"obstacles\": [\n      { \"position\": { \"x\": 10, \"y\": 20 } }\n    ],\n    \"waypoints\": [\n      { \"position\": { \"x\": 50, \"y\": 60 } }\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/map-config",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "map-config"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 3: Validate Map Config (Invalid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"mapConfig\": {\n    \"obstacles\": [],\n    \"waypoints\": []\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/map-config",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "map-config"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 4: Validate Dimensions (Valid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"width\": 100,\n  \"height\": 80\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/dimensions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "dimensions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 4: Validate Dimensions (Invalid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"width\": 5,\n  \"height\": 80\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/dimensions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "dimensions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 5: Start/End Not Obstructed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"startPoint\": { \"x\": 0, \"y\": 0 },\n  \"endPoint\": { \"x\": 5, \"y\": 5 },\n  \"obstacles\": [\n    { \"x\": 1, \"y\": 1 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/start-end-obstructed",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "start-end-obstructed"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 6: Cyclic Dependencies (Valid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapConfig\": {\n    \"connections\": [\n      { \"source\": \"A\", \"target\": \"B\" },\n      { \"source\": \"B\", \"target\": \"C\" }\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/cyclic-dependencies",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "cyclic-dependencies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 6: Cyclic Dependencies (Invalid Cycle)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapConfig\": {\n    \"connections\": [\n      { \"source\": \"A\", \"target\": \"B\" },\n      { \"source\": \"B\", \"target\": \"A\" }\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/cyclic-dependencies",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "cyclic-dependencies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 7: Valid Path from DB Map",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"startPoint\": { \"x\": 0, \"y\": 0 },\n  \"endPoint\": { \"x\": 9, \"y\": 9 }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/valid-path",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "valid-path"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 8: Performance Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startPoint\": { \"x\": 0, \"y\": 0 },\n  \"endPoint\": { \"x\": 9, \"y\": 9 },\n  \"obstacles\": [\n    { \"x\": 1, \"y\": 1 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/performance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "performance"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 9: Route Intersections",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"path\": [{ \"x\": 0, \"y\": 0 }, { \"x\": 1, \"y\": 0 }],\n  \"obstacles\": [{ \"x\": 5, \"y\": 5 }]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/route-intersections",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "route-intersections"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Point 10 & 11: Comprehensive Showcase",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"startPoint\": { \"x\": 0, \"y\": 0 },\n  \"endPoint\": { \"x\": 5, \"y\": 5 },\n  \"obstacles\": [],\n  \"path\": [{ \"x\": 0, \"y\": 0 }, { \"x\": 1, \"y\": 0 }]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/comprehensive",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "comprehensive"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

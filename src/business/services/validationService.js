@@ -8,6 +8,7 @@ const {
 } = require('../../utils/recursion');
 const mapRepository = require('../../data/repositories/mapRepository');
 const { createAppError, ERROR_TYPES } = require('../../utils/errors');
+const logger = require('../../utils/logger');
 
 /**
  * Validates UUID format of a map ID (recursive).
@@ -36,10 +37,12 @@ const validateMapIdExists = async (mapId) => {
   }
   const map = await mapRepository.getMapById(mapId);
   if (!map) {
-    throw createAppError(
+    const error = createAppError(
       ERROR_TYPES.NOT_FOUND,
       `Map with ID "${mapId}" does not exist in the database.`
     );
+    logger.logValidationError('validateMapIdExists', { mapId }, error);
+    throw error;
   }
   return { message: 'Map ID exists in the database.' };
 };
@@ -87,11 +90,13 @@ const validateNoCyclicDependencies = (mapConfig) => {
   }
   const result = detectCyclicDependencies(connections);
   if (result.hasCycle) {
-    throw createAppError(
+    const error = createAppError(
       ERROR_TYPES.VALIDATION_ERROR,
       'Cyclic dependency detected in map configuration: ' +
       `${result.cycle.join(' → ')}.`
     );
+    logger.logValidationError('validateNoCyclicDependencies', { cycle: result.cycle }, error);
+    throw error;
   }
   return {
     message: 'No cyclic dependencies found in map configuration.',
@@ -254,6 +259,8 @@ const analyzeRoutePerformance = async ({
     (r) => r.distance === results[0].distance
   );
 
+  logger.logConcurrencyEvent('analyzeRoutePerformance', RUNS, duration, 0);
+
   return {
     message: 'Performance analysis completed successfully.',
     analysis: {
@@ -408,12 +415,15 @@ const validateRouteComprehensive = async ({
 
   // Report ALL failures at once — not just the first one.
   if (failed.length > 0) {
+    logger.logConcurrencyEvent('validateRouteComprehensive', passed.length + failed.length, 0, failed.length);
     const messages = failed.map((e) => e.message).join('; ');
     throw createAppError(
       ERROR_TYPES.VALIDATION_ERROR,
       `Comprehensive validation failed: ${messages}`
     );
   }
+
+  logger.logConcurrencyEvent('validateRouteComprehensive', passed.length, 0, 0);
 
   return {
     message: 'All parallel validations passed.',
