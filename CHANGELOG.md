@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **2026-08-11 (Phase 13B - Recursive Validation Functions):**
+  - feat(utils): add recursive validation functions (UUID, map config, dimensions, cycle detection).
+  - feat(validation): add validation service and controller.
+  - feat(routes): add /api/validation/* endpoints.
+  - test(utils): add recursion unit tests.
+  - docs(patterns): add recursive validation pattern doc.
 - **2026-08-07 (Phase 12C - Clean Code Audit & Assignment 5.4 Report):**
   - refactor(services): improve validation error messages in `mapService.js` to be more explicit.
   - docs(utils): add file-level JSDoc comments to all shared utilities.

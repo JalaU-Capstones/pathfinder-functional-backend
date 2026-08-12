@@ -2,6 +2,12 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-11 (Phase 13B - Recursive Validation Functions)
+- **Isolation:** Decision to isolate all recursive functions in `src/utils/recursion.js` (SRP — recursion as one concern).
+- **UUID Validation:** Decision to use segment-by-segment recursion for UUID validation (natural fit for the 5-segment structure).
+- **Dimension Rules:** Decision to use rule-list recursion for dimension validation (each rule is one recursive call — extensible without modifying existing rules = OCP).
+- **Cycle Detection:** Decision to use DFS recursion for cycle detection (canonical algorithm — call stack = traversal path).
+
 ## 2026-08-07 (Phase 12B - Promise as Monad)
 - **Monad Implementation:** Decided to explicitly document and use JavaScript's native Promise as a Monad rather than introducing a new third-party functional library (like `fp-ts` or `ramda`).
 - **Pipeline Refactoring:** Refactored `routeService.js` to use `pipeAsync` (monadic function composition) to manage the async validation and computation flow, adhering strictly to mathematical Monad laws.
