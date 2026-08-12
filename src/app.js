@@ -7,6 +7,7 @@ const obstacleRoutes = require('./presentation/routes/obstacleRoutes');
 const waypointRoutes = require('./presentation/routes/waypointRoutes');
 const routeRoutes = require('./presentation/routes/routeRoutes');
 const userRoutes = require('./presentation/routes/userRoutes');
+const validationRoutes = require('./presentation/routes/validationRoutes');
 const { requestLogger } = require('./presentation/middlewares/requestLogger');
 const { errorHandler } = require('./presentation/middlewares/errorHandler');
 const { notFound } = require('./presentation/middlewares/notFound');
@@ -38,6 +39,7 @@ const createApp = () => {
   app.use('/api/waypoints', waypointRoutes);
   app.use('/api/routes', routeRoutes);
   app.use('/api/users', userRoutes);
+  app.use('/api/validation', validationRoutes);
 
   // 404 Not Found (After routes)
   app.use(notFound);
