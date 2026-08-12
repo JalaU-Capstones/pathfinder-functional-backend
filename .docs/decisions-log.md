@@ -2,6 +2,11 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-11 (Phase 13C - Concurrency & Parallel Validations)
+- **Decision:** Adopt `Promise.all` and `Promise.allSettled` for concurrent operations instead of simple sequential execution.
+- **Rationale:** Many validations, especially in batch processes or when validating multi-faceted objects like a Map ID and a start point simultaneously, do not depend on each other. Using native Promises correctly optimizes these independent checks and supports the functional mandate.
+- **Status:** Implemented. Utilities added in `concurrency.js` and wired into 7 new validation routes.
+
 ## 2026-08-11 (Phase 13B - Recursive Validation Functions)
 - **Isolation:** Decision to isolate all recursive functions in `src/utils/recursion.js` (SRP — recursion as one concern).
 - **UUID Validation:** Decision to use segment-by-segment recursion for UUID validation (natural fit for the 5-segment structure).
