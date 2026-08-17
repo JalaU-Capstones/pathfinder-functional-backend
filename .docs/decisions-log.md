@@ -2,6 +2,13 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-17 (Phase 14A - CI/CD Pipelines & README Cleanup)
+- **Node.js 22 LTS in CI:** Decision to use Node.js 22 LTS in GitHub Actions and GitLab CI pipelines instead of the local Node.js 26. Node.js 22 LTS has broader ecosystem support in CI runner images and is the current production-stable LTS release.
+- **npm ci over npm install:** Decision to use `npm ci` in all pipeline install steps. `npm ci` reads `package-lock.json` exactly and fails if the lock file is out of date, guaranteeing reproducible installs across all pipeline runs.
+- **No database service in CI:** Decision to exclude a PostgreSQL service from both pipelines. All tests mock Sequelize at the model level; a live database is not needed. This validates the unit test strategy and keeps pipeline execution fast.
+- **Remove emojis from README:** Decision to remove all emojis and decorative symbols from `README.md`. The codebase may be reviewed by evaluators and employers; a professional plain-text standard is required.
+- **Parallel pipelines (GitHub and GitLab):** Decision to maintain identical CI pipelines on both GitHub Actions and GitLab CI. The project is hosted on GitHub but course submission uses GitLab; both platforms must run the same three-step pipeline (install, lint, test with coverage).
+
 ## 2026-08-11 (Phase 13C - Concurrency & Parallel Validations)
 - **Decision:** Adopt `Promise.all` and `Promise.allSettled` for concurrent operations instead of simple sequential execution.
 - **Rationale:** Many validations, especially in batch processes or when validating multi-faceted objects like a Map ID and a start point simultaneously, do not depend on each other. Using native Promises correctly optimizes these independent checks and supports the functional mandate.

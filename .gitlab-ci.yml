@@ -1,0 +1,57 @@
+# CI pipeline for Pathfinder Functional Backend
+# Runs on every push to main and every merge request targeting main.
+# Steps: install -> lint -> test with coverage.
+# Node.js 22 LTS used for CI stability.
+# Database not required: all tests use mocked Sequelize models.
+
+stages:
+  - install
+  - lint
+  - test
+
+variables:
+  NODE_ENV: test
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .npm/
+    - node_modules/
+
+install-dependencies:
+  stage: install
+  image: node:22-alpine
+  script:
+    - npm ci
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+run-lint:
+  stage: lint
+  image: node:22-alpine
+  needs:
+    - install-dependencies
+  script:
+    - npm run lint
+
+run-tests:
+  stage: test
+  image: node:22-alpine
+  needs:
+    - install-dependencies
+  script:
+    - npm run test:ci
+  coverage: '/Statements\s*:\s*([\d.]+)%/'
+  artifacts:
+    name: coverage-report
+    paths:
+      - coverage/
+    expire_in: 7 days
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml

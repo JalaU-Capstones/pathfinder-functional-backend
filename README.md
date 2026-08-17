@@ -1,227 +1,200 @@
 # Pathfinder Functional Backend
 
-This project is an academic capstone for Jala University's "Programming 4" module. The objective is to build a functional Node.js backend implementing a Path Finder application. It supports maps, obstacles, waypoints, route calculations via a pathfinding algorithm, and users. The entire application strictly follows the functional programming paradigm and a three-layer architecture (Presentation, Business Logic, Data Access).
+A Node.js REST API implementing a path-finding system using functional programming principles and a three-layer architecture. Built as the capstone project for the Programming 4 module at Jala University.
 
-> **Status:** This is a work-in-progress capstone. Phases will be added incrementally.
+## Tech Stack
+
+- Runtime: Node.js v26
+- Framework: Express
+- Database: PostgreSQL (Docker)
+- ORM: Sequelize
+- Testing: Jest + Supertest
+- Documentation: Swagger/OpenAPI 3.0
+- Logging: Winston
+
+## Architecture
+
+The application is structured into three layers: Presentation (Express routers and controllers that handle HTTP concerns), Business (pure service functions that contain all domain logic and validation), and Data (repositories that encapsulate all Sequelize calls and return plain objects). Each layer communicates only with the layer directly below it, and no layer bypasses another.
 
 ## Prerequisites
 
-- Node.js v26+
-- Docker & Docker Compose (for the PostgreSQL database)
+- Node.js v26 or higher
+- Docker and Docker Compose
+- npm v11 or higher
 
-## Clone Instructions
+## Getting Started
+
+### Clone the repository
 
 ```bash
 git clone https://github.com/JalaU-Capstones/pathfinder-functional-backend.git
 cd pathfinder-functional-backend
 ```
 
-## Installation and Setup
-
-### Linux / macOS
+### Install dependencies
 
 ```bash
-# Install dependencies
 npm install
+```
 
-# Copy environment variables and adjust if necessary
+### Configure environment variables
+
+Linux/macOS:
+
+```bash
 cp .env.example .env
 ```
 
-### Windows (PowerShell)
+Windows (PowerShell):
 
 ```powershell
-# Install dependencies
-npm install
-
-# Copy environment variables and adjust if necessary
 Copy-Item .env.example .env
 ```
 
-## Running the Database
-
-We use Docker Compose to run a local PostgreSQL instance for development.
+### Start the database
 
 ```bash
-# Start the database container in the background
 docker compose up -d
-
-# To stop the database:
-# docker compose down
 ```
 
-## Running the Application
+### Run database migrations
 
-To start the server with native Node.js auto-reload:
+```bash
+npm run db:migrate
+```
+
+### Seed demo data
+
+```bash
+npm run db:seed
+```
+
+### Start the development server
 
 ```bash
 npm run dev
 ```
 
-The application will run on the port specified in your `.env` (default is 3000).
-
-## API Endpoints
-
-The following entities have been implemented following our purely functional, three-layer architecture:
-
-### Maps
-- `POST /api/maps` - Create a new map
-- `GET /api/maps` - List all maps
-- `GET /api/maps/:id` - Get a map by ID
-- `PUT /api/maps/:id` - Update a map by ID
-- `DELETE /api/maps/:id` - Delete a map by ID
-
-### Obstacles
-- `POST /api/obstacles` - Create a new obstacle
-- `GET /api/obstacles` - List all obstacles (supports optional `?mapId=` query filter)
-- `GET /api/obstacles/:id` - Get an obstacle by ID
-- `PUT /api/obstacles/:id` - Update an obstacle by ID
-- `DELETE /api/obstacles/:id` - Delete an obstacle by ID
-
-### Waypoints
-- `POST /api/waypoints` - Create a new waypoint
-- `GET /api/waypoints` - List all waypoints (supports optional `?mapId=` query filter)
-- `GET /api/waypoints/:id` - Get a waypoint by ID
-- `PUT /api/waypoints/:id` - Update a waypoint by ID
-- `DELETE /api/waypoints/:id` - Delete a waypoint by ID
-
-### Routes
-- `POST /api/routes` - Create a new route. (Note: The A* algorithm was used.).
-- `GET /api/routes` - List all routes (supports optional `?mapId=` query filter)
-- `GET /api/routes/:id` - Get a route by ID
-- `DELETE /api/routes/:id` - Delete a route by ID
-
-### Users
-- `POST /api/users` - Create a new user account
-- `GET /api/users` - Retrieve a list of all users
-- `GET /api/users/:id` - Retrieve a user by ID
-- `PUT /api/users/:id` - Update user account details
-- `DELETE /api/users/:id` - Delete a user account
-
-For detailed request/response schemas, refer to the Swagger UI below.
-
-## 🧭 Pathfinding Algorithm
-
-The core of this application is an **A\* (A-Star)** pathfinding
-algorithm implemented as a pure function in
-`src/business/pathfinder.js`.
-
-### Why A\*
-A\* was chosen for its combination of optimality and efficiency:
-it finds the guaranteed shortest path while using a **Manhattan
-distance heuristic** to explore far fewer nodes than Dijkstra
-(which explores all directions equally) or BFS (which has no
-heuristic guidance). For a 2D grid with integer coordinates —
-exactly the data model used here — A\* is the optimal choice.
-
-### Features
-- **Obstacle avoidance:** blocked cells are excluded from
-  neighbor exploration.
-- **Waypoint support:** routes pass through all configured
-  waypoints by running A\* sequentially between each checkpoint
-  pair and concatenating the path segments.
-- **Waypoint compliance validation:** after computation, the
-  path is verified to include every waypoint position; a 422
-  error is returned if any waypoint is unreachable.
-- **Immutable output:** the returned path array is frozen
-  (`Object.freeze`) consistent with the functional paradigm.
-
-### Response
-`POST /api/routes` returns:
-```json
-{
-  "distance": 12,
-  "optimal_path": [{ "x": 2, "y": 2 }, "...", { "x": 8, "y": 8 }]
-}
-```
-
-Full algorithm documentation:
-[`.docs/architecture/pathfinding-algorithm.md`](.docs/architecture/pathfinding-algorithm.md)
-
-## ⚙️ Functional Programming Techniques
-
-Beyond general functional style (`const`, pure functions,
-immutability), this project explicitly implements:
-
-| Technique | File | Example |
-|---|---|---|
-| Higher-Order Functions | `src/utils/routeValidators.js` | `requireNonEmpty(fieldName)` returns a validator |
-| Currying | `src/utils/curry.js` | `isPointInGrid(grid)(point)` pre-loads grid |
-| Function Composition | `src/utils/compose.js` | `pipe(f,g,h)` builds validation pipeline |
-
-Full documentation:
-[`.docs/architecture/functional-techniques.md`](.docs/architecture/functional-techniques.md)
-
-## Logging
-
-The backend utilizes `winston` for structured logging.
-- In **development**, logs are colorized and human-readable.
-- In **production**, logs are emitted as strict JSON objects for aggregation tools.
-By default, the application runs at `info` level in production and `debug` level in development.
-
-## API Documentation (Development)
-
-Start the server in development mode (`npm run dev`) and visit:
-`http://localhost:3000/api-docs`
-
-## Postman Collection
-
-For API testing, a comprehensive Postman Collection and Environment are provided.
-See the [.docs/collections/postman/README.md](.docs/collections/postman/README.md) for import instructions and details.
+The server starts on the port configured in `.env` (default: 3000).
 
 ## Available Scripts
 
-### Database Migrations
+| Script | Description |
+|---|---|
+| `npm test` | Run the test suite |
+| `npm run test:coverage` | Run tests with coverage report |
+| `npm run test:coverage:watch` | Run tests with coverage in watch mode |
+| `npm run test:ci` | CI mode: coverage, strict, force exit |
+| `npm run lint` | Run ESLint across the codebase |
+| `npm run dev` | Start the development server with auto-reload |
+| `npm run db:migrate` | Run all pending database migrations |
+| `npm run db:migrate:undo` | Undo the last executed migration |
+| `npm run db:migrate:undo:all` | Revert all migrations |
+| `npm run db:seed` | Seed the database with demo data |
+| `npm run db:seed:undo` | Revert all seeders |
+| `npm run db:reset` | Revert all migrations, re-migrate, and re-seed |
+| `npm run db:test-connection` | Verify connectivity to the PostgreSQL database |
 
-For a fresh setup, the correct order of operations is:
-1. Start the Docker database container (`docker compose up -d`).
-2. Run database migrations (`npm run db:migrate`).
-3. Seed the database (`npm run db:seed`).
+## API Documentation
 
-Here are all the database-related scripts defined in the project:
+Swagger UI is available at `http://localhost:3000/api-docs` when running in development mode. The Postman collection is located at `.docs/collections/postman/`.
 
-- `npm run db:migrate`: Runs all pending Sequelize migrations to update the database schema.
-- `npm run db:migrate:undo`: Reverts the last executed migration.
-- `npm run db:migrate:undo:all`: Reverts all executed migrations, dropping the created tables.
-- `npm run db:seed`: Runs all seeders to populate the database with initial dummy data.
-- `npm run db:seed:undo`: Reverts all seeders, removing the populated initial data.
-- `npm run db:test-connection`: Tests the connection to the PostgreSQL database.
+## API Endpoints
 
-### Code Quality & Testing
+### Maps
 
-- `npm run lint`: Runs ESLint across the codebase to check for code quality and adherence to functional programming rules.
+| Method | Path | Description |
+|---|---|---|
+| POST | /api/maps | Create a map |
+| GET | /api/maps | List all maps |
+| GET | /api/maps/:id | Get a map by ID |
+| PUT | /api/maps/:id | Update a map by ID |
+| DELETE | /api/maps/:id | Delete a map by ID |
 
-## 🧪 Testing & Coverage
+### Obstacles
+
+| Method | Path | Description |
+|---|---|---|
+| POST | /api/obstacles | Create an obstacle |
+| GET | /api/obstacles | List all obstacles (optional `?mapId=` filter) |
+| GET | /api/obstacles/:id | Get an obstacle by ID |
+| PUT | /api/obstacles/:id | Update an obstacle by ID |
+| DELETE | /api/obstacles/:id | Delete an obstacle by ID |
+
+### Waypoints
+
+| Method | Path | Description |
+|---|---|---|
+| POST | /api/waypoints | Create a waypoint |
+| GET | /api/waypoints | List all waypoints (optional `?mapId=` filter) |
+| GET | /api/waypoints/:id | Get a waypoint by ID |
+| PUT | /api/waypoints/:id | Update a waypoint by ID |
+| DELETE | /api/waypoints/:id | Delete a waypoint by ID |
+
+### Routes
+
+| Method | Path | Description |
+|---|---|---|
+| POST | /api/routes | Create a route and calculate the optimal path |
+| GET | /api/routes | List all routes (optional `?mapId=` filter) |
+| GET | /api/routes/:id | Get a route by ID |
+| DELETE | /api/routes/:id | Delete a route by ID |
+
+### Users
+
+| Method | Path | Description |
+|---|---|---|
+| POST | /api/users | Create a user account |
+| GET | /api/users | List all users |
+| GET | /api/users/:id | Get a user by ID |
+| PUT | /api/users/:id | Update a user account |
+| DELETE | /api/users/:id | Delete a user account |
+
+### Validation
+
+| Method | Path | Description |
+|---|---|---|
+| POST | /api/validation/uuid | Validate a UUID string |
+| POST | /api/validation/map-config | Validate map configuration dimensions and rules |
+| POST | /api/validation/cycle | Detect cycles in a dependency graph |
+| POST | /api/validation/parallel | Run multiple validations in parallel |
+| POST | /api/validation/parallel-settled | Run validations in parallel and collect all results |
+| POST | /api/validation/batch | Validate a batch of items |
+| POST | /api/validation/map-full | Run full concurrent map validation |
+
+## Testing and Coverage
 
 ### Run tests
+
 ```bash
-npm test                  # fast, no coverage
-npm run test:coverage     # full coverage report
-npm run test:ci           # CI mode (strict, force exit)
+npm test                  # Run the test suite without coverage
+npm run test:coverage     # Run tests with full coverage report
+npm run test:ci           # CI mode: strict enforcement, force exit
 ```
 
+### Coverage thresholds
+
+Jest enforces minimum coverage thresholds on all metrics. The test run fails if any metric drops below the configured threshold. Current coverage: 99%+ statements, branches, functions, and lines.
+
 ### Coverage report
-After running `npm run test:coverage`, open
-`coverage/index.html` in a browser for an interactive
-file-by-file breakdown.
 
-### Thresholds
-Jest enforces a minimum of **70%** on statements, branches,
-functions, and lines. The test run fails if any metric drops
-below this threshold.
+After running `npm run test:coverage`, open `coverage/index.html` in a browser for an interactive file-by-file breakdown.
 
-## Current baseline
-| Metric | Coverage |
-|---|---|
-| Statements | 100% |
-| Branches | 100% |
-| Functions | 100% |
-| Lines | 100% |
+## Pathfinding Algorithm
 
-## 📋 Weekly Reports
+The core of this application is an A* (A-Star) algorithm implemented as a pure function in `src/business/pathfinder.js`. A* was chosen for its combination of optimality and efficiency using a Manhattan distance heuristic, which is perfectly admissible for 4-directional movement on an integer grid. Waypoint routing is achieved by running A* sequentially between each waypoint pair and concatenating the resulting path segments. Full algorithm documentation is available in `.docs/architecture/pathfinding-algorithm.md`.
 
-Progress reports are generated at the end of each assignment period,
-documenting decisions made, features implemented, and lessons learned.
+## Functional Programming Techniques
+
+Beyond general functional style (pure functions, `const`, and immutable data), this project explicitly demonstrates: higher-order functions, currying, function composition using `pipe` and `compose`, Promise as Monad via `pipeAsync`, recursion for validation (UUID validation, dimension rules, cycle detection), and structured concurrency using `Promise.all` and `Promise.allSettled`. Full documentation is in `.docs/architecture/`.
+
+## SOLID Principles
+
+SOLID principles are documented in `.docs/solid/` with functional paradigm adaptations.
+
+## Weekly Reports
+
+Progress reports are generated at the end of each assignment period, documenting decisions made, features implemented, and lessons learned.
 
 | Assignment | Period | Description | Report |
 |---|---|---|---|
@@ -231,3 +204,7 @@ documenting decisions made, features implemented, and lessons learned.
 | Mid-Term Evaluation | Jul 13 – Aug 4, 2026 | Full project summary covering Assignments 2.4–4.4: complete CRUD for 5 entities, A* pathfinding, functional techniques (HOF, currying, composition), 282 tests with 100% coverage. Includes demo video. | [View Report](.docs/reports/assignments/mid-term/mid-term-report.md) |
 | Assignment 5.4 | Aug 4 – Aug 7, 2026 | Formal documentation of SOLID principles within a functional architecture, refactoring to demonstrate Promise as Monad (`pipeAsync`), and a comprehensive clean code audit with test coverage maintenance. | [View Report](.docs/reports/assignments/5/progress-report.md) |
 | Assignment 6.4 | Aug 7 – Aug 11, 2026 | UUID migration, recursive validation algorithms, structured concurrency (`Promise.all`, `Promise.allSettled`), explicit sequential/parallel separation, extended Winston logging, and updated Postman collections. | [View Report](.docs/reports/assignments/6/progress-report.md) |
+
+## License
+
+MIT License. Diego Alejandro Botina. 2026.
