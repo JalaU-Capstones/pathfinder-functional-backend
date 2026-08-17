@@ -2,6 +2,10 @@
 
 ## [Unreleased] - 2026-08-17
 ### Added
+- **2026-08-17 (Phase 14B - Memoization Utility):**
+  - feat(utils): add memoize, memoizeAsync and memoizeWithLimit utilities
+  - test(utils): add comprehensive memoize unit tests including rejection retry and concurrent call deduplication
+  - docs: document memoization decisions in decisions log
 - **2026-08-17 (Phase 14A - CI/CD Pipelines & README Cleanup):**
   - ci: add github actions workflow for lint, test and coverage.
   - ci: add gitlab ci pipeline for lint, test and coverage.

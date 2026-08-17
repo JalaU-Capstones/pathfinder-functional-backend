@@ -2,6 +2,12 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-17 (Phase 14B - Memoization Utility)
+- Decision to implement three memoize variants: `memoize` (general), `memoizeAsync` (Promise-based), `memoizeWithLimit` (bounded cache). Rationale: pathfinding on small maps suits `memoize`; large maps (Assignment 7.4 point 7) need `memoizeWithLimit` to prevent unbounded memory growth; async DB calls suit `memoizeAsync`.
+- Decision to use JSON.stringify as the cache key strategy: correct for plain data (grids, coordinates, obstacle arrays), unsuitable for functions or circular references (documented).
+- Decision to use Map over plain object for cache storage: Map preserves insertion order (needed for FIFO eviction), has O(1) has/get/set, and does not have prototype pollution risks.
+- Decision to expose `.cache` property on the memoized function: enables testing and cache inspection without breaking the function's public interface.
+
 ## 2026-08-17 (Phase 14A - CI/CD Pipelines & README Cleanup)
 - **Node.js 22 LTS in CI:** Decision to use Node.js 22 LTS in GitHub Actions and GitLab CI pipelines instead of the local Node.js 26. Node.js 22 LTS has broader ecosystem support in CI runner images and is the current production-stable LTS release.
 - **npm ci over npm install:** Decision to use `npm ci` in all pipeline install steps. `npm ci` reads `package-lock.json` exactly and fails if the lock file is out of date, guaranteeing reproducible installs across all pipeline runs.
