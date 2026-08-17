@@ -1,4 +1,13 @@
 # Changelog
+
+## [Unreleased] - 2026-08-17
+### Added
+- **2026-08-17 (Phase 14A - CI/CD Pipelines & README Cleanup):**
+  - ci: add github actions workflow for lint, test and coverage.
+  - ci: add gitlab ci pipeline for lint, test and coverage.
+  - docs: rewrite readme removing emojis and updating project state.
+  - docs: document ci/cd decisions in decisions log.
+
 ## [Unreleased] - 2026-08-11
 ### Changed
 - Migrated all primary keys (Maps, Users, Obstacles, Waypoints, Routes) to UUIDs.
