@@ -56,7 +56,8 @@
       "text",
       "text-summary",
       "html",
-      "lcov"
+      "lcov",
+      "cobertura"
     ]
   },
   "dependencies": {
