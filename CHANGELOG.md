@@ -2,6 +2,12 @@
 
 ## [Unreleased] - 2026-08-17
 ### Added
+- **2026-08-18 (Phase 14D - Fixes & Postman):**
+  - fix(swagger): quote description strings containing colons in validationRoutes.js JSDoc annotations
+  - test: run full test suite and fix any coverage gaps
+  - docs(postman): add 8 new requests for assignment 7.4
+  - docs: update readme with new endpoints and techniques
+  - docs(reports): add assignment 7.4 progress report
 - **2026-08-18 (Phase 14C - Filters, Accumulators & Endpoints):**
   - feat(utils): add filters module with filterValidWaypoints, filterReachableWaypoints and filterValidMapInput
   - feat(utils): add accumulators module with reachability, all-routes, optimal-route and large-map accumulators

@@ -725,7 +725,7 @@ router.post('/comprehensive', validationController.checkComprehensive);
  * /api/validation/map-waypoints:
  *   post:
  *     summary: Validate map contains valid stopping points (Point 1)
- *     description: Point 1: filter for valid stopping points using functional filter.
+ *     description: "Point 1: filter for valid stopping points using functional filter."
  *     tags: [Validation]
  *     requestBody:
  *       required: true
@@ -749,7 +749,7 @@ router.post('/map-waypoints', validationController.validateMapWaypoints);
  * /api/validation/reachability:
  *   post:
  *     summary: Verify reachability of waypoints (Point 2)
- *     description: Point 2: accumulator for waypoint connectivity using functional reduce.
+ *     description: "Point 2: accumulator for waypoint connectivity using functional reduce."
  *     tags: [Validation]
  *     requestBody:
  *       required: true
@@ -773,7 +773,7 @@ router.post('/reachability', validationController.checkReachability);
  * /api/validation/complex-geometry:
  *   post:
  *     summary: Validates map with complex geometry (Point 3)
- *     description: Point 3: memoized pathfinding for complex maps using memoization.
+ *     description: "Point 3: memoized pathfinding for complex maps using memoization."
  *     tags: [Validation]
  *     requestBody:
  *       required: true
@@ -797,7 +797,7 @@ router.post('/complex-geometry', validationController.validateComplexGeometry);
  * /api/validation/all-routes:
  *   post:
  *     summary: Accumulate all possible routes (Point 4)
- *     description: Point 4: accumulate all possible routes using functional reduce.
+ *     description: "Point 4: accumulate all possible routes using functional reduce."
  *     tags: [Validation]
  *     requestBody:
  *       required: true
@@ -821,7 +821,7 @@ router.post('/all-routes', validationController.validateAllRoutes);
  * /api/validation/optimal-route:
  *   post:
  *     summary: Select the optimal route (Point 5)
- *     description: Point 5: pipe of accumulators for optimal route.
+ *     description: "Point 5: pipe of accumulators for optimal route."
  *     tags: [Validation]
  *     requestBody:
  *       required: true
@@ -845,7 +845,7 @@ router.post('/optimal-route', validationController.validateOptimalRoute);
  * /api/validation/validate-input:
  *   post:
  *     summary: Filter invalid map inputs (Point 6)
- *     description: Point 6: filter invalid inputs using functional filter.
+ *     description: "Point 6: filter invalid inputs using functional filter."
  *     tags: [Validation]
  *     requestBody:
  *       required: true
@@ -869,7 +869,7 @@ router.post('/validate-input', validationController.validateInputHandler);
  * /api/validation/large-map:
  *   post:
  *     summary: Validate large map results (Point 7)
- *     description: Point 7: memoization + accumulator for large maps.
+ *     description: "Point 7: memoization + accumulator for large maps."
  *     tags: [Validation]
  *     requestBody:
  *       required: true
