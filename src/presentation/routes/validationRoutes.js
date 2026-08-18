@@ -718,4 +718,174 @@ router.post('/same-point', validationController.checkSamePoint);
  */
 router.post('/comprehensive', validationController.checkComprehensive);
 
+// ─── Phase 14C Routes ─────────────────────────────────────────────────────────
+
+/**
+ * @swagger
+ * /api/validation/map-waypoints:
+ *   post:
+ *     summary: Validate map contains valid stopping points (Point 1)
+ *     description: Point 1: filter for valid stopping points using functional filter.
+ *     tags: [Validation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               map:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: Map contains valid stopping points.
+ *       400:
+ *         description: Validation error.
+ */
+router.post('/map-waypoints', validationController.validateMapWaypoints);
+
+/**
+ * @swagger
+ * /api/validation/reachability:
+ *   post:
+ *     summary: Verify reachability of waypoints (Point 2)
+ *     description: Point 2: accumulator for waypoint connectivity using functional reduce.
+ *     tags: [Validation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               map:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: Reachability results.
+ *       400:
+ *         description: Validation error.
+ */
+router.post('/reachability', validationController.checkReachability);
+
+/**
+ * @swagger
+ * /api/validation/complex-geometry:
+ *   post:
+ *     summary: Validates map with complex geometry (Point 3)
+ *     description: Point 3: memoized pathfinding for complex maps using memoization.
+ *     tags: [Validation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               map:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: Geometry validated.
+ *       400:
+ *         description: Validation error.
+ */
+router.post('/complex-geometry', validationController.validateComplexGeometry);
+
+/**
+ * @swagger
+ * /api/validation/all-routes:
+ *   post:
+ *     summary: Accumulate all possible routes (Point 4)
+ *     description: Point 4: accumulate all possible routes using functional reduce.
+ *     tags: [Validation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               map:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: All routes considered.
+ *       400:
+ *         description: Validation error.
+ */
+router.post('/all-routes', validationController.validateAllRoutes);
+
+/**
+ * @swagger
+ * /api/validation/optimal-route:
+ *   post:
+ *     summary: Select the optimal route (Point 5)
+ *     description: Point 5: pipe of accumulators for optimal route.
+ *     tags: [Validation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               map:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: Optimal route result.
+ *       400:
+ *         description: Validation error.
+ */
+router.post('/optimal-route', validationController.validateOptimalRoute);
+
+/**
+ * @swagger
+ * /api/validation/validate-input:
+ *   post:
+ *     summary: Filter invalid map inputs (Point 6)
+ *     description: Point 6: filter invalid inputs using functional filter.
+ *     tags: [Validation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               map:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: Map input is valid.
+ *       400:
+ *         description: Validation error.
+ */
+router.post('/validate-input', validationController.validateInputHandler);
+
+/**
+ * @swagger
+ * /api/validation/large-map:
+ *   post:
+ *     summary: Validate large map results (Point 7)
+ *     description: Point 7: memoization + accumulator for large maps.
+ *     tags: [Validation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               map:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: Large map results.
+ *       400:
+ *         description: Validation error.
+ */
+router.post('/large-map', validationController.validateLargeMap);
+
 module.exports = router;
