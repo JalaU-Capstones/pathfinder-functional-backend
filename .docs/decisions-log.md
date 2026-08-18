@@ -3,6 +3,8 @@
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
 ## 2026-08-18 (Phase 14C - Filters, Accumulators & Endpoints)
+- Swagger YAML error root cause and fix: description strings containing colons must be quoted in JSDoc YAML annotations or the parser creates invalid nested mappings. Fix applied: wrap all such strings in double quotes consistently across validationRoutes.js.
+- Decision to update README weekly reports table and functional techniques section to reflect current state after all 14x phases.
 - Decision to separate filters and accumulators into dedicated utility files (`filters.js`, `accumulators.js`). Rationale: SRP — one file per functional concept.
 - Decision to pass `pathFinder` as a parameter to accumulators rather than importing directly. Rationale: Dependency Inversion Principle (DIP). It depends on abstraction, making it easier to test using `jest.fn()`.
 - Decision to create memoized pathfinder instances at the module level in `validationService.js`. Rationale: They are created once and reused across multiple HTTP requests, persisting the cache for the lifetime of the Node.js process.
