@@ -2,6 +2,13 @@
 
 ## [Unreleased] - 2026-08-17
 ### Added
+- **2026-08-18 (Phase 14C - Filters, Accumulators & Endpoints):**
+  - feat(utils): add filters module with filterValidWaypoints, filterReachableWaypoints and filterValidMapInput
+  - feat(utils): add accumulators module with reachability, all-routes, optimal-route and large-map accumulators
+  - feat(validation): extend validation service with 7 new functions covering assignment 7.4 points 1-7
+  - feat(validation): add 7 new endpoints under /api/validation
+  - test(utils): add filters and accumulators unit tests
+  - test(validation): extend validation service and controller tests
 - **2026-08-17 (Phase 14B - Memoization Utility):**
   - feat(utils): add memoize, memoizeAsync and memoizeWithLimit utilities
   - test(utils): add comprehensive memoize unit tests including rejection retry and concurrent call deduplication
