@@ -154,13 +154,25 @@ Swagger UI is available at `http://localhost:3000/api-docs` when running in deve
 
 | Method | Path | Description |
 |---|---|---|
-| POST | /api/validation/uuid | Validate a UUID string |
-| POST | /api/validation/map-config | Validate map configuration dimensions and rules |
-| POST | /api/validation/cycle | Detect cycles in a dependency graph |
-| POST | /api/validation/parallel | Run multiple validations in parallel |
-| POST | /api/validation/parallel-settled | Run validations in parallel and collect all results |
-| POST | /api/validation/batch | Validate a batch of items |
-| POST | /api/validation/map-full | Run full concurrent map validation |
+| GET | /api/validation/map-id/:mapId | Validate UUID format (recursive) |
+| GET | /api/validation/map-exists/:mapId | Check map exists in database |
+| POST | /api/validation/map-config | Validate map has obstacles and waypoints |
+| POST | /api/validation/dimensions | Validate dimensions within limits |
+| POST | /api/validation/cyclic-dependencies | Detect cyclic dependencies (DFS) |
+| POST | /api/validation/start-end-obstructed | Verify start and end not blocked |
+| POST | /api/validation/valid-path | Verify at least one valid path exists |
+| POST | /api/validation/performance | Parallel performance analysis |
+| POST | /api/validation/route-intersections | Verify route has no intersections |
+| POST | /api/validation/route-length | Validate route length within limits |
+| POST | /api/validation/same-point | Handle start equals end case |
+| POST | /api/validation/comprehensive | Run all independent checks in parallel |
+| POST | /api/validation/map-waypoints | Filter for valid stopping points |
+| POST | /api/validation/reachability | Check waypoint reachability |
+| POST | /api/validation/complex-geometry | Memoized validation for complex maps |
+| POST | /api/validation/all-routes | Accumulate all possible routes |
+| POST | /api/validation/optimal-route | Select optimal route via accumulator |
+| POST | /api/validation/validate-input | Filter and validate map input |
+| POST | /api/validation/large-map | Memoized validation for large maps |
 
 ## Testing and Coverage
 
@@ -186,7 +198,7 @@ The core of this application is an A* (A-Star) algorithm implemented as a pure f
 
 ## Functional Programming Techniques
 
-Beyond general functional style (pure functions, `const`, and immutable data), this project explicitly demonstrates: higher-order functions, currying, function composition using `pipe` and `compose`, Promise as Monad via `pipeAsync`, recursion for validation (UUID validation, dimension rules, cycle detection), and structured concurrency using `Promise.all` and `Promise.allSettled`. Full documentation is in `.docs/architecture/`.
+Functional programming techniques applied in this project: pure functions, immutability, higher-order functions, currying, function composition (pipe/compose), Promise as Monad (pipeAsync), recursion, concurrency (Promise.all/Promise.allSettled), memoization (memoize, memoizeAsync, memoizeWithLimit), filters (Array.prototype.filter), and accumulators (Array.prototype.reduce).
 
 ## SOLID Principles
 
@@ -204,6 +216,7 @@ Progress reports are generated at the end of each assignment period, documenting
 | Mid-Term Evaluation | Jul 13 – Aug 4, 2026 | Full project summary covering Assignments 2.4–4.4: complete CRUD for 5 entities, A* pathfinding, functional techniques (HOF, currying, composition), 282 tests with 100% coverage. Includes demo video. | [View Report](.docs/reports/assignments/mid-term/mid-term-report.md) |
 | Assignment 5.4 | Aug 4 – Aug 7, 2026 | Formal documentation of SOLID principles within a functional architecture, refactoring to demonstrate Promise as Monad (`pipeAsync`), and a comprehensive clean code audit with test coverage maintenance. | [View Report](.docs/reports/assignments/5/progress-report.md) |
 | Assignment 6.4 | Aug 7 – Aug 11, 2026 | UUID migration, recursive validation algorithms, structured concurrency (`Promise.all`, `Promise.allSettled`), explicit sequential/parallel separation, extended Winston logging, and updated Postman collections. | [View Report](.docs/reports/assignments/6/progress-report.md) |
+| Assignment 7.4 | Aug 17-18, 2026 | Filters, accumulators, memoization. Seven new validation endpoints. Swagger YAML fix. CI/CD pipelines for GitHub Actions and GitLab. | [View report](.docs/reports/assignments/7/progress-report.md) |
 
 ## License
 
