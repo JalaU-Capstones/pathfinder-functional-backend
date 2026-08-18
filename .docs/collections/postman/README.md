@@ -28,3 +28,9 @@ If new endpoints or entities are added in future phases:
 - **2026-07-27:** Updated Route responses to include `optimal_path`
   array. Added 422 example for waypoint compliance failure on
   POST /api/routes.
+
+2026-08-18: Added 8 requests for Assignment 7.4 (points 1-7)
+  in the Validation folder: map-waypoints, reachability,
+  complex-geometry, all-routes, optimal-route,
+  validate-input (x2), large-map. Demonstrates filters,
+  accumulators, and memoization techniques.

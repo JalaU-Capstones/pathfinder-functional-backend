@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Pathfinder Functional Backend API",
-    "description": "This is the complete API collection for the Pathfinder Functional Backend project. It includes endpoints for Maps, Obstacles, Waypoints, Route calculation, and Users.\n\n### Usage\n1. Import this collection and the associated `pathfinder-local.postman_environment.json` into Postman.\n2. Ensure the **Pathfinder Local** environment is selected in the top right corner.\n3. Run the **Health Check** first to verify connectivity.\n\n*Note: Route distance is currently computed via a Manhattan distance placeholder pending Phase 5B algorithm implementation.*\n\nDate generated: **2026-07-22**.",
+    "description": "This is the complete API collection for the Pathfinder Functional Backend project. It includes endpoints for Maps, Obstacles, Waypoints, Route calculation, and Users.\n\n### Usage\n1. Import this collection and the associated `pathfinder-local.postman_environment.json` into Postman.\n2. Ensure the **Pathfinder Local** environment is selected in the top right corner.\n3. Run the **Health Check** first to verify connectivity.\n\n*Note: Route distance is currently computed via a Manhattan distance placeholder pending Phase 5B algorithm implementation.*\n\nDate generated: **2026-07-22**.\n\nAssignment 7.4 - Filters, Accumulators and Memoization\n\nThe Validation folder contains additional requests\ndemonstrating:\n- Filters: filterValidWaypoints, filterValidMapInput.\n- Accumulators: reachability check, all-routes count,\n  optimal route selection via pipe of reduce operations.\n- Memoization: complex geometry and large map validation\n  use memoized pathfinding to cache repeated calculations.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -1284,6 +1284,262 @@
               ]
             }
           }
+        },
+        {
+          "name": "Validate Map Has Valid Waypoints",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/map-waypoints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "map-waypoints"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        1,\n        1\n      ],\n      [\n        2,\n        2\n      ],\n      [\n        3,\n        3\n      ]\n    ],\n    \"obstacles\": [\n      [\n        1,\n        0\n      ],\n      [\n        2,\n        1\n      ]\n    ]\n  }\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check Waypoint Reachability",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/reachability",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "reachability"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        1,\n        1\n      ],\n      [\n        2,\n        2\n      ],\n      [\n        3,\n        3\n      ]\n    ],\n    \"obstacles\": [\n      [\n        1,\n        0\n      ],\n      [\n        2,\n        1\n      ]\n    ]\n  }\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Complex Geometry with Memoization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/complex-geometry",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "complex-geometry"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        5,\n        5\n      ],\n      [\n        10,\n        10\n      ]\n    ],\n    \"obstacles\": [\n      [\n        1,\n        0\n      ],\n      [\n        2,\n        1\n      ],\n      [\n        7,\n        8\n      ],\n      [\n        9,\n        9\n      ]\n    ]\n  }\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate All Possible Routes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/all-routes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "all-routes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        2,\n        2\n      ],\n      [\n        3,\n        4\n      ]\n    ],\n    \"obstacles\": [\n      [\n        1,\n        1\n      ]\n    ]\n  }\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Optimal Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/optimal-route",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "optimal-route"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        1,\n        2\n      ],\n      [\n        3,\n        4\n      ],\n      [\n        5,\n        6\n      ]\n    ],\n    \"obstacles\": [\n      [\n        1,\n        1\n      ],\n      [\n        4,\n        4\n      ]\n    ]\n  }\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Map Input - Invalid Obstacles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/validate-input",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "validate-input"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        1,\n        1\n      ],\n      [\n        2,\n        2\n      ]\n    ],\n    \"obstacles\": \"invalid_data\"\n  }\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Map Input - Valid",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/validate-input",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "validate-input"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        1,\n        1\n      ]\n    ],\n    \"obstacles\": []\n  }\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Large Map with Memoization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validation/large-map",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "validation",
+                "large-map"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"map\": {\n    \"startingPoint\": [\n      0,\n      0\n    ],\n    \"stoppingPoints\": [\n      [\n        1,\n        1\n      ],\n      [\n        2,\n        2\n      ],\n      [\n        3,\n        3\n      ],\n      [\n        4,\n        4\n      ],\n      [\n        5,\n        5\n      ],\n      [\n        6,\n        6\n      ],\n      [\n        7,\n        7\n      ],\n      [\n        8,\n        8\n      ],\n      [\n        9,\n        9\n      ],\n      [\n        10,\n        10\n      ]\n    ],\n    \"obstacles\": [\n      [\n        1,\n        0\n      ],\n      [\n        2,\n        1\n      ],\n      [\n        3,\n        2\n      ],\n      [\n        4,\n        3\n      ],\n      [\n        5,\n        4\n      ]\n    ]\n  }\n}"
+            }
+          },
+          "response": []
         }
       ]
     }
