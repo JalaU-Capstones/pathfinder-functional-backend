@@ -431,13 +431,219 @@ const validateRouteComprehensive = async ({
   };
 };
 
+// ─── Phase 14C: Filters, Accumulators & Memoization ────────────────────────
+const {
+  filterValidWaypoints,
+  filterValidMapInput,
+} = require('../../utils/filters');
+
+const {
+  accumulateReachability,
+  accumulateAllRoutes,
+  accumulateOptimalRoute,
+  accumulateLargeMapResults,
+} = require('../../utils/accumulators');
+
+const {
+  memoize,
+  memoizeWithLimit,
+} = require('../../utils/memoize');
+
+const validateMapHasValidWaypoints = (map) => {
+  const inputCheck = filterValidMapInput(map);
+  if (!inputCheck.valid) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
+    );
+  }
+
+  const validWaypoints = filterValidWaypoints(
+    map.stoppingPoints?.map((sp) => ({
+      position: { x: sp[0], y: sp[1] },
+      name: `point-${sp[0]}-${sp[1]}`,
+    })) || []
+  );
+
+  if (validWaypoints.length === 0) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      'Map does not contain any valid stopping points.'
+    );
+  }
+
+  return {
+    valid: true,
+    message: 'Map contains at least one valid stopping point.',
+    validCount: validWaypoints.length,
+  };
+};
+
+const checkWaypointReachability = (map) => {
+  const inputCheck = filterValidMapInput(map);
+  if (!inputCheck.valid) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
+    );
+  }
+
+  const grid = { width: 1000, height: 1000 };
+  const obstacles = (map.obstacles || []).map(
+    ([x, y]) => ({ x, y })
+  );
+
+  const result = accumulateReachability(
+    map.startingPoint,
+    map.stoppingPoints,
+    obstacles,
+    grid,
+    calculatePath,
+  );
+
+  return {
+    reachable: result.unreachable.length === 0,
+    unreachablePoints: result.unreachable,
+  };
+};
+
+// Memoized pathfinder for complex geometry validation
+// Created once at module level - shared across requests
+const memoizedCalculatePath = memoize(calculatePath);
+
+const validateComplexGeometry = (map) => {
+  const inputCheck = filterValidMapInput(map);
+  if (!inputCheck.valid) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
+    );
+  }
+
+  const grid = { width: 1000, height: 1000 };
+  const obstacles = (map.obstacles || []).map(
+    ([x, y]) => ({ x, y })
+  );
+  const start = {
+    x: map.startingPoint[0],
+    y: map.startingPoint[1],
+  };
+  const end = {
+    x: map.stoppingPoints[0][0],
+    y: map.stoppingPoints[0][1],
+  };
+
+  // Uses memoized pathfinder - repeated calls with same
+  // grid/obstacles return cached result immediately
+  const result = memoizedCalculatePath(
+    grid, start, end, obstacles, []
+  );
+
+  return {
+    valid: result.distance !== -1,
+    message:
+      result.distance !== -1
+        ? 'Algorithm can handle maps with complex geometries.'
+        : 'No valid path found in complex geometry.',
+  };
+};
+
+const validateAllRoutes = (map) => {
+  const inputCheck = filterValidMapInput(map);
+  if (!inputCheck.valid) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
+    );
+  }
+
+  const grid = { width: 1000, height: 1000 };
+  const obstacles = (map.obstacles || []).map(
+    ([x, y]) => ({ x, y })
+  );
+
+  const result = accumulateAllRoutes(
+    map.startingPoint,
+    map.stoppingPoints,
+    obstacles,
+    grid,
+    calculatePath,
+  );
+
+  return {
+    consideredAllRoutes: true,
+    routesCount: result.routesCount,
+  };
+};
+
+const validateOptimalRoute = (map) => {
+  const inputCheck = filterValidMapInput(map);
+  if (!inputCheck.valid) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
+    );
+  }
+
+  const grid = { width: 1000, height: 1000 };
+  const obstacles = (map.obstacles || []).map(
+    ([x, y]) => ({ x, y })
+  );
+
+  return accumulateOptimalRoute(
+    map.startingPoint,
+    map.stoppingPoints,
+    obstacles,
+    grid,
+    calculatePath,
+  );
+};
+
+const validateMapInputService = (map) => {
+  const result = filterValidMapInput(map);
+  if (!result.valid) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      result.errors.join('; ')
+    );
+  }
+  return { valid: true, message: 'Map input is valid.' };
+};
+
+const memoizedPathFinderLimited = memoizeWithLimit(
+  calculatePath, 500
+);
+
+const validateLargeMap = (map) => {
+  const inputCheck = filterValidMapInput(map);
+  if (!inputCheck.valid) {
+    throw createAppError(
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
+    );
+  }
+
+  const grid = { width: 10000, height: 10000 };
+  const obstacles = (map.obstacles || []).map(
+    ([x, y]) => ({ x, y })
+  );
+
+  return accumulateLargeMapResults(
+    map.startingPoint,
+    map.stoppingPoints,
+    obstacles,
+    grid,
+    memoizedPathFinderLimited,
+  );
+};
+
 module.exports = {
   validateMapIdFormat,
   validateMapIdExists,
   validateMapConfiguration,
   validateDimensions,
   validateNoCyclicDependencies,
-  // Phase 13C — concurrency & parallel validations
+  // Phase 13C - concurrency & parallel validations
   validateStartEndNotObstructed,
   validateAtLeastOneValidPath,
   analyzeRoutePerformance,
@@ -446,4 +652,12 @@ module.exports = {
   handleSameStartEnd,
   validateRouteComprehensive,
   MAX_ROUTE_LENGTH,
+  // Phase 14C - Filters, Accumulators & Memoization
+  validateMapHasValidWaypoints,
+  checkWaypointReachability,
+  validateComplexGeometry,
+  validateAllRoutes,
+  validateOptimalRoute,
+  validateMapInputService,
+  validateLargeMap,
 };

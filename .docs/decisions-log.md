@@ -2,6 +2,12 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-18 (Phase 14C - Filters, Accumulators & Endpoints)
+- Decision to separate filters and accumulators into dedicated utility files (`filters.js`, `accumulators.js`). Rationale: SRP — one file per functional concept.
+- Decision to pass `pathFinder` as a parameter to accumulators rather than importing directly. Rationale: Dependency Inversion Principle (DIP). It depends on abstraction, making it easier to test using `jest.fn()`.
+- Decision to create memoized pathfinder instances at the module level in `validationService.js`. Rationale: They are created once and reused across multiple HTTP requests, persisting the cache for the lifetime of the Node.js process.
+- Decision to use array coordinate format (`[x, y]`) for the new 7.4 endpoints to strictly match the assignment's JSON examples, while keeping `{x, y}` objects in the internal pathfinder logic (translation happens inside the service layer).
+
 ## 2026-08-17 (Phase 14B - Memoization Utility)
 - Decision to implement three memoize variants: `memoize` (general), `memoizeAsync` (Promise-based), `memoizeWithLimit` (bounded cache). Rationale: pathfinding on small maps suits `memoize`; large maps (Assignment 7.4 point 7) need `memoizeWithLimit` to prevent unbounded memory growth; async DB calls suit `memoizeAsync`.
 - Decision to use JSON.stringify as the cache key strategy: correct for plain data (grids, coordinates, obstacle arrays), unsuitable for functions or circular references (documented).

@@ -134,6 +134,78 @@ const checkComprehensive = async (req, res, next) => {
   }
 };
 
+// ─── Phase 14C controllers ────────────────────────────────────────────────────
+
+const validateMapWaypoints = (req, res, next) => {
+  try {
+    const { map } = req.body;
+    const result = validationService.validateMapHasValidWaypoints(map);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const checkReachability = (req, res, next) => {
+  try {
+    const { map } = req.body;
+    const result = validationService.checkWaypointReachability(map);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const validateComplexGeometry = (req, res, next) => {
+  try {
+    const { map } = req.body;
+    const result = validationService.validateComplexGeometry(map);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const validateAllRoutes = (req, res, next) => {
+  try {
+    const { map } = req.body;
+    const result = validationService.validateAllRoutes(map);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const validateOptimalRoute = (req, res, next) => {
+  try {
+    const { map } = req.body;
+    const result = validationService.validateOptimalRoute(map);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const validateInputHandler = (req, res, next) => {
+  try {
+    const { map } = req.body;
+    const result = validationService.validateMapInputService(map);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const validateLargeMap = (req, res, next) => {
+  try {
+    const { map } = req.body;
+    const result = validationService.validateLargeMap(map);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   validateMapId,
   checkMapExists,
@@ -148,4 +220,12 @@ module.exports = {
   checkRouteLength,
   checkSamePoint,
   checkComprehensive,
+  // Phase 14C
+  validateMapWaypoints,
+  checkReachability,
+  validateComplexGeometry,
+  validateAllRoutes,
+  validateOptimalRoute,
+  validateInputHandler,
+  validateLargeMap,
 };
