@@ -1,3 +1,5 @@
+/* global jest */
+
 const {
   accumulateReachability,
   accumulateAllRoutes,

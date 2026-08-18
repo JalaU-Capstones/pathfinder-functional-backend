@@ -434,7 +434,6 @@ const validateRouteComprehensive = async ({
 // ─── Phase 14C: Filters, Accumulators & Memoization ────────────────────────
 const {
   filterValidWaypoints,
-  filterReachableWaypoints,
   filterValidMapInput,
 } = require('../../utils/filters');
 
