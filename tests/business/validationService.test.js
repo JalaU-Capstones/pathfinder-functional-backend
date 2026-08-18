@@ -282,4 +282,112 @@ describe('validationService', () => {
       });
     });
   });
+  // ─── Phase 14C: Filters, Accumulators & Memoization ───────────────────────
+
+  describe('validateMapHasValidWaypoints', () => {
+    it('returns valid count if valid stopping points exist', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[1, 1], [2, 2]],
+        obstacles: [],
+      };
+      const res = validationService.validateMapHasValidWaypoints(map);
+      expect(res.valid).toBe(true);
+      expect(res.validCount).toBe(2);
+    });
+
+    it('throws VALIDATION_ERROR if no valid stopping points exist', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[-1, -1]],
+        obstacles: [],
+      };
+      expect(() => validationService.validateMapHasValidWaypoints(map)).toThrow(
+        expect.objectContaining({ type: ERROR_TYPES.VALIDATION_ERROR })
+      );
+    });
+  });
+
+  describe('checkWaypointReachability', () => {
+    it('returns reachable status correctly', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[1, 1], [2, 2]],
+        obstacles: [],
+      };
+      const res = validationService.checkWaypointReachability(map);
+      expect(res.reachable).toBe(true);
+      expect(res.unreachablePoints).toEqual([]);
+    });
+
+    it('throws VALIDATION_ERROR if invalid map input', () => {
+      expect(() => validationService.checkWaypointReachability({})).toThrow(
+        expect.objectContaining({ type: ERROR_TYPES.VALIDATION_ERROR })
+      );
+    });
+  });
+
+  describe('validateComplexGeometry', () => {
+    it('returns valid for a reachable end point', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[2, 2]],
+        obstacles: [],
+      };
+      const res = validationService.validateComplexGeometry(map);
+      expect(res.valid).toBe(true);
+    });
+  });
+
+  describe('validateAllRoutes', () => {
+    it('returns route count correctly', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[1, 1], [2, 2]],
+        obstacles: [],
+      };
+      const res = validationService.validateAllRoutes(map);
+      expect(res.consideredAllRoutes).toBe(true);
+      expect(res.routesCount).toBe(2);
+    });
+  });
+
+  describe('validateOptimalRoute', () => {
+    it('returns optimal route distance', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[1, 1]],
+        obstacles: [],
+      };
+      const res = validationService.validateOptimalRoute(map);
+      expect(res.optimal).toBe(true);
+      expect(res.distance).toBeGreaterThan(0);
+    });
+  });
+
+  describe('validateMapInputService', () => {
+    it('returns valid for good input', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[1, 1]],
+        obstacles: [],
+      };
+      const res = validationService.validateMapInputService(map);
+      expect(res.valid).toBe(true);
+    });
+  });
+
+  describe('validateLargeMap', () => {
+    it('returns large map processing stats', () => {
+      const map = {
+        startingPoint: [0, 0],
+        stoppingPoints: [[1, 1]],
+        obstacles: [],
+      };
+      const res = validationService.validateLargeMap(map);
+      expect(res.canHandleLargeMap).toBe(true);
+      expect(res.processed).toBe(1);
+    });
+  });
 });
+

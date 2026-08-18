@@ -209,5 +209,77 @@ describe('validationController', () => {
       expect(res.statusCode).toEqual(400);
     });
   });
+  // ─── Phase 14C tests ────────────────────────────────────────────────────────
+
+  describe('POST /api/validation/map-waypoints', () => {
+    it('should return 200 with result', async () => {
+      validationService.validateMapHasValidWaypoints.mockReturnValue({ valid: true });
+      const res = await request(app).post('/api/validation/map-waypoints').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.valid).toBe(true);
+    });
+
+    it('should return 400 on error', async () => {
+      const error = createAppError(ERROR_TYPES.VALIDATION_ERROR, 'failed');
+      validationService.validateMapHasValidWaypoints.mockImplementation(() => { throw error; });
+      const res = await request(app).post('/api/validation/map-waypoints').send({});
+      expect(res.statusCode).toEqual(400);
+    });
+  });
+
+  describe('POST /api/validation/reachability', () => {
+    it('should return 200 with result', async () => {
+      validationService.checkWaypointReachability.mockReturnValue({ reachable: true });
+      const res = await request(app).post('/api/validation/reachability').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.reachable).toBe(true);
+    });
+  });
+
+  describe('POST /api/validation/complex-geometry', () => {
+    it('should return 200 with result', async () => {
+      validationService.validateComplexGeometry.mockReturnValue({ valid: true });
+      const res = await request(app).post('/api/validation/complex-geometry').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.valid).toBe(true);
+    });
+  });
+
+  describe('POST /api/validation/all-routes', () => {
+    it('should return 200 with result', async () => {
+      validationService.validateAllRoutes.mockReturnValue({ consideredAllRoutes: true });
+      const res = await request(app).post('/api/validation/all-routes').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.consideredAllRoutes).toBe(true);
+    });
+  });
+
+  describe('POST /api/validation/optimal-route', () => {
+    it('should return 200 with result', async () => {
+      validationService.validateOptimalRoute.mockReturnValue({ optimal: true });
+      const res = await request(app).post('/api/validation/optimal-route').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.optimal).toBe(true);
+    });
+  });
+
+  describe('POST /api/validation/validate-input', () => {
+    it('should return 200 with result', async () => {
+      validationService.validateMapInputService.mockReturnValue({ valid: true });
+      const res = await request(app).post('/api/validation/validate-input').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.valid).toBe(true);
+    });
+  });
+
+  describe('POST /api/validation/large-map', () => {
+    it('should return 200 with result', async () => {
+      validationService.validateLargeMap.mockReturnValue({ canHandleLargeMap: true });
+      const res = await request(app).post('/api/validation/large-map').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.canHandleLargeMap).toBe(true);
+    });
+  });
 
 });
+
