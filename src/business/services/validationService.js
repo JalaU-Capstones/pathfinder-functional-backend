@@ -454,9 +454,8 @@ const validateMapHasValidWaypoints = (map) => {
   const inputCheck = filterValidMapInput(map);
   if (!inputCheck.valid) {
     throw createAppError(
-      inputCheck.errors.join('; '),
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
     );
   }
 
@@ -469,9 +468,8 @@ const validateMapHasValidWaypoints = (map) => {
 
   if (validWaypoints.length === 0) {
     throw createAppError(
-      'Map does not contain any valid stopping points.',
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      'Map does not contain any valid stopping points.'
     );
   }
 
@@ -486,9 +484,8 @@ const checkWaypointReachability = (map) => {
   const inputCheck = filterValidMapInput(map);
   if (!inputCheck.valid) {
     throw createAppError(
-      inputCheck.errors.join('; '),
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
     );
   }
 
@@ -519,9 +516,8 @@ const validateComplexGeometry = (map) => {
   const inputCheck = filterValidMapInput(map);
   if (!inputCheck.valid) {
     throw createAppError(
-      inputCheck.errors.join('; '),
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
     );
   }
 
@@ -557,9 +553,8 @@ const validateAllRoutes = (map) => {
   const inputCheck = filterValidMapInput(map);
   if (!inputCheck.valid) {
     throw createAppError(
-      inputCheck.errors.join('; '),
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
     );
   }
 
@@ -586,9 +581,8 @@ const validateOptimalRoute = (map) => {
   const inputCheck = filterValidMapInput(map);
   if (!inputCheck.valid) {
     throw createAppError(
-      inputCheck.errors.join('; '),
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
     );
   }
 
@@ -610,9 +604,8 @@ const validateMapInputService = (map) => {
   const result = filterValidMapInput(map);
   if (!result.valid) {
     throw createAppError(
-      result.errors.join('; '),
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      result.errors.join('; ')
     );
   }
   return { valid: true, message: 'Map input is valid.' };
@@ -626,9 +619,8 @@ const validateLargeMap = (map) => {
   const inputCheck = filterValidMapInput(map);
   if (!inputCheck.valid) {
     throw createAppError(
-      inputCheck.errors.join('; '),
-      'VALIDATION_ERROR',
-      400,
+      ERROR_TYPES.VALIDATION_ERROR,
+      inputCheck.errors.join('; ')
     );
   }
 
