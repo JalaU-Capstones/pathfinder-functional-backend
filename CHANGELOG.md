@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - 2026-08-19
+### Added
+- **2026-08-19 (Phase Lab7A - LRU Cache Utility):**
+  - feat(utils): add createLRUCache factory with LRU eviction and TTL support for lab week 7 memoization middleware
+  - test(utils): add comprehensive lruCache unit tests including TTL reset on access and LRU eviction ordering
+  - docs: document LRU cache design decisions
+
 ## [Unreleased] - 2026-08-17
 ### Added
 - **2026-08-18 (Phase 14D - Fixes & Postman):**
