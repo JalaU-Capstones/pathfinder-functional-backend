@@ -2,6 +2,14 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-19 (Phase Lab7A - LRU Cache Utility)
+- Decision to implement LRU over FIFO for the lab middleware cache: LRU retains recently accessed data regardless of insertion order, making it more effective for API response caching where hot endpoints receive repeated requests.
+- Decision to use Map as the primary data structure: Map preserves insertion order, enabling O(1) LRU ordering via delete-and-reinsert on every access, without requiring a doubly linked list.
+- Decision to reset TTL on every get (not just on set): actively accessed entries stay cached as long as they continue to be requested, which aligns with LRU semantics.
+- Decision to expose a `stats()` method on the cache instance: enables the monitoring endpoint in Phase Lab7B without coupling the cache to HTTP concerns.
+- Decision NOT to reuse `memoizeWithLimit` from memoize.js: it uses FIFO eviction and has no TTL support. The LRU + TTL requirements are sufficiently different to warrant a dedicated implementation.
+- Decision to use `Object.freeze` on the returned cache instance: the cache API is fixed and should not be mutated by consumers. Internal state (the Map) is not frozen and evolves normally.
+
 ## 2026-08-18 (Phase 14C - Filters, Accumulators & Endpoints)
 - Swagger YAML error root cause and fix: description strings containing colons must be quoted in JSDoc YAML annotations or the parser creates invalid nested mappings. Fix applied: wrap all such strings in double quotes consistently across validationRoutes.js.
 - Decision to update README weekly reports table and functional techniques section to reflect current state after all 14x phases.
