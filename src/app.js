@@ -11,20 +11,40 @@ const validationRoutes = require('./presentation/routes/validationRoutes');
 const { requestLogger } = require('./presentation/middlewares/requestLogger');
 const { errorHandler } = require('./presentation/middlewares/errorHandler');
 const { notFound } = require('./presentation/middlewares/notFound');
+const { createCacheMiddleware } = require(
+  './presentation/middlewares/cacheMiddleware'
+);
+const { createCacheRouter } = require(
+  './presentation/routes/cacheRoutes'
+);
+
+// Cache configuration - adjust max and maxAge per environment
+const CACHE_CONFIG = Object.freeze({
+  max: 50,
+  maxAge: 30000,
+});
+
+const cache = require('./utils/lruCache').createLRUCache(CACHE_CONFIG);
+const cacheMiddleware = createCacheMiddleware(CACHE_CONFIG);
 
 const createApp = () => {
   const app = express();
 
   // Middleware
   app.use(express.json());
-  
+
   // Request Logger (Before routes)
   app.use(requestLogger);
+
+  // LRU cache middleware (After request logger, before entity routes)
+  if (process.env.NODE_ENV !== 'test') {
+    app.use('/api', cacheMiddleware);
+  }
 
   // Swagger Documentation (Development Only)
   if (process.env.NODE_ENV !== 'production') {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-    
+
     // Serve raw OpenAPI JSON
     app.get('/api-docs.json', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
@@ -32,7 +52,7 @@ const createApp = () => {
     });
   }
 
-  // Routes
+  // Entity routes
   app.use('/api', healthRoutes);
   app.use('/api/maps', mapRoutes);
   app.use('/api/obstacles', obstacleRoutes);
@@ -40,6 +60,9 @@ const createApp = () => {
   app.use('/api/routes', routeRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/validation', validationRoutes);
+
+  // Cache monitoring route (After entity routes)
+  app.use('/api/cache', createCacheRouter(cache));
 
   // 404 Not Found (After routes)
   app.use(notFound);
