@@ -2,6 +2,12 @@
 
 ## [Unreleased] - 2026-08-19
 ### Added
+- **2026-08-19 (Phase Lab7B - LRU Memoization Middleware):**
+  - feat(middleware): add LRU memoization middleware with configurable max size and TTL for GET response caching
+  - feat(routes): add GET /api/cache/stats monitoring endpoint
+  - feat(controllers): add cache stats controller with dependency injection
+  - test(middleware): add cacheMiddleware and cacheController unit tests
+  - docs: document cache middleware design decisions
 - **2026-08-19 (Phase Lab7A - LRU Cache Utility):**
   - feat(utils): add createLRUCache factory with LRU eviction and TTL support for lab week 7 memoization middleware
   - test(utils): add comprehensive lruCache unit tests including TTL reset on access and LRU eviction ordering

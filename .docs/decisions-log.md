@@ -2,6 +2,14 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-19 (Phase Lab7B - LRU Memoization Middleware)
+- Decision to cache only GET requests: POST, PUT, DELETE have side effects and must always reach the business layer. Caching them would return stale data after mutations.
+- Decision to cache only 2xx responses: 4xx and 5xx errors are transient and should not be cached. A 404 for a resource that gets created later must not return the cached 404.
+- Decision to use factory pattern for `createCacheMiddleware` instead of a singleton: each call returns a middleware with its own isolated cache instance. This makes tests independent and allows multiple cache configurations in the same app if needed.
+- Decision to inject the cache instance into `createCacheRouter` and `createCacheController` via factory parameter (DIP: depends on abstraction, not on a hardcoded import of the singleton).
+- Decision to intercept `res.json` rather than `res.send` or `res.end`: all entity routes use `res.json`, making this the correct interception point. Overriding `res.send` would be broader and could accidentally cache non-JSON responses.
+- Decision to add `X-Cache: HIT` / `X-Cache: MISS` headers: standard HTTP caching practice, allows clients and proxies to observe cache behavior without inspecting the response body.
+
 ## 2026-08-19 (Phase Lab7A - LRU Cache Utility)
 - Decision to implement LRU over FIFO for the lab middleware cache: LRU retains recently accessed data regardless of insertion order, making it more effective for API response caching where hot endpoints receive repeated requests.
 - Decision to use Map as the primary data structure: Map preserves insertion order, enabling O(1) LRU ordering via delete-and-reinsert on every access, without requiring a doubly linked list.
