@@ -2,6 +2,9 @@
 
 ## [Unreleased] - 2026-08-19
 ### Added
+- **2026-08-19 (Phase Lab7C - LRU Cache Lab Report):**
+  - docs(lab): add week 7 LRU cache memoization lab report covering problem statement, LRU vs FIFO design decision, Map data structure rationale, factory pattern, TTL reset on access, functional techniques (filters, pipes, accumulators), implementation summary, real test coverage numbers, manual verification output, and conclusion
+  - docs: update readme weekly reports table with Lab Week 7 row
 - **2026-08-19 (Phase Lab7B - LRU Memoization Middleware):**
   - feat(middleware): add LRU memoization middleware with configurable max size and TTL for GET response caching
   - feat(routes): add GET /api/cache/stats monitoring endpoint
