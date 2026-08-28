@@ -1,3 +1,4 @@
+/* global jest, beforeEach */
 'use strict';
 
 jest.mock('../../src/data/models', () => ({
