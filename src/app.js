@@ -11,6 +11,7 @@ const validationRoutes = require('./presentation/routes/validationRoutes');
 const { requestLogger } = require('./presentation/middlewares/requestLogger');
 const { errorHandler } = require('./presentation/middlewares/errorHandler');
 const { notFound } = require('./presentation/middlewares/notFound');
+const { trackingMiddleware } = require('./presentation/middlewares/trackingMiddleware');
 const { createCacheMiddleware } = require(
   './presentation/middlewares/cacheMiddleware'
 );
@@ -40,6 +41,10 @@ const createApp = () => {
   if (process.env.NODE_ENV !== 'test') {
     app.use('/api', cacheMiddleware);
   }
+
+  // API usage tracking — persists one row per request
+  // to the ApiStats table for /stats/* endpoints
+  app.use('/api', trackingMiddleware);
 
   // Swagger Documentation (Development Only)
   if (process.env.NODE_ENV !== 'production') {
