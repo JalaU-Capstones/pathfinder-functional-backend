@@ -14,6 +14,8 @@ const models = {
   Route: defineRouteModel(sequelize)
 };
 
+const ApiStat = require('./apiStat.model')(sequelize);
+
 // Apply associations
 Object.keys(models).forEach(modelName => {
   if (models[modelName].associate) {
@@ -23,5 +25,7 @@ Object.keys(models).forEach(modelName => {
 
 module.exports = {
   sequelize,
-  ...models
+  ...models,
+  ApiStat
 };
+
