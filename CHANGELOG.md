@@ -2,6 +2,15 @@
 
 ## [Unreleased] - 2026-08-19
 ### Added
+- **2026-08-28 (Lab Week 8 - Phase Lab8B):**
+  - feat(middleware): add trackingMiddleware using HOF to
+    capture and persist API usage stats per request
+  - feat(middleware): add withTracking HOF controller wrapper
+    for explicit HOF demonstration (lab week 8)
+  - feat(app): register trackingMiddleware on /api routes
+  - test(middleware): add comprehensive trackingMiddleware
+    unit tests including HOF behavior verification
+  - docs: document tracking middleware design decisions
 - **2026-08-28 (Lab Week 8 - Phase Lab8A):**
   - feat(database): add ApiStats table via new migration
     for API usage tracking (lab week 8)

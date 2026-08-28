@@ -2,11 +2,11 @@
 'use strict';
 
 jest.mock(
-  '../../src/data/repositories/apiStatRepository',
+  '../../../src/data/repositories/apiStatRepository',
   () => ({ createStat: jest.fn() })
 );
 
-jest.mock('../../src/utils/logger', () => ({
+jest.mock('../../../src/utils/logger', () => ({
   logger: { error: jest.fn(), info: jest.fn() },
 }));
 
@@ -16,12 +16,12 @@ const {
   normalizePath,
   buildStatPayload,
 } = require(
-  '../../src/presentation/middlewares/trackingMiddleware'
+  '../../../src/presentation/middlewares/trackingMiddleware'
 );
 
 const { createStat } =
-  require('../../src/data/repositories/apiStatRepository');
-const { logger } = require('../../src/utils/logger');
+  require('../../../src/data/repositories/apiStatRepository');
+const { logger } = require('../../../src/utils/logger');
 
 // ─── normalizePath ─────────────────────────────────────────────
 describe('normalizePath', () => {

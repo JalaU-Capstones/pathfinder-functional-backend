@@ -161,3 +161,26 @@ A chronological log of major architectural, tooling, and design decisions made t
   timestamp): the four stats endpoints all group or
   filter by endpoint, and time-range filtering is a
   natural future requirement.
+
+## 2026-08-28 (Phase Lab8B - Tracking Middleware)
+- Decision to use res.json override (not res.on('finish'))
+  for capturing the status code: res.on('finish') fires
+  after the response is sent and statusCode may already
+  be reset. Overriding res.json gives the status at the
+  exact moment the response is constructed.
+- Decision to apply trackingMiddleware to /api only (not
+  /stats): tracking the stats endpoints themselves would
+  create recursive data inflation — every call to
+  /stats/requests would add a new row for /stats/requests.
+- Decision to make persistStat non-blocking (no await in
+  res.json override): the client should not wait for the
+  DB write. A slow DB should not slow down API responses.
+  Errors are logged via Winston, never surfaced to client.
+- Decision to export both trackingMiddleware and
+  withTracking: trackingMiddleware is used globally in
+  app.js; withTracking is exported for explicit HOF
+  demonstration as required by the lab rubric.
+- Decision to export normalizePath and buildStatPayload
+  as named exports: pure functions are independently
+  testable and should be tested in isolation from the
+  middleware integration.
