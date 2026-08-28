@@ -142,3 +142,22 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Decision:** Migrated all entity Primary Keys (and corresponding Foreign Keys) from Integer to UUID.
 - **Rationale:** To comply with Assignment 6.4 requirements and provide globally unique identifiers for distributed systems.
 - **Implementation:** Created immutable migration files (20260811000001 to 20260811000005) to recreate tables with UUIDs. Updated models, seeders, services, and tests.
+
+## 2026-08-28 (Lab Week 8 - Phase Lab8A)
+- **Per-request Storage:** Decision to store one row per request rather than
+  pre-aggregated summaries: the lab requires HOF
+  aggregations (filter, map, reduce) in the service
+  layer. Pre-aggregation would bypass those techniques.
+- **responseTimeMs:** Decision to store responseTimeMs as INTEGER per row
+  (not JSONB avg/min/max): raw values enable correct
+  statistical aggregation; pre-computing avg/min/max
+  at write time would produce incorrect results when
+  new records are added.
+- **No Foreign Keys:** Decision not to FK ApiStats to any entity table:
+  tracking rows are analytics data, not part of the
+  core domain model. Deleting a map should not cascade
+  to delete its access history.
+- **Indexes:** Decision to add two indexes (endpointAccess,
+  timestamp): the four stats endpoints all group or
+  filter by endpoint, and time-range filtering is a
+  natural future requirement.

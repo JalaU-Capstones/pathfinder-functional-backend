@@ -68,3 +68,41 @@ Migration: `20260727000000-add-path-to-routes.js`
 - Why JSONB: binary JSON enables structured storage and future
   indexed queries; Sequelize auto-serializes/deserializes arrays.
 - Why nullable: backward compatibility with existing rows.
+
+## ApiStats Table (Lab Week 8)
+
+### Purpose
+Tracks every HTTP request processed by the backend API.
+Used by the statistics endpoints to compute aggregations
+(total requests, response times, status codes, popular
+endpoints).
+
+### Schema
+| Column | Type | Nullable | Description |
+|---|---|---|---|
+| id | UUID (PK) | No | Auto-generated UUID v4 |
+| endpointAccess | STRING | No | Normalized route path |
+| requestMethod | STRING(10) | No | HTTP method |
+| statusCode | INTEGER | No | Response status code |
+| responseTimeMs | INTEGER | No | Duration in ms |
+| userId | STRING | Yes | Optional user identifier |
+| timestamp | DATE | No | Request time (default: NOW) |
+| createdAt | DATE | No | Sequelize auto timestamp |
+| updatedAt | DATE | No | Sequelize auto timestamp |
+
+### Indexes
+- `api_stats_endpoint_access_idx` on endpointAccess
+- `api_stats_timestamp_idx` on timestamp
+
+### Design decisions
+- One row per request (not pre-aggregated): enables
+  flexible aggregation via filter/map/reduce at the
+  service layer, which is the functional programming
+  approach required by the lab rubric.
+- responseTimeMs stored as INTEGER per row: avg/min/max
+  are derived at query time using reduce, not stored.
+- No FK relationships: ApiStats is an analytics table
+  independent of the core entity graph.
+
+### Migration
+`src/data/migrations/20260828000001-create-api-stats.js`

@@ -2,6 +2,16 @@
 
 ## [Unreleased] - 2026-08-19
 ### Added
+- **2026-08-28 (Lab Week 8 - Phase Lab8A):**
+  - feat(database): add ApiStats table via new migration
+    for API usage tracking (lab week 8)
+  - feat(models): add ApiStat Sequelize model
+  - feat(repositories): add apiStatRepository with
+    createStat, getAllStats, getStatsByEndpoint,
+    getStatCount and clearStats
+  - test(repositories): add apiStatRepository unit tests
+  - docs(database): document ApiStats schema and design
+    decisions
 - **2026-08-19 (Phase Lab7C - LRU Cache Lab Report):**
   - docs(lab): add week 7 LRU cache memoization lab report covering problem statement, LRU vs FIFO design decision, Map data structure rationale, factory pattern, TTL reset on access, functional techniques (filters, pipes, accumulators), implementation summary, real test coverage numbers, manual verification output, and conclusion
   - docs: update readme weekly reports table with Lab Week 7 row
