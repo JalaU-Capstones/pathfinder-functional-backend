@@ -208,3 +208,13 @@ A chronological log of major architectural, tooling, and design decisions made t
   res.json to return a Promise, awaiting it is the correct and
   more deterministic pattern. The setTimeout-based waits were
   fragile (timing-dependent) and are no longer needed.
+
+## 2026-08-28: Stats Aggregation and HOF
+- **Decision:** Implemented `statsService` purely with functional programming HOFs (map, filter, reduce) instead of using raw SQL `GROUP BY` or `COUNT`.
+- **Reason:** To satisfy Lab Week 8 requirements and align with the course's functional programming paradigm.
+- **Decision:** Implemented a custom `groupBy` function using `reduce`.
+- **Reason:** JavaScript Arrays lack a native `groupBy` method (unlike Lodash), and introducing a new third-party dependency for a single utility was deemed unnecessary.
+- **Decision:** Registered `statsRoutes` at `/stats` rather than `/api/stats`.
+- **Reason:** The tracking middleware is mounted on `/api`. Isolating stats endpoints prevents them from being tracked, avoiding recursive database growth where checking stats artificially inflates the stats.
+- **Decision:** `statsController` delegates all logic to `statsService` and only handles HTTP mapping.
+- **Reason:** Maintains strict layer separation, keeping controllers thin and easily testable with Supertest.
