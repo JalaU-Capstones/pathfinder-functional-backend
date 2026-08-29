@@ -1542,6 +1542,107 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Stats",
+      "item": [
+        {
+          "name": "Request Stats - Total and Breakdown",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stats/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stats",
+                "requests"
+              ]
+            },
+            "description": "This endpoint is NOT tracked by the tracking middleware (applied to /api only). Stats endpoints are intentionally excluded to prevent recursive data inflation."
+          },
+          "response": []
+        },
+        {
+          "name": "Response Time Stats - Avg Min Max per Endpoint",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stats/response-times",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stats",
+                "response-times"
+              ]
+            },
+            "description": "This endpoint is NOT tracked by the tracking middleware (applied to /api only). Stats endpoints are intentionally excluded to prevent recursive data inflation."
+          },
+          "response": []
+        },
+        {
+          "name": "Status Code Stats - Count per Code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stats/status-codes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stats",
+                "status-codes"
+              ]
+            },
+            "description": "This endpoint is NOT tracked by the tracking middleware (applied to /api only). Stats endpoints are intentionally excluded to prevent recursive data inflation."
+          },
+          "response": []
+        },
+        {
+          "name": "Popular Endpoints - Ranked by Request Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stats/popular-endpoints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stats",
+                "popular-endpoints"
+              ]
+            },
+            "description": "This endpoint is NOT tracked by the tracking middleware (applied to /api only). Stats endpoints are intentionally excluded to prevent recursive data inflation."
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

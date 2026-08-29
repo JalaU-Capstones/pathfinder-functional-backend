@@ -34,3 +34,4 @@ If new endpoints or entities are added in future phases:
   complex-geometry, all-routes, optimal-route,
   validate-input (x2), large-map. Demonstrates filters,
   accumulators, and memoization techniques.
+- **2026-08-28**: Added Stats folder with 4 requests covering /stats/requests, /stats/response-times, /stats/status-codes, /stats/popular-endpoints (lab week 8).

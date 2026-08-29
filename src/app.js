@@ -8,6 +8,7 @@ const waypointRoutes = require('./presentation/routes/waypointRoutes');
 const routeRoutes = require('./presentation/routes/routeRoutes');
 const userRoutes = require('./presentation/routes/userRoutes');
 const validationRoutes = require('./presentation/routes/validationRoutes');
+const statsRoutes = require('./presentation/routes/statsRoutes');
 const { requestLogger } = require('./presentation/middlewares/requestLogger');
 const { errorHandler } = require('./presentation/middlewares/errorHandler');
 const { notFound } = require('./presentation/middlewares/notFound');
@@ -68,6 +69,9 @@ const createApp = () => {
 
   // Cache monitoring route (After entity routes)
   app.use('/api/cache', createCacheRouter(cache));
+
+  // Stats endpoints — kept out of /api to avoid recursive tracking
+  app.use('/stats', statsRoutes);
 
   // 404 Not Found (After routes)
   app.use(notFound);

@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- `statsService` with functional aggregations (`groupBy`, `reduce`, `map`, `filter`).
+- Four new GET endpoints on `/stats`: `/requests`, `/response-times`, `/status-codes`, `/popular-endpoints`.
+- Postman collection Stats folder.
+- Lab Week 8 report.
+
 ## [Unreleased] - 2026-08-19
 ### Added
 - **2026-08-28 (Lab Week 8 - Phase Lab8B):**
@@ -35,7 +43,13 @@
   - test(utils): add comprehensive lruCache unit tests including TTL reset on access and LRU eviction ordering
   - docs: document LRU cache design decisions
 
-## [Unreleased] - 2026-08-17
+## [Unreleased]
+
+### Added
+- `statsService` with functional aggregations (`groupBy`, `reduce`, `map`, `filter`).
+- Four new GET endpoints on `/stats`: `/requests`, `/response-times`, `/status-codes`, `/popular-endpoints`.
+- Postman collection Stats folder.
+- Lab Week 8 report. - 2026-08-17
 ### Added
 - **2026-08-18 (Phase 14D - Fixes & Postman):**
   - fix(swagger): quote description strings containing colons in validationRoutes.js JSDoc annotations
@@ -60,7 +74,13 @@
   - docs: rewrite readme removing emojis and updating project state.
   - docs: document ci/cd decisions in decisions log.
 
-## [Unreleased] - 2026-08-11
+## [Unreleased]
+
+### Added
+- `statsService` with functional aggregations (`groupBy`, `reduce`, `map`, `filter`).
+- Four new GET endpoints on `/stats`: `/requests`, `/response-times`, `/status-codes`, `/popular-endpoints`.
+- Postman collection Stats folder.
+- Lab Week 8 report. - 2026-08-11
 ### Changed
 - Migrated all primary keys (Maps, Users, Obstacles, Waypoints, Routes) to UUIDs.
 - Updated services to validate UUIDs instead of integers.
@@ -73,6 +93,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+- `statsService` with functional aggregations (`groupBy`, `reduce`, `map`, `filter`).
+- Four new GET endpoints on `/stats`: `/requests`, `/response-times`, `/status-codes`, `/popular-endpoints`.
+- Postman collection Stats folder.
+- Lab Week 8 report.
 ### Added
 - **2026-08-11 (Phase 13C - Concurrency & Parallel Validations):**
   - feat(utils): add concurrency helpers (`runParallel`, `runParallelSettled`, `validateAll`).
