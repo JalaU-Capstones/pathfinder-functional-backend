@@ -19,6 +19,11 @@ const defineMapModel = (sequelize) => {
     height: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
     }
   }, {
     tableName: 'Maps',
