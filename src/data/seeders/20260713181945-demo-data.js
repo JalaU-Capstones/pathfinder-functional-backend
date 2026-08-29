@@ -7,6 +7,9 @@ const WAYPOINT_1_ID = 'd4e5f6a7-b8c9-0123-defa-234567890123';
 const WAYPOINT_2_ID = 'e5f6a7b8-c9d0-1234-efab-345678901234';
 const ROUTE_1_ID = 'f6a7b8c9-d0e1-2345-fabc-456789012345';
 
+const bcrypt = require('bcryptjs');
+const DEMO_PASSWORD_HASH = bcrypt.hashSync('Demo1234!', 10);
+
 module.exports = {
   async up(queryInterface) {
     const now = new Date();
@@ -16,6 +19,7 @@ module.exports = {
       name: 'Jane Doe',
       age: 25,
       email: 'jane.doe@example.com',
+      password: DEMO_PASSWORD_HASH,
       createdAt: now,
       updatedAt: now
     }]);
@@ -25,22 +29,23 @@ module.exports = {
       name: 'Level 1',
       width: 100,
       height: 100,
+      userId: USER_ID,
       createdAt: now,
       updatedAt: now
     }]);
 
     await queryInterface.bulkInsert('Obstacles', [
-      { id: OBSTACLE_1_ID, mapId: MAP_ID, positionX: 10, positionY: 20, size: 5, createdAt: now, updatedAt: now },
-      { id: OBSTACLE_2_ID, mapId: MAP_ID, positionX: 30, positionY: 40, size: 10, createdAt: now, updatedAt: now }
+      { id: OBSTACLE_1_ID, mapId: MAP_ID, positionX: 10, positionY: 20, size: 5, userId: USER_ID, createdAt: now, updatedAt: now },
+      { id: OBSTACLE_2_ID, mapId: MAP_ID, positionX: 30, positionY: 40, size: 10, userId: USER_ID, createdAt: now, updatedAt: now }
     ]);
 
     await queryInterface.bulkInsert('Waypoints', [
-      { id: WAYPOINT_1_ID, mapId: MAP_ID, positionX: 15, positionY: 25, name: 'Start Point', createdAt: now, updatedAt: now },
-      { id: WAYPOINT_2_ID, mapId: MAP_ID, positionX: 95, positionY: 95, name: 'End Point', createdAt: now, updatedAt: now }
+      { id: WAYPOINT_1_ID, mapId: MAP_ID, positionX: 15, positionY: 25, name: 'Start Point', userId: USER_ID, createdAt: now, updatedAt: now },
+      { id: WAYPOINT_2_ID, mapId: MAP_ID, positionX: 95, positionY: 95, name: 'End Point', userId: USER_ID, createdAt: now, updatedAt: now }
     ]);
 
     await queryInterface.bulkInsert('Routes', [
-      { id: ROUTE_1_ID, mapId: MAP_ID, startX: 5, startY: 5, endX: 95, endY: 95, distance: 127.28, path: null, createdAt: now, updatedAt: now }
+      { id: ROUTE_1_ID, mapId: MAP_ID, startX: 5, startY: 5, endX: 95, endY: 95, distance: 127.28, path: null, userId: USER_ID, createdAt: now, updatedAt: now }
     ]);
   },
 
