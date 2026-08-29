@@ -42,6 +42,11 @@ const defineRouteModel = (sequelize) => {
       type: DataTypes.JSONB,
       allowNull: true,
       defaultValue: null,
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
     }
   }, {
     tableName: 'Routes',
