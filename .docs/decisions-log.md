@@ -184,3 +184,27 @@ A chronological log of major architectural, tooling, and design decisions made t
   as named exports: pure functions are independently
   testable and should be tested in isolation from the
   middleware integration.
+
+## 2026-08-28 (Phase Lab8B - Teardown Fix)
+- Decision to fix logger import in trackingMiddleware.js:
+  logger.js exports the logger instance directly via
+  module.exports = logger (not as { logger }). The original
+  destructured import const { logger } = require(...) produced
+  undefined, causing TypeError on logger.error inside persistStat.
+  Fixed to const logger = require(...) matching requestLogger.js
+  and errorHandler.js convention.
+- Decision to conditionally await persistStat in NODE_ENV=test:
+  The fire-and-forget persistStat(payload) call in the res.json
+  override outlived Jest's module teardown, causing ReferenceError
+  (require after teardown) and TypeError (undefined logger) in
+  unrelated integration tests. In NODE_ENV=test, res.json now
+  returns Promise.resolve(persistStat(payload)).then(() =>
+  originalJson(body)) so the DB write settles before Jest destroys
+  the module registry. In production and development the call
+  remains fire-and-forget: the client receives the response before
+  the DB write completes, preserving the non-blocking guarantee.
+- Decision to update unit tests to await res.json() directly
+  rather than using setTimeout delays: since NODE_ENV=test causes
+  res.json to return a Promise, awaiting it is the correct and
+  more deterministic pattern. The setTimeout-based waits were
+  fragile (timing-dependent) and are no longer needed.
