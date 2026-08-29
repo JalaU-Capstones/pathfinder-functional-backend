@@ -28,7 +28,7 @@
 const { createStat } = require(
   '../../data/repositories/apiStatRepository'
 );
-const { logger } = require('../../utils/logger');
+const logger = require('../../utils/logger');
 
 // ─── Pure helpers ─────────────────────────────────────────────
 
@@ -128,7 +128,11 @@ const trackingMiddleware = (req, res, next) => {
    * happens. The original res.json is wrapped with tracking
    * logic. The wrapper:
    * 1. Captures the status code and elapsed time.
-   * 2. Fires persistStat asynchronously (non-blocking).
+   * 2. Fires persistStat. In production/development this is
+   *    non-blocking (fire-and-forget). In NODE_ENV=test the
+   *    promise is returned so Jest can await it before
+   *    teardown, preventing "require after environment torn
+   *    down" and "Cannot read properties of undefined" errors.
    * 3. Calls the original res.json with the original body.
    *
    * Using res.json (not res.send or res.end) because all
@@ -140,10 +144,17 @@ const trackingMiddleware = (req, res, next) => {
       req, res.statusCode, responseTimeMs
     );
 
-    // Non-blocking: do not await, do not chain .catch here
-    // persistStat handles its own errors internally
-    persistStat(payload);
+    // In test environments await the promise so it settles
+    // before Jest tears down the module registry and DB pool.
+    // In all other environments this is fire-and-forget so
+    // the client receives the response before the DB write.
+    if (process.env.NODE_ENV === 'test') {
+      return Promise.resolve(persistStat(payload)).then(
+        () => originalJson(body)
+      );
+    }
 
+    persistStat(payload);
     return originalJson(body);
   };
 

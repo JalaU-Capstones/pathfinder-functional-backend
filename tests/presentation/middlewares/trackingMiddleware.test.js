@@ -1,4 +1,4 @@
-/* global jest, beforeEach, setTimeout */
+/* global jest, beforeEach */
 'use strict';
 
 jest.mock(
@@ -6,8 +6,12 @@ jest.mock(
   () => ({ createStat: jest.fn() })
 );
 
+// logger.js exports the logger instance directly (module.exports = logger).
+// The mock must return the same shape so trackingMiddleware can call
+// logger.error without a TypeError.
 jest.mock('../../../src/utils/logger', () => ({
-  logger: { error: jest.fn(), info: jest.fn() },
+  error: jest.fn(),
+  info: jest.fn(),
 }));
 
 const {
@@ -21,7 +25,7 @@ const {
 
 const { createStat } =
   require('../../../src/data/repositories/apiStatRepository');
-const { logger } = require('../../../src/utils/logger');
+const logger = require('../../../src/utils/logger');
 
 // ─── normalizePath ─────────────────────────────────────────────
 describe('normalizePath', () => {
@@ -131,11 +135,9 @@ describe('trackingMiddleware', () => {
       createStat.mockResolvedValue({});
       trackingMiddleware(req, res, next);
 
-      // Simulate route handler calling res.json
-      res.json({ success: true, data: [] });
-
-      // Wait for the async persistStat to settle
-      await new Promise((r) => setTimeout(r, 10));
+      // In NODE_ENV=test res.json returns a Promise — await it
+      // so persistStat settles before the assertion.
+      await res.json({ success: true, data: [] });
 
       expect(createStat).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -147,34 +149,38 @@ describe('trackingMiddleware', () => {
     }
   );
 
-  it('should not throw if createStat rejects', async () => {
-    createStat.mockRejectedValue(new Error('DB error'));
-    trackingMiddleware(req, res, next);
+  it('should not propagate errors if createStat rejects',
+    async () => {
+      createStat.mockRejectedValue(new Error('DB error'));
+      trackingMiddleware(req, res, next);
 
-    // This must not throw
-    expect(() => res.json({ success: true })).not.toThrow();
+      // In NODE_ENV=test res.json returns a Promise.
+      // The promise must resolve (not reject) because persistStat
+      // catches its own errors — the client never sees the DB failure.
+      await expect(
+        res.json({ success: true })
+      ).resolves.not.toThrow();
 
-    await new Promise((r) => setTimeout(r, 10));
-    expect(logger.error).toHaveBeenCalled();
-  });
+      expect(logger.error).toHaveBeenCalled();
+    }
+  );
 
-  it('should record response time greater than 0', async () => {
-    createStat.mockResolvedValue({});
-    trackingMiddleware(req, res, next);
+  it('should record response time greater than or equal to 0',
+    async () => {
+      createStat.mockResolvedValue({});
+      trackingMiddleware(req, res, next);
 
-    await new Promise((r) => setTimeout(r, 5));
-    res.json({ success: true });
+      await res.json({ success: true });
 
-    await new Promise((r) => setTimeout(r, 10));
-
-    expect(createStat).toHaveBeenCalledWith(
-      expect.objectContaining({
-        responseTimeMs: expect.any(Number),
-      })
-    );
-    const call = createStat.mock.calls[0][0];
-    expect(call.responseTimeMs).toBeGreaterThanOrEqual(0);
-  });
+      expect(createStat).toHaveBeenCalledWith(
+        expect.objectContaining({
+          responseTimeMs: expect.any(Number),
+        })
+      );
+      const call = createStat.mock.calls[0][0];
+      expect(call.responseTimeMs).toBeGreaterThanOrEqual(0);
+    }
+  );
 });
 
 // ─── withTracking ──────────────────────────────────────────────
