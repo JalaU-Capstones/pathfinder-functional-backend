@@ -23,6 +23,50 @@ Object.keys(models).forEach(modelName => {
   }
 });
 
+// User ownership associations
+// A user owns many maps, obstacles, waypoints, routes.
+// If the user is deleted, owned records have userId set
+// to null (SET NULL) — data is preserved, not deleted.
+models.User.hasMany(models.Map, {
+  foreignKey: 'userId',
+  as: 'ownedMaps',
+  onDelete: 'SET NULL',
+});
+models.Map.belongsTo(models.User, {
+  foreignKey: 'userId',
+  as: 'owner',
+});
+
+models.User.hasMany(models.Obstacle, {
+  foreignKey: 'userId',
+  as: 'ownedObstacles',
+  onDelete: 'SET NULL',
+});
+models.Obstacle.belongsTo(models.User, {
+  foreignKey: 'userId',
+  as: 'owner',
+});
+
+models.User.hasMany(models.Waypoint, {
+  foreignKey: 'userId',
+  as: 'ownedWaypoints',
+  onDelete: 'SET NULL',
+});
+models.Waypoint.belongsTo(models.User, {
+  foreignKey: 'userId',
+  as: 'owner',
+});
+
+models.User.hasMany(models.Route, {
+  foreignKey: 'userId',
+  as: 'ownedRoutes',
+  onDelete: 'SET NULL',
+});
+models.Route.belongsTo(models.User, {
+  foreignKey: 'userId',
+  as: 'owner',
+});
+
 module.exports = {
   sequelize,
   ...models,

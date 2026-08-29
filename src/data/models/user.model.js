@@ -23,10 +23,20 @@ const defineUserModel = (sequelize) => {
       validate: {
         isEmail: true
       }
+    },
+    password: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      defaultValue: null,
     }
   }, {
     tableName: 'Users',
-    timestamps: true
+    timestamps: true,
+    defaultScope: {
+      attributes: {
+        exclude: ['password'],
+      },
+    },
   });
 
   return User;

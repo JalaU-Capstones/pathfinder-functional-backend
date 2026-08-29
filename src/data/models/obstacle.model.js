@@ -29,6 +29,11 @@ const defineObstacleModel = (sequelize) => {
     size: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
     }
   }, {
     tableName: 'Obstacles',

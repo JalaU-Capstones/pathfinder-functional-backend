@@ -2,6 +2,14 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-29 (Phase Auth-1 - Auth Database Foundation)
+- Decision to use bcryptjs over bcrypt: bcryptjs is a pure JavaScript implementation with no native compilation step. It works identically on all platforms and CI environments without build tools. Performance difference (slightly slower) is acceptable for a backend that does not handle millions of concurrent logins.
+- Decision to use allowNull: true for password and all userId FK columns: backward compatibility with existing data. Existing rows keep functioning. New rows will always have these fields populated (enforced at the service layer in Phase Auth-2/3).
+- Decision to use onDelete: SET NULL for userId FKs (not CASCADE): deleting a user account should not destroy their maps, obstacles, waypoints, and routes. Those records become orphaned but are preserved. CASCADE would be destructive and irreversible.
+- Decision to add a performance index on userId for each entity table: all GET endpoints will filter by userId after Phase Auth-3. Without an index, these become full table scans as the dataset grows.
+- Decision to use STRING(255) for password hash: bcrypt always produces 60-character hashes, but STRING(255) provides buffer for potential algorithm changes in future without a new migration.
+- Decision to add defaultScope to user.model.js excluding password: this ensures the password hash is never returned by any Sequelize query using the default scope. The auth service will use explicit attribute inclusion only when verifying login credentials.
+
 ## 2026-08-19 (Phase Lab7B - LRU Memoization Middleware)
 - Decision to cache only GET requests: POST, PUT, DELETE have side effects and must always reach the business layer. Caching them would return stale data after mutations.
 - Decision to cache only 2xx responses: 4xx and 5xx errors are transient and should not be cached. A 404 for a resource that gets created later must not return the cached 404.
