@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased] - 2026-08-29
+### Added
+- **2026-08-29 (Phase Auth-1 - Auth Database Foundation):**
+  - chore(deps): add bcryptjs and jsonwebtoken for JWT auth
+  - feat(database): add password column to Users table
+  - feat(database): add userId FK to Maps, Obstacles, Waypoints, Routes tables with SET NULL cascade
+  - feat(models): update all entity models with new fields
+  - feat(models): add User ownership associations to all entity models
+  - feat(models): add defaultScope to User model excluding password from all default queries
+  - feat(seeders): update demo seeder with hashed password and userId references
+
 ## [Unreleased]
 
 ### Added
