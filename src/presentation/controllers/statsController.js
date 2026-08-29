@@ -16,7 +16,7 @@ const { sendSuccess } = require('../../utils/httpResponse');
 const getRequestStats = async (req, res, next) => {
   try {
     const data = await statsService.getRequestStats();
-    return sendSuccess(res, data, 200);
+    return sendSuccess(res, 200, data);
   } catch (error) {
     return next(error);
   }
@@ -29,7 +29,7 @@ const getRequestStats = async (req, res, next) => {
 const getResponseTimeStats = async (req, res, next) => {
   try {
     const data = await statsService.getResponseTimeStats();
-    return sendSuccess(res, data, 200);
+    return sendSuccess(res, 200, data);
   } catch (error) {
     return next(error);
   }
@@ -42,7 +42,7 @@ const getResponseTimeStats = async (req, res, next) => {
 const getStatusCodeStats = async (req, res, next) => {
   try {
     const data = await statsService.getStatusCodeStats();
-    return sendSuccess(res, data, 200);
+    return sendSuccess(res, 200, data);
   } catch (error) {
     return next(error);
   }
@@ -55,7 +55,7 @@ const getStatusCodeStats = async (req, res, next) => {
 const getPopularEndpoints = async (req, res, next) => {
   try {
     const data = await statsService.getPopularEndpoints();
-    return sendSuccess(res, data, 200);
+    return sendSuccess(res, 200, data);
   } catch (error) {
     return next(error);
   }
