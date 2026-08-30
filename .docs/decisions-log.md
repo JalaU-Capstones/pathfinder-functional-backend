@@ -2,6 +2,13 @@
 
 A chronological log of major architectural, tooling, and design decisions made throughout the project.
 
+## 2026-08-29 (Phase Auth-2 - Auth Endpoints)
+- Decision to remove POST /api/users and move user creation to POST /api/auth/signin. Rationale: creating a user without a password is insecure. All user creation now goes through the auth flow which enforces password hashing. Old endpoint removal prevents accidental creation of passwordless accounts.
+- Decision that authService calls userRepository directly (not userService). Rationale: DIP — high-level modules (authService) depend on abstractions (repositories), not on other services. Prevents cross-service coupling and circular dependency risk.
+- Decision to use BCRYPT_ROUNDS = 12. Rationale: NIST and OWASP recommend at minimum cost factor 10. Factor 12 provides ~300ms hash time on modern hardware, making brute force significantly more expensive while keeping login latency acceptable.
+- Decision to use the same error message for wrong email and wrong password ("Invalid email or password."). Rationale: user enumeration prevention. Different messages ("User not found" vs "Wrong password") allow attackers to enumerate valid email addresses.
+- Decision to store JWT_SECRET in env.js and fail fast if missing. Rationale: a missing JWT_SECRET would cause silent failures or signing with an empty secret, which is a critical security vulnerability. Fail-fast at startup is safer.
+
 ## 2026-08-29 (Phase Auth-1 - Auth Database Foundation)
 - Decision to use bcryptjs over bcrypt: bcryptjs is a pure JavaScript implementation with no native compilation step. It works identically on all platforms and CI environments without build tools. Performance difference (slightly slower) is acceptable for a backend that does not handle millions of concurrent logins.
 - Decision to use allowNull: true for password and all userId FK columns: backward compatibility with existing data. Existing rows keep functioning. New rows will always have these fields populated (enforced at the service layer in Phase Auth-2/3).
