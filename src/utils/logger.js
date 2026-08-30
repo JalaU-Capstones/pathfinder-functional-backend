@@ -10,7 +10,24 @@ const logLevels = {
   debug: 3
 };
 
+const testFilter = winston.format((info) => {
+  if (process.env.NODE_ENV === 'test') {
+    if (
+      (typeof info.message === 'string' && 
+        (info.message.includes('Validation error') || 
+         info.message.includes('VALIDATION_ERROR') || 
+         info.message.includes('NOT_FOUND') ||
+         info.message.includes('CONFLICT') ||
+         info.message.includes('UNAUTHORIZED')))
+    ) {
+      return false;
+    }
+  }
+  return info;
+});
+
 const devFormat = winston.format.combine(
+  testFilter(),
   winston.format.colorize({ all: true }),
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.printf(
@@ -19,6 +36,7 @@ const devFormat = winston.format.combine(
 );
 
 const prodFormat = winston.format.combine(
+  testFilter(),
   winston.format.timestamp(),
   winston.format.json()
 );
@@ -28,6 +46,7 @@ const logger = winston.createLogger({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   transports: [
     new winston.transports.Console({
+      level: process.env.NODE_ENV === 'test' ? 'warn' : undefined,
       format: process.env.NODE_ENV === 'production' ? prodFormat : devFormat
     })
   ]
