@@ -23,17 +23,12 @@ const toDbShape = (apiData) => {
   };
 };
 
-const validateUserCreate = (data) => {
-  if (!data.name || typeof data.name !== 'string' || data.name.trim() === '') {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Name is required and must be a non-empty string.');
-  }
-  if (!data.age || !Number.isInteger(data.age) || data.age <= 0) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Age is required and must be a positive integer.');
-  }
-  if (!data.email || !isValidEmail(data.email)) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Email is required and must be a valid email format.');
-  }
-};
+/**
+ * Note: user CREATION is handled by authService.register
+ * (POST /api/auth/signin), not by this service.
+ * This service handles: read, update, delete operations
+ * on the authenticated user's own account.
+ */
 
 const validateUserUpdate = (data) => {
   if (Object.keys(data).length === 0) {
@@ -56,18 +51,6 @@ const validateUserUpdate = (data) => {
   }
 };
 
-const createUserService = async (userData) => {
-  validateUserCreate(userData);
-
-  const existingUser = await userRepository.getUserByEmail(userData.email);
-  if (existingUser) {
-    throw createAppError(ERROR_TYPES.CONFLICT, 'A user with this email already exists.');
-  }
-
-  const dbShape = toDbShape(userData);
-  const newUser = await userRepository.createUser(dbShape);
-  return toApiShape(newUser);
-};
 
 const getUserService = async (id) => {
   const user = await userRepository.getUserById(id);
@@ -116,7 +99,6 @@ const deleteUserService = async (id) => {
 };
 
 module.exports = {
-  createUserService,
   getUserService,
   getAllUsersService,
   updateUserService,
