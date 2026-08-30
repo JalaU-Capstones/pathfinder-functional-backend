@@ -6,6 +6,7 @@ describe('env config', () => {
   beforeEach(() => {
     jest.resetModules();
     process.env = { ...ORIGINAL_ENV };
+    process.env.JWT_SECRET = 'test-secret';
   });
 
   afterEach(() => {
@@ -34,5 +35,10 @@ describe('env config', () => {
     expect(env.env.dbUser).toBe('pathfinder_user');
     expect(env.env.dbPassword).toBe('pathfinder_pass');
     expect(env.env.dbName).toBe('pathfinder_db');
+  });
+
+  it('should throw Error if JWT_SECRET is missing', () => {
+    delete process.env.JWT_SECRET;
+    expect(() => require('../../src/config/env')).toThrow('JWT_SECRET environment variable is required');
   });
 });

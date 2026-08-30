@@ -19,7 +19,7 @@ const signin = async (req, res, next) => {
     const result = await authService.register({
       name, email, password, age,
     });
-    return sendSuccess(res, result, 201);
+    return sendSuccess(res, 201, result);
   } catch (error) {
     return next(error);
   }
@@ -33,7 +33,7 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const result = await authService.login({ email, password });
-    return sendSuccess(res, result, 200);
+    return sendSuccess(res, 200, result);
   } catch (error) {
     return next(error);
   }

@@ -111,26 +111,22 @@ const toAuthResponse = (user, token) => ({
 const validateRegistrationInput = ({ name, email, password, age }) => {
   if (!name || typeof name !== 'string' || !name.trim()) {
     throw createAppError(
-      'Name is required and must be a non-empty string.',
-      'VALIDATION_ERROR', 400
+      'VALIDATION_ERROR', 'Name is required and must be a non-empty string.'
     );
   }
   if (!email || !isValidEmail(email)) {
     throw createAppError(
-      'A valid email address is required.',
-      'VALIDATION_ERROR', 400
+      'VALIDATION_ERROR', 'A valid email address is required.'
     );
   }
   if (!password || typeof password !== 'string' || password.length < 8) {
     throw createAppError(
-      'Password must be at least 8 characters.',
-      'VALIDATION_ERROR', 400
+      'VALIDATION_ERROR', 'Password must be at least 8 characters.'
     );
   }
   if (!Number.isInteger(Number(age)) || Number(age) < 1) {
     throw createAppError(
-      'Age must be a positive integer.',
-      'VALIDATION_ERROR', 400
+      'VALIDATION_ERROR', 'Age must be a positive integer.'
     );
   }
 };
@@ -157,8 +153,7 @@ const register = async ({ name, email, password, age }) => {
   const existing = await userRepository.getUserByEmail(email);
   if (existing) {
     throw createAppError(
-      `An account with email "${email}" already exists.`,
-      'CONFLICT', 409
+      'CONFLICT', `An account with email "${email}" already exists.`
     );
   }
 
@@ -195,14 +190,12 @@ const register = async ({ name, email, password, age }) => {
 const login = async ({ email, password }) => {
   if (!email || !isValidEmail(email)) {
     throw createAppError(
-      'A valid email address is required.',
-      'VALIDATION_ERROR', 400
+      'VALIDATION_ERROR', 'A valid email address is required.'
     );
   }
   if (!password) {
     throw createAppError(
-      'Password is required.',
-      'VALIDATION_ERROR', 400
+      'VALIDATION_ERROR', 'Password is required.'
     );
   }
 
@@ -218,7 +211,7 @@ const login = async ({ email, password }) => {
 
   if (!user || !user.password) {
     throw createAppError(
-      INVALID_CREDENTIALS_MSG, 'UNAUTHORIZED', 401
+      'UNAUTHORIZED', INVALID_CREDENTIALS_MSG
     );
   }
 
@@ -226,7 +219,7 @@ const login = async ({ email, password }) => {
 
   if (!passwordMatch) {
     throw createAppError(
-      INVALID_CREDENTIALS_MSG, 'UNAUTHORIZED', 401
+      'UNAUTHORIZED', INVALID_CREDENTIALS_MSG
     );
   }
 

@@ -1,13 +1,17 @@
+/* global jest, beforeEach */
 'use strict';
 
-jest.mock('../../src/business/services/authService', () => ({
+process.env.JWT_SECRET = 'test-secret';
+process.env.JWT_EXPIRES_IN = '7d';
+
+jest.mock('../../../src/business/services/authService', () => ({
   register: jest.fn(),
   login: jest.fn(),
 }));
 
 const request = require('supertest');
-const { createApp } = require('../../src/app');
-const authService = require('../../src/business/services/authService');
+const { createApp } = require('../../../src/app');
+const authService = require('../../../src/business/services/authService');
 const app = createApp();
 
 const mockAuthResponse = {
@@ -45,7 +49,7 @@ describe('POST /api/auth/signin', () => {
   );
 
   it('should return 409 for duplicate email', async () => {
-    const { createAppError } = require('../../src/utils/errors');
+    const { createAppError } = require('../../../src/utils/errors');
     authService.register.mockRejectedValue(
       createAppError('CONFLICT', 'Email already exists')
     );
@@ -84,7 +88,7 @@ describe('POST /api/auth/login', () => {
   );
 
   it('should return 401 for invalid credentials', async () => {
-    const { createAppError } = require('../../src/utils/errors');
+    const { createAppError } = require('../../../src/utils/errors');
     authService.login.mockRejectedValue(
       createAppError(
         'UNAUTHORIZED', 'Invalid email or password.'

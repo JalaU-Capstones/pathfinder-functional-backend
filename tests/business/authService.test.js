@@ -1,9 +1,11 @@
+/* global jest, beforeEach */
 'use strict';
 
 jest.mock('../../src/data/repositories/userRepository');
 jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
 jest.mock('../../src/config/env', () => ({
+  env: { dbName: 'test', dbUser: 'test', dbPassword: 'pw', dbHost: 'localhost', dbPort: 5432 },
   JWT_SECRET: 'test-secret',
   JWT_EXPIRES_IN: '7d',
 }));
