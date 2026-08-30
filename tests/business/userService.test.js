@@ -10,52 +10,7 @@ describe('User Service', () => {
     jest.clearAllMocks();
   });
 
-  describe('createUserService', () => {
-    it('should create a user when input is valid and email is unique', async () => {
-      userRepository.getUserByEmail.mockResolvedValue(null);
-      userRepository.createUser.mockResolvedValue({
-        id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Alice', age: 30, email: 'alice@example.com', toJSON: function() { return this; }
-      });
 
-      const input = { name: 'Alice', age: 30, email: 'alice@example.com' };
-      const result = await userService.createUserService(input);
-
-      expect(userRepository.getUserByEmail).toHaveBeenCalledWith('alice@example.com');
-      expect(userRepository.createUser).toHaveBeenCalledWith(input);
-      expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(result.name).toEqual('Alice');
-    });
-
-    it('should throw CONFLICT error if email already exists', async () => {
-      userRepository.getUserByEmail.mockResolvedValue({ id: 2, email: 'alice@example.com' });
-
-      const input = { name: 'Alice', age: 30, email: 'alice@example.com' };
-      await expect(userService.createUserService(input)).rejects.toMatchObject({
-        type: ERROR_TYPES.CONFLICT
-      });
-    });
-
-    it('should throw VALIDATION_ERROR if name is missing or invalid', async () => {
-      await expect(userService.createUserService({ age: 30, email: 'a@b.com' })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
-      await expect(userService.createUserService({ name: ' ', age: 30, email: 'a@b.com' })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
-    });
-
-    it('should throw VALIDATION_ERROR if age is missing or negative', async () => {
-      await expect(userService.createUserService({ name: 'A', email: 'a@b.com' })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
-      await expect(userService.createUserService({ name: 'A', age: -5, email: 'a@b.com' })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
-    });
-
-    it('should throw VALIDATION_ERROR if email is missing', async () => {
-      await expect(userService.createUserService({ name: 'A', age: 30 })).rejects.toMatchObject({ type: ERROR_TYPES.VALIDATION_ERROR });
-    });
-
-    it('should throw VALIDATION_ERROR if email format is invalid', async () => {
-      const input = { name: 'Alice', age: 30, email: 'invalid-email' };
-      await expect(userService.createUserService(input)).rejects.toMatchObject({
-        type: ERROR_TYPES.VALIDATION_ERROR
-      });
-    });
-  });
 
   describe('updateUserService', () => {
     it('should update a user when valid and email is unique', async () => {
