@@ -47,12 +47,8 @@ describe('env config', () => {
     delete process.env.JWT_SECRET;
     process.env.NODE_ENV = 'test';
     
-    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     const env = require('../../src/config/env');
     
     expect(env.JWT_SECRET).toBe('TEST_SECRET_DO_NOT_USE_IN_PROD');
-    expect(consoleSpy).toHaveBeenCalledWith('⚠️ Using fallback JWT_SECRET for tests');
-    
-    consoleSpy.mockRestore();
   });
 });

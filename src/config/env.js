@@ -15,10 +15,6 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 if (!JWT_SECRET) {
   if (process.env.NODE_ENV === 'test') {
     JWT_SECRET = 'TEST_SECRET_DO_NOT_USE_IN_PROD';
-    if (!global.__JWT_WARNING_LOGGED__) {
-      console.warn('⚠️ Using fallback JWT_SECRET for tests');
-      global.__JWT_WARNING_LOGGED__ = true;
-    }
   } else {
     throw new Error(
       'JWT_SECRET environment variable is required. ' +
