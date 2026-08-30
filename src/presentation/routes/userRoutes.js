@@ -10,38 +10,6 @@ const router = express.Router();
  *   description: User management
  */
 
-/**
- * @swagger
- * /api/users:
- *   post:
- *     summary: Create a new user
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       201:
- *         description: The user was successfully created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   $ref: '#/components/schemas/User'
- *       400:
- *         description: Validation error
- *       409:
- *         description: Conflict - User with this email already exists
- *       500:
- *         description: Internal server error
- */
-router.post('/', userController.createUser);
 
 /**
  * @swagger
