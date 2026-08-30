@@ -8,8 +8,18 @@ const getUserById = async (id) => {
   return await User.findByPk(id);
 };
 
-const getUserByEmail = async (email) => {
-  return await User.findOne({ where: { email } });
+const getUserByEmail = async (email, options = {}) => {
+  const queryOptions = { where: { email } };
+
+  if (options.includePassword) {
+    // Bypass defaultScope to include password hash
+    queryOptions.attributes = {
+      include: ['password'],
+    };
+    return await User.unscoped().findOne(queryOptions);
+  }
+
+  return await User.findOne(queryOptions);
 };
 
 const getAllUsers = async () => {

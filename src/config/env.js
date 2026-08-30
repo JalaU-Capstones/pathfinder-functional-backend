@@ -9,4 +9,18 @@ const env = {
   dbName: process.env.DB_NAME || 'pathfinder_db',
 };
 
-module.exports = { env };
+let JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+
+if (!JWT_SECRET) {
+  if (process.env.NODE_ENV === 'test') {
+    JWT_SECRET = 'TEST_SECRET_DO_NOT_USE_IN_PROD';
+  } else {
+    throw new Error(
+      'JWT_SECRET environment variable is required. ' +
+      'Add it to your .env file.'
+    );
+  }
+}
+
+module.exports = { env, JWT_SECRET, JWT_EXPIRES_IN };

@@ -2,14 +2,18 @@
 const request = require('supertest');
 
 describe('App', () => {
-  const originalEnv = process.env.NODE_ENV;
+  const ORIGINAL_ENV = process.env;
 
   beforeEach(() => {
     jest.resetModules();
+    process.env = { ...ORIGINAL_ENV };
+    // Ensure JWT_SECRET is always defined even when NODE_ENV is switched to
+    // 'development' or 'production', so env.js never throws during these tests.
+    process.env.JWT_SECRET = 'test-jwt-secret-key';
   });
 
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv;
+    process.env = ORIGINAL_ENV;
   });
 
   it('should register swagger endpoints in development', async () => {

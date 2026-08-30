@@ -17,40 +17,6 @@ describe('User Controller', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
-  describe('POST /api/users', () => {
-    it('should return 201 and created user on success', async () => {
-      const mockObj = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', email: 'a@a.com' };
-      userService.createUserService.mockResolvedValue(mockObj);
-
-      const response = await request(app).post('/api/users').send({ email: 'a@a.com' });
-
-      expect(response.status).toBe(201);
-      expect(response.body.success).toBe(true);
-      expect(response.body.data).toEqual(mockObj);
-    });
-
-    it('should return 400 on validation error', async () => {
-      const error = createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid');
-      userService.createUserService.mockRejectedValue(error);
-
-      const response = await request(app).post('/api/users').send({});
-
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-      expect(response.body.error).toHaveProperty('code');
-    });
-
-    it('should return 409 on duplicate email', async () => {
-      const error = createAppError(ERROR_TYPES.CONFLICT, 'Duplicate');
-      userService.createUserService.mockRejectedValue(error);
-
-      const response = await request(app).post('/api/users').send({});
-
-      expect(response.status).toBe(409);
-    });
-  });
-
   describe('GET /api/users', () => {
     it('should return 200 and array of users', async () => {
       const mockObjs = [{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }];

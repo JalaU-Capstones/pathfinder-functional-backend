@@ -23,11 +23,24 @@ const prodFormat = winston.format.combine(
   winston.format.json()
 );
 
+const isTest = process.env.NODE_ENV === 'test';
+
+class SilentInTestConsole extends winston.transports.Console {
+  log(info, callback) {
+    if (process.env.NODE_ENV === 'test') {
+      if (callback) callback();
+      return;
+    }
+    super.log(info, callback);
+  }
+}
+
 const logger = winston.createLogger({
   levels: logLevels,
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   transports: [
-    new winston.transports.Console({
+    new SilentInTestConsole({
+      silent: isTest,
       format: process.env.NODE_ENV === 'production' ? prodFormat : devFormat
     })
   ]

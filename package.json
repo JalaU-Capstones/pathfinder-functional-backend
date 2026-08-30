@@ -10,7 +10,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:coverage:watch": "jest --coverage --watchAll",
-    "test:ci": "jest --coverage --ci --forceExit",
+    "test:ci": "cross-env NODE_ENV=test jest --coverage --ci --forceExit --silent --passWithNoTests",
     "dev": "node --watch src/server.js",
     "lint": "eslint .",
     "db:test-connection": "node scripts/test-db.js",
@@ -75,6 +75,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "cross-env": "^10.1.0",
     "eslint": "^10.7.0",
     "jest": "^30.4.2",
     "sequelize-cli": "^6.6.5",

@@ -58,6 +58,11 @@ const createApp = () => {
     });
   }
 
+  const authRoutes = require('./presentation/routes/authRoutes');
+
+  // Public routes — no auth middleware applied
+  app.use('/api/auth', authRoutes);
+
   // Entity routes
   app.use('/api', healthRoutes);
   app.use('/api/maps', mapRoutes);

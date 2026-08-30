@@ -1,16 +1,6 @@
 const userService = require('../../business/services/userService');
 const { sendSuccess } = require('../../utils/httpResponse');
 
-const createUser = async (req, res, next) => {
-  try {
-    const userData = req.body;
-    const newUser = await userService.createUserService(userData);
-    return sendSuccess(res, 201, newUser);
-  } catch (error) {
-    next(error);
-  }
-};
-
 const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -52,7 +42,6 @@ const deleteUser = async (req, res, next) => {
 };
 
 module.exports = {
-  createUser,
   getUser,
   getAllUsers,
   updateUser,

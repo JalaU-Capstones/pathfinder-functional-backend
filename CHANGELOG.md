@@ -1,6 +1,15 @@
 # Changelog
 
 ## [Unreleased] - 2026-08-29
+feat(auth): add POST /api/auth/signin (register + auto login)
+feat(auth): add POST /api/auth/login (credentials + JWT)
+feat(auth): add authService with bcrypt and JWT signing
+refactor(users): remove POST /api/users - user creation moved to auth/signin
+fix(repositories): update getUserByEmail to support includePassword option for login flow
+fix(errors): add 401 UNAUTHORIZED to error handler status code mapping
+test(auth): add authService and authController tests
+
+## [Unreleased] - 2026-08-29
 ### Added
 - **2026-08-29 (Phase Auth-1 - Auth Database Foundation):**
   - chore(deps): add bcryptjs and jsonwebtoken for JWT auth
