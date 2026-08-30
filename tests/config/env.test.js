@@ -37,8 +37,22 @@ describe('env config', () => {
     expect(env.env.dbName).toBe('pathfinder_db');
   });
 
-  it('should throw Error if JWT_SECRET is missing', () => {
+  it('should throw Error if JWT_SECRET is missing outside of test env', () => {
     delete process.env.JWT_SECRET;
+    process.env.NODE_ENV = 'development';
     expect(() => require('../../src/config/env')).toThrow('JWT_SECRET environment variable is required');
+  });
+
+  it('should use fallback if JWT_SECRET is missing in test env', () => {
+    delete process.env.JWT_SECRET;
+    process.env.NODE_ENV = 'test';
+    
+    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const env = require('../../src/config/env');
+    
+    expect(env.JWT_SECRET).toBe('TEST_SECRET_DO_NOT_USE_IN_PROD');
+    expect(consoleSpy).toHaveBeenCalledWith('⚠️ Using fallback JWT_SECRET for tests');
+    
+    consoleSpy.mockRestore();
   });
 });
