@@ -1,40 +1,28 @@
 const userService = require('../../business/services/userService');
 const { sendSuccess } = require('../../utils/httpResponse');
 
-const getUser = async (req, res, next) => {
+const getProfile = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const user = await userService.getUserService(id);
+    const user = await userService.getProfile(req.user.userId);
     return sendSuccess(res, 200, user);
   } catch (error) {
     next(error);
   }
 };
 
-const getAllUsers = async (req, res, next) => {
+const updateProfile = async (req, res, next) => {
   try {
-    const users = await userService.getAllUsersService();
-    return sendSuccess(res, 200, users);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const updateUser = async (req, res, next) => {
-  try {
-    const { id } = req.params;
     const updateData = req.body;
-    const updatedUser = await userService.updateUserService(id, updateData);
+    const updatedUser = await userService.updateProfile(req.user.userId, updateData);
     return sendSuccess(res, 200, updatedUser);
   } catch (error) {
     next(error);
   }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteAccount = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    await userService.deleteUserService(id);
+    await userService.deleteAccount(req.user.userId);
     return res.status(204).send();
   } catch (error) {
     next(error);
@@ -42,8 +30,7 @@ const deleteUser = async (req, res, next) => {
 };
 
 module.exports = {
-  getUser,
-  getAllUsers,
-  updateUser,
-  deleteUser
+  getProfile,
+  updateProfile,
+  deleteAccount
 };

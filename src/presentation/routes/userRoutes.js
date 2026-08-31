@@ -10,50 +10,17 @@ const router = express.Router();
  *   description: User management
  */
 
-
 /**
  * @swagger
- * /api/users:
+ * /api/users/me:
  *   get:
- *     summary: Retrieve a list of users
+ *     summary: Get the current user profile
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of users
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/User'
- *       500:
- *         description: Internal server error
- */
-router.get('/', userController.getAllUsers);
-
-/**
- * @swagger
- * /api/users/{id}:
- *   get:
- *     summary: Get a user by ID
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: "UUID of the resource"
- *         schema:
- *           type: string
- *           format: uuid
- *           example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
- *     responses:
- *       200:
- *         description: The user description by id
+ *         description: The user profile
  *         content:
  *           application/json:
  *             schema:
@@ -63,28 +30,23 @@ router.get('/', userController.getAllUsers);
  *                   type: boolean
  *                 data:
  *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: User not found
  *       500:
  *         description: Internal server error
  */
-router.get('/:id', userController.getUser);
+router.get('/me', userController.getProfile);
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/users/me:
  *   put:
- *     summary: Update a user by ID
+ *     summary: Update the current user profile
  *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: "UUID of the resource"
- *         schema:
- *           type: string
- *           format: uuid
- *           example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -105,6 +67,8 @@ router.get('/:id', userController.getUser);
  *                   $ref: '#/components/schemas/User'
  *       400:
  *         description: Validation error
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: User not found
  *       409:
@@ -112,31 +76,26 @@ router.get('/:id', userController.getUser);
  *       500:
  *         description: Internal server error
  */
-router.put('/:id', userController.updateUser);
+router.put('/me', userController.updateProfile);
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/users/me:
  *   delete:
- *     summary: Delete a user by ID
+ *     summary: Delete the current user account
  *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: "UUID of the resource"
- *         schema:
- *           type: string
- *           format: uuid
- *           example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       204:
  *         description: The user was deleted
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: User not found
  *       500:
  *         description: Internal server error
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/me', userController.deleteAccount);
 
 module.exports = router;

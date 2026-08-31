@@ -4,7 +4,7 @@ const { sendSuccess } = require('../../utils/httpResponse');
 const createMap = async (req, res, next) => {
   try {
     const { name, dimensions, obstacles = [], waypoints = [] } = req.body;
-    const newMap = await mapService.createMapService({ name, dimensions, obstacles, waypoints });
+    const newMap = await mapService.createMapService({ name, dimensions, obstacles, waypoints }, req.user.userId);
     return sendSuccess(res, 201, newMap);
   } catch (error) {
     next(error);
@@ -14,7 +14,7 @@ const createMap = async (req, res, next) => {
 const getMap = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const map = await mapService.getMapService(id);
+    const map = await mapService.getMapService(id, req.user.userId);
     return sendSuccess(res, 200, map);
   } catch (error) {
     next(error);
@@ -23,7 +23,7 @@ const getMap = async (req, res, next) => {
 
 const getAllMaps = async (req, res, next) => {
   try {
-    const maps = await mapService.getAllMapsService();
+    const maps = await mapService.getAllMapsService(req.user.userId);
     return sendSuccess(res, 200, maps);
   } catch (error) {
     next(error);
@@ -34,7 +34,7 @@ const updateMap = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    const updatedMap = await mapService.updateMapService(id, updateData);
+    const updatedMap = await mapService.updateMapService(id, updateData, req.user.userId);
     return sendSuccess(res, 200, updatedMap);
   } catch (error) {
     next(error);
@@ -44,7 +44,7 @@ const updateMap = async (req, res, next) => {
 const deleteMap = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await mapService.deleteMapService(id);
+    await mapService.deleteMapService(id, req.user.userId);
     // 204 No Content typically does not return a body
     return res.status(204).send();
   } catch (error) {
