@@ -1,5 +1,11 @@
 # Changelog
 
+- **2026-08-31 (Phase Auth-4 - Bug Fixes & Postman):**
+  - fix(repositories): pass `userId` through `createMapWithRelations` to `Map.create` to fix 403 Forbidden bug on map creation.
+  - test(services): update mock assertions in map, obstacle, waypoint, and route service tests to include `userId`.
+  - docs(postman): add Auth folder with Register and Login endpoints.
+  - docs(postman): auto-save JWT tokens via test scripts and inject into protected endpoints.
+  - docs(postman): update Postman README and environment variables.
 
 - **2026-08-31 (Phase Auth-3 - Ownership Filtering):**
   - feat(middleware): add JWT `authMiddleware` and apply it globally to all `/api` routes.

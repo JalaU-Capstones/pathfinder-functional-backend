@@ -79,7 +79,8 @@ describe('Route Service', () => {
         endX: 5,
         endY: 7,
         distance: 12,
-        path: [{x:0,y:0}, {x:5,y:7}]
+        path: [{x:0,y:0}, {x:5,y:7}],
+        userId: undefined
       });
 
       expect(result).toEqual({

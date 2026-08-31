@@ -23,7 +23,7 @@ describe('Waypoint Service', () => {
       const result = await waypointService.createWaypointService(input);
 
       expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', { userId: undefined });
-      expect(waypointRepository.createWaypoint).toHaveBeenCalledWith({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 5, positionY: 5, name: 'A' });
+      expect(waypointRepository.createWaypoint).toHaveBeenCalledWith({ mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 5, positionY: 5, name: 'A', userId: undefined });
       expect(result.position).toEqual({ x: 5, y: 5 });
       expect(result.name).toEqual('A');
     });

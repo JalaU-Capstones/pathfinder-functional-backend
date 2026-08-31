@@ -16,12 +16,14 @@ This directory contains the exported Postman collection and environment variable
 - The endpoints are grouped by entity.
 - The collection uses logical flows (POST -> GET all -> GET by id -> PUT -> DELETE).
 - Run the **Health Check** request first to ensure the server is responding on `http://localhost:3000`.
+- **Authentication**: All endpoints (except Health and Validation) are protected. You must run **Auth / Register** or **Auth / Login** first. The test script will automatically save your JWT to the `token` environment variable, which is automatically injected into all other requests via the `Authorization: Bearer {{token}}` header.
 - Note: The distance calculated in the Route POST endpoint uses a placeholder Manhattan distance until the final pathfinding algorithm is implemented in Phase 5B.
 
 ## How to Keep Updated
 If new endpoints or entities are added in future phases:
 1. Duplicate an existing folder or request in Postman.
 2. Update the endpoint and payload.
+3. Ensure Auth headers are included (use `Bearer {{token}}`).
 4. Re-export both the collection and environment, and overwrite these `.json` files in this directory.
 
 ## Collection Changelog

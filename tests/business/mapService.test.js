@@ -48,6 +48,7 @@ describe('Map Service', () => {
       const result = await mapService.createMapService(input);
 
       expect(mapRepository.createMapWithRelations).toHaveBeenCalledWith({
+        userId: undefined,
         name: 'Test Map',
         width: 100,
         height: 100,
@@ -92,6 +93,7 @@ describe('Map Service', () => {
       const result = await mapService.createMapService(input);
 
       expect(mapRepository.createMapWithRelations).toHaveBeenCalledWith({
+        userId: undefined,
         name: 'Test Map',
         width: 100,
         height: 100,
