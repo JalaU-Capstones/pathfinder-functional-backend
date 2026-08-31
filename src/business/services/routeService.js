@@ -1,6 +1,7 @@
 const routeRepository = require('../../data/repositories/routeRepository');
 const mapRepository = require('../../data/repositories/mapRepository');
 const { ERROR_TYPES, createAppError } = require('../../utils/errors');
+const { assertOwnership } = require('../../utils/ownershipCheck');
 const { toApiPosition, toDbPosition } = require('../../utils/shapeMapper');
 const { calculatePath } = require('../pathfinder');
 
@@ -66,7 +67,7 @@ const validateRouteContext = pipe(
 );
 
 // Each step is a named pure async function — single responsibility
-const fetchMapContext = async (routeData) => {
+const fetchMapContext = async ({ routeData, userId }) => {
   if (!routeData.mapId || typeof routeData.mapId !== 'string') {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'mapId is required and must be a string.');
   }
@@ -74,10 +75,16 @@ const fetchMapContext = async (routeData) => {
   validateCoordinate(routeData.start, 'Start');
   validateCoordinate(routeData.end, 'End');
 
-  const fetchedMap = await mapRepository.getMapById(routeData.mapId);
+  const fetchedMap = await mapRepository.getMapById(routeData.mapId, { userId });
+  if (!fetchedMap) {
+    const anyMap = await mapRepository.getMapById(routeData.mapId);
+    if (anyMap) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Map.`);
+    // else let validator throw NOT_FOUND
+  }
   
   return { 
     routeData,
+    userId,
     context: {
       mapId: routeData.mapId, 
       start: routeData.start, 
@@ -120,7 +127,7 @@ const validatePath = (state) => {
 };
 
 const persistRoute = async (state) => {
-  const { routeData, pathResult } = state;
+  const { routeData, pathResult, userId } = state;
   const routeToCreate = {
     ...routeData,
     distance: pathResult.distance,
@@ -128,6 +135,7 @@ const persistRoute = async (state) => {
   };
 
   const dbShape = toDbShape(routeToCreate);
+  dbShape.userId = userId;
   const newRoute = await routeRepository.createRoute(dbShape);
   return newRoute;
 };
@@ -137,7 +145,7 @@ const toResponse = (newRoute) => {
 };
 
 // The monadic pipeline — reads like a specification:
-const createRouteService = async (data) =>
+const createRouteService = async (data, userId) =>
   pipeAsync(
     fetchMapContext,
     validateContext,
@@ -145,28 +153,28 @@ const createRouteService = async (data) =>
     validatePath,
     persistRoute,
     toResponse
-  )(data);
+  )({ routeData: data, userId });
 
 
-const getRouteService = async (id) => {
-  const route = await routeRepository.getRouteById(id);
+const getRouteService = async (id, userId) => {
+  const route = await routeRepository.getRouteById(id, { userId });
   if (!route) {
+    const anyRoute = await routeRepository.getRouteById(id);
+    if (anyRoute) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Route.`);
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Route with ID ${id} not found.`);
   }
   return toApiShape(route);
 };
 
-const getAllRoutesService = async (mapId = null) => {
+const getAllRoutesService = async (mapId = null, userId) => {
   const parsedMapId = mapId || null;
-  const routes = await routeRepository.getAllRoutes(parsedMapId);
+  const routes = await routeRepository.getAllRoutes(parsedMapId, { userId });
   return routes.map(toApiShape);
 };
 
-const deleteRouteService = async (id) => {
-  const deleted = await routeRepository.deleteRoute(id);
-  if (!deleted) {
-    throw createAppError(ERROR_TYPES.NOT_FOUND, `Route with ID ${id} not found.`);
-  }
+const deleteRouteService = async (id, userId) => {
+  const deletedCount = await routeRepository.deleteRoute(id, { userId });
+  await assertOwnership(deletedCount ? 1 : 0, () => routeRepository.getRouteById(id), 'Route');
   return true;
 };
 

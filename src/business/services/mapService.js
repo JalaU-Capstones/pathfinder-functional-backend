@@ -1,5 +1,6 @@
 const mapRepository = require('../../data/repositories/mapRepository');
 const { ERROR_TYPES, createAppError } = require('../../utils/errors');
+const { assertOwnership } = require('../../utils/ownershipCheck');
 const { toApiPosition, toDbPosition } = require('../../utils/shapeMapper');
 const { isValidObstacle, isValidWaypoint } = require('../../utils/validation');
 
@@ -74,7 +75,7 @@ const buildWaypointRecords = (waypoints) => waypoints.map(wp => {
   };
 });
 
-const createMapService = async (mapData) => {
+const createMapService = async (mapData, userId) => {
   validateMapInput(mapData);
   
   const { name, dimensions, obstacles = [], waypoints = [] } = mapData;
@@ -86,6 +87,7 @@ const createMapService = async (mapData) => {
   const dbWaypoints = buildWaypointRecords(waypoints);
 
   const mapId = await mapRepository.createMapWithRelations({
+    userId,
     name,
     width: dimensions.width,
     height: dimensions.height,
@@ -93,23 +95,25 @@ const createMapService = async (mapData) => {
     waypoints: dbWaypoints
   });
 
-  return await getMapService(mapId);
+  return await getMapService(mapId, userId);
 };
 
-const getMapService = async (id) => {
-  const map = await mapRepository.getMapById(id);
+const getMapService = async (id, userId) => {
+  const map = await mapRepository.getMapById(id, { userId });
   if (!map) {
+    const exists = await mapRepository.getMapById(id);
+    if (exists) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Map.`);
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Map with ID ${id} not found.`);
   }
   return toApiShape(map);
 };
 
-const getAllMapsService = async () => {
-  const maps = await mapRepository.getAllMaps();
+const getAllMapsService = async (userId) => {
+  const maps = await mapRepository.getAllMaps({ userId });
   return maps.map(toApiShape);
 };
 
-const updateMapService = async (id, updateData) => {
+const updateMapService = async (id, updateData, userId) => {
   validateMapInput(updateData);
   
   // Verify existence first
@@ -123,11 +127,9 @@ const updateMapService = async (id, updateData) => {
   return toApiShape(updatedMap);
 };
 
-const deleteMapService = async (id) => {
-  const deleted = await mapRepository.deleteMap(id);
-  if (!deleted) {
-    throw createAppError(ERROR_TYPES.NOT_FOUND, `Map with ID ${id} not found.`);
-  }
+const deleteMapService = async (id, userId) => {
+  const deletedCount = await mapRepository.deleteMap(id, { userId });
+  await assertOwnership(deletedCount ? 1 : 0, () => mapRepository.getMapById(id), 'Map');
   return true;
 };
 
