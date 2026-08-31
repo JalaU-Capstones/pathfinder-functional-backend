@@ -6,7 +6,7 @@ jest.mock('../../src/data/models', () => {
   return {
     Waypoint: {
       create: jest.fn(),
-      findByPk: jest.fn(),
+      findOne: jest.fn(),
       findAll: jest.fn(),
       update: jest.fn(),
       destroy: jest.fn()
@@ -30,10 +30,10 @@ describe('Waypoint Repository', () => {
   });
 
   describe('getWaypointById', () => {
-    it('should call Waypoint.findByPk', async () => {
-      Waypoint.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+    it('should call Waypoint.findOne', async () => {
+      Waypoint.findOne.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       const result = await waypointRepository.getWaypointById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(Waypoint.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(Waypoint.findOne).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
       expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });

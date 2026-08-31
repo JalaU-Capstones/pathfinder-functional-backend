@@ -2,6 +2,17 @@
 const request = require('supertest');
 const { createApp } = require('../../../src/app');
 const app = createApp();
+
+
+jest.mock('../../../src/presentation/middlewares/authMiddleware', () => ({
+  authMiddleware: (req, _res, next) => {
+    req.user = { userId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
+    next();
+  },
+  extractToken: jest.fn(),
+  verifyToken: jest.fn()
+}));
+
 const obstacleService = require('../../../src/business/services/obstacleService');
 const { createAppError, ERROR_TYPES } = require('../../../src/utils/errors');
 
@@ -70,7 +81,7 @@ describe('Obstacle Controller', () => {
       const response = await request(app).get('/api/obstacles?mapId=1');
 
       expect(response.status).toBe(200);
-      expect(obstacleService.getAllObstaclesService).toHaveBeenCalledWith('1');
+      expect(obstacleService.getAllObstaclesService).toHaveBeenCalledWith('1', '3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should return 500 on unexpected error', async () => {
