@@ -4,10 +4,10 @@ const createMap = async (mapData) => {
   return await Map.create(mapData);
 };
 
-const createMapWithRelations = async ({ name, width, height, obstacles, waypoints }) => {
+const createMapWithRelations = async ({ userId, name, width, height, obstacles, waypoints }) => {
   const transaction = await sequelize.transaction();
   try {
-    const map = await Map.create({ name, width, height }, { transaction });
+    const map = await Map.create({ userId, name, width, height }, { transaction });
 
     if (obstacles && obstacles.length > 0) {
       const dbObstacles = obstacles.map(obs => ({ ...obs, mapId: map.id }));
