@@ -14,7 +14,7 @@ jest.mock('../../src/data/models', () => {
     },
     Map: {
       create: jest.fn(),
-      findByPk: jest.fn(),
+      findOne: jest.fn(),
       findAll: jest.fn(),
       update: jest.fn(),
       destroy: jest.fn()
@@ -102,12 +102,13 @@ describe('Map Repository', () => {
   });
 
   describe('getMapById', () => {
-    it('should call Map.findByPk', async () => {
-      Map.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Test' });
+    it('should call Map.findOne', async () => {
+      Map.findOne.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', name: 'Test' });
 
       const result = await mapRepository.getMapById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
 
-      expect(Map.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', {
+      expect(Map.findOne).toHaveBeenCalledWith({
+        where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' },
         include: [
           { model: Obstacle, as: 'obstacles' },
           { model: Waypoint, as: 'waypoints' }
@@ -122,6 +123,7 @@ describe('Map Repository', () => {
       Map.findAll.mockResolvedValue([]);
       await mapRepository.getAllMaps();
       expect(Map.findAll).toHaveBeenCalledWith({
+        where: {},
         include: [
           { model: Obstacle, as: 'obstacles' },
           { model: Waypoint, as: 'waypoints' }

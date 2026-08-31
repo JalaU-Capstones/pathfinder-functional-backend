@@ -184,7 +184,7 @@ describe('Map Service', () => {
 
       const result = await mapService.getMapService('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       
-      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', { userId: undefined });
       expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.dimensions.width).toBe(100);
       expect(result.obstacles).toEqual([{ x: 3, y: 5 }]);
@@ -195,7 +195,7 @@ describe('Map Service', () => {
       mapRepository.getMapById.mockResolvedValue(null);
 
       await expect(mapService.getMapService(999)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
     });
   });
@@ -224,7 +224,7 @@ describe('Map Service', () => {
 
       const result = await mapService.updateMapService(1, updateData);
 
-      expect(mapRepository.updateMap).toHaveBeenCalledWith(1, { name: 'Updated Map', width: 200, height: 200 });
+      expect(mapRepository.updateMap).toHaveBeenCalledWith(1, { name: 'Updated Map', width: 200, height: 200 }, { userId: undefined });
       expect(result.name).toBe('Updated Map');
     });
 
@@ -233,7 +233,7 @@ describe('Map Service', () => {
       const updateData = { name: 'Updated', dimensions: { width: 100, height: 100 } };
       
       await expect(mapService.updateMapService(999, updateData)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
     });
   });
@@ -242,14 +242,14 @@ describe('Map Service', () => {
     it('should return true if map deleted', async () => {
       mapRepository.deleteMap.mockResolvedValue(true);
       const result = await mapService.deleteMapService('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(mapRepository.deleteMap).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(mapRepository.deleteMap).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', { userId: undefined });
       expect(result).toBe(true);
     });
 
     it('should throw NOT_FOUND error if map not deleted (does not exist)', async () => {
       mapRepository.deleteMap.mockResolvedValue(false);
       await expect(mapService.deleteMapService(999)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
     });
   });

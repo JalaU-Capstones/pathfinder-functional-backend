@@ -108,8 +108,16 @@ const options = {
             createdAt: { type: 'string', format: 'date-time', example: '2026-07-13T10:00:00Z' }
           }
         }
+      },
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
       }
-    }
+    },
+    security: [{ bearerAuth: [] }]
   },
   apis: ['./src/presentation/**/*.js'],
 };

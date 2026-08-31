@@ -41,7 +41,7 @@ describe('validationService', () => {
     it('should throw a NOT_FOUND error if valid UUID but map not found', async () => {
       mapRepository.getMapById.mockResolvedValue(null);
       await expect(validationService.validateMapIdExists(validMapId)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
       expect(mapRepository.getMapById).toHaveBeenCalledWith(validMapId);
     });
@@ -146,7 +146,7 @@ describe('validationService', () => {
         ],
       };
       await expect(validationService.validateStartEndNotObstructed(data)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND,
+        type: 'NOT_FOUND',
       });
     });
 
@@ -187,7 +187,7 @@ describe('validationService', () => {
         endPoint: { x: 0, y: 2 },
       };
       await expect(validationService.validateAtLeastOneValidPath(data)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND,
+        type: 'NOT_FOUND',
       });
     });
   });

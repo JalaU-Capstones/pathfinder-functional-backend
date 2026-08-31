@@ -2,6 +2,17 @@
 const request = require('supertest');
 const { createApp } = require('../../../src/app');
 const app = createApp();
+
+
+jest.mock('../../../src/presentation/middlewares/authMiddleware', () => ({
+  authMiddleware: (req, _res, next) => {
+    req.user = { userId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
+    next();
+  },
+  extractToken: jest.fn(),
+  verifyToken: jest.fn()
+}));
+
 const routeService = require('../../../src/business/services/routeService');
 const { createAppError, ERROR_TYPES } = require('../../../src/utils/errors');
 

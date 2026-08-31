@@ -27,8 +27,11 @@ const createMapWithRelations = async ({ name, width, height, obstacles, waypoint
   }
 };
 
-const getMapById = async (id) => {
-  return await Map.findByPk(id, {
+const getMapById = async (id, options = {}) => {
+  const where = { id };
+  if (options.userId) where.userId = options.userId;
+  return await Map.findOne({
+    where,
     include: [
       { model: Obstacle, as: 'obstacles' },
       { model: Waypoint, as: 'waypoints' }
@@ -36,8 +39,10 @@ const getMapById = async (id) => {
   });
 };
 
-const getAllMaps = async () => {
+const getAllMaps = async (options = {}) => {
+  const where = options.userId ? { userId: options.userId } : {};
   return await Map.findAll({
+    where,
     include: [
       { model: Obstacle, as: 'obstacles' },
       { model: Waypoint, as: 'waypoints' }
@@ -46,17 +51,21 @@ const getAllMaps = async () => {
   });
 };
 
-const updateMap = async (id, updateData) => {
+const updateMap = async (id, updateData, options = {}) => {
+  const where = { id };
+  if (options.userId) where.userId = options.userId;
   const [updatedRowsCount, updatedRows] = await Map.update(updateData, {
-    where: { id },
+    where,
     returning: true
   });
   return updatedRowsCount > 0 ? updatedRows[0] : null;
 };
 
-const deleteMap = async (id) => {
+const deleteMap = async (id, options = {}) => {
+  const where = { id };
+  if (options.userId) where.userId = options.userId;
   const deletedRowsCount = await Map.destroy({
-    where: { id }
+    where
   });
   return deletedRowsCount > 0;
 };

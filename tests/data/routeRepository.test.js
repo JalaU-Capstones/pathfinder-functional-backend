@@ -6,7 +6,7 @@ jest.mock('../../src/data/models', () => {
   return {
     Route: {
       create: jest.fn(),
-      findByPk: jest.fn(),
+      findOne: jest.fn(),
       findAll: jest.fn(),
       destroy: jest.fn()
     }
@@ -39,17 +39,17 @@ describe('Route Repository', () => {
   });
 
   describe('getRouteById', () => {
-    it('should call Route.findByPk and return a route', async () => {
-      Route.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+    it('should call Route.findOne and return a route', async () => {
+      Route.findOne.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       const result = await routeRepository.getRouteById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(Route.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(Route.findOne).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
       expect(result.mapId).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
 
     it('should return null when route is not found', async () => {
-      Route.findByPk.mockResolvedValue(null);
+      Route.findOne.mockResolvedValue(null);
       const result = await routeRepository.getRouteById('99999999-9999-9999-9999-999999999999');
-      expect(Route.findByPk).toHaveBeenCalledWith('99999999-9999-9999-9999-999999999999');
+      expect(Route.findOne).toHaveBeenCalledWith({ where: { id: '99999999-9999-9999-9999-999999999999' } });
       expect(result).toBeNull();
     });
   });

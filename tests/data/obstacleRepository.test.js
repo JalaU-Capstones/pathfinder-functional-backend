@@ -6,7 +6,7 @@ jest.mock('../../src/data/models', () => {
   return {
     Obstacle: {
       create: jest.fn(),
-      findByPk: jest.fn(),
+      findOne: jest.fn(),
       findAll: jest.fn(),
       update: jest.fn(),
       destroy: jest.fn()
@@ -31,10 +31,10 @@ describe('Obstacle Repository', () => {
   });
 
   describe('getObstacleById', () => {
-    it('should call Obstacle.findByPk', async () => {
-      Obstacle.findByPk.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
+    it('should call Obstacle.findOne', async () => {
+      Obstacle.findOne.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       const result = await obstacleRepository.getObstacleById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(Obstacle.findByPk).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(Obstacle.findOne).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
       expect(result.mapId).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });

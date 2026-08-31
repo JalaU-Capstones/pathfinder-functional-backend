@@ -52,7 +52,7 @@ const validateUserUpdate = (data) => {
 };
 
 
-const getUserService = async (id) => {
+const getProfile = async (id) => {
   const user = await userRepository.getUserById(id);
   if (!user) {
     throw createAppError(ERROR_TYPES.NOT_FOUND, `User with ID ${id} not found.`);
@@ -60,12 +60,7 @@ const getUserService = async (id) => {
   return toApiShape(user);
 };
 
-const getAllUsersService = async () => {
-  const users = await userRepository.getAllUsers();
-  return users.map(toApiShape);
-};
-
-const updateUserService = async (id, updateData) => {
+const updateProfile = async (id, updateData) => {
   const existingUser = await userRepository.getUserById(id);
   if (!existingUser) {
     throw createAppError(ERROR_TYPES.NOT_FOUND, `User with ID ${id} not found.`);
@@ -90,7 +85,7 @@ const updateUserService = async (id, updateData) => {
   return toApiShape(updatedUser);
 };
 
-const deleteUserService = async (id) => {
+const deleteAccount = async (id) => {
   const deleted = await userRepository.deleteUser(id);
   if (!deleted) {
     throw createAppError(ERROR_TYPES.NOT_FOUND, `User with ID ${id} not found.`);
@@ -99,10 +94,9 @@ const deleteUserService = async (id) => {
 };
 
 module.exports = {
-  getUserService,
-  getAllUsersService,
-  updateUserService,
-  deleteUserService,
+  getProfile,
+  updateProfile,
+  deleteAccount,
   toApiShape,
   toDbShape
 };

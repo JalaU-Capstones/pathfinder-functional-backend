@@ -1,5 +1,16 @@
 # Changelog
 
+
+- **2026-08-31 (Phase Auth-3 - Ownership Filtering):**
+  - feat(middleware): add JWT `authMiddleware` and apply it globally to all `/api` routes.
+  - feat(auth): add generic `assertOwnership` utility for verifying user permissions.
+  - feat(repositories): update all repository operations to filter by `userId`.
+  - feat(services): enforce data ownership by injecting `userId`.
+  - feat(controllers): protect all endpoints so users only see their own data.
+  - refactor(user): completely isolate User endpoints under `/api/users/me`.
+  - docs(swagger): update Swagger documentation with `bearerAuth`.
+  - test(auth): mock `authMiddleware` and update 100+ tests across the app to maintain 100% test pass rate.
+
 ## [Unreleased] - 2026-08-29
 feat(auth): add POST /api/auth/signin (register + auto login)
 feat(auth): add POST /api/auth/login (credentials + JWT)
