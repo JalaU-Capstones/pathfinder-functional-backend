@@ -36,7 +36,7 @@ describe('Obstacle Service', () => {
 
       const result = await obstacleService.createObstacleService(input);
 
-      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', { userId: undefined });
       expect(obstacleRepository.createObstacle).toHaveBeenCalledWith({
         mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         positionX: 10,
@@ -57,7 +57,7 @@ describe('Obstacle Service', () => {
       mapRepository.getMapById.mockResolvedValue(null);
 
       await expect(obstacleService.createObstacleService(input)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
     });
 
@@ -127,7 +127,7 @@ describe('Obstacle Service', () => {
     it('should throw NOT_FOUND error when obstacle does not exist', async () => {
       obstacleRepository.getObstacleById.mockResolvedValue(null);
       await expect(obstacleService.getObstacleService(999)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
     });
   });
@@ -136,13 +136,13 @@ describe('Obstacle Service', () => {
     it('should pass parsed mapId to repository', async () => {
       obstacleRepository.getAllObstacles.mockResolvedValue([]);
       await obstacleService.getAllObstaclesService('123');
-      expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith('123');
+      expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith('123', { userId: undefined });
     });
 
     it('should pass null to repository if mapId is omitted', async () => {
       obstacleRepository.getAllObstacles.mockResolvedValue([]);
       await obstacleService.getAllObstaclesService();
-      expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith(null);
+      expect(obstacleRepository.getAllObstacles).toHaveBeenCalledWith(null, { userId: undefined });
     });
   });
 
@@ -175,14 +175,14 @@ describe('Obstacle Service', () => {
 
       expect(obstacleRepository.updateObstacle).toHaveBeenCalledWith(1, {
         mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', positionX: 10, positionY: 10, size: 3
-      });
+      }, { userId: undefined });
       expect(result.size).toBe(3);
     });
 
     it('should throw NOT_FOUND if updating non-existent obstacle', async () => {
       obstacleRepository.getObstacleById.mockResolvedValue(null);
       await expect(obstacleService.updateObstacleService(999, {})).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
     });
   });
@@ -197,7 +197,7 @@ describe('Obstacle Service', () => {
     it('should throw NOT_FOUND if obstacle not deleted', async () => {
       obstacleRepository.deleteObstacle.mockResolvedValue(false);
       await expect(obstacleService.deleteObstacleService(999)).rejects.toMatchObject({
-        type: ERROR_TYPES.NOT_FOUND
+        type: 'NOT_FOUND'
       });
     });
   });

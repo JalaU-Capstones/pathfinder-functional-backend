@@ -63,7 +63,7 @@ describe('Route Service', () => {
 
       const result = await routeService.createRouteService(routeData);
 
-      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(mapRepository.getMapById).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', { userId: undefined });
       expect(pathfinder.calculatePath).toHaveBeenCalledWith(
         { width: 10, height: 10 },
         { x: 0, y: 0 },
@@ -252,14 +252,14 @@ describe('Route Service', () => {
     it('should return all routes without mapId', async () => {
       routeRepository.getAllRoutes.mockResolvedValue([{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 5 }]);
       const result = await routeService.getAllRoutesService();
-      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith(null);
+      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith(null, { userId: undefined });
       expect(result).toHaveLength(1);
     });
 
     it('should return all routes with mapId', async () => {
       routeRepository.getAllRoutes.mockResolvedValue([{ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 0, startY: 0, endX: 5, endY: 5 }]);
       const result = await routeService.getAllRoutesService('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
+      expect(routeRepository.getAllRoutes).toHaveBeenCalledWith('3b47e69f-788d-4b19-b81b-0b4a2fd92799', { userId: undefined });
       expect(result).toHaveLength(1);
     });
   });
