@@ -1,3 +1,12 @@
+
+jest.mock('../../../src/presentation/middlewares/authMiddleware', () => ({
+  authMiddleware: (req, _res, next) => {
+    req.user = { userId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' };
+    next();
+  },
+  extractToken: jest.fn(),
+  verifyToken: jest.fn()
+}));
 /* global jest, beforeEach */
 'use strict';
 
