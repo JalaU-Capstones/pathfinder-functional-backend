@@ -41,7 +41,8 @@ describe('Obstacle Service', () => {
         mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
         positionX: 10,
         positionY: 15,
-        size: 5
+        size: 5,
+        userId: undefined
       });
       expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(result.position.x).toBe(10);
