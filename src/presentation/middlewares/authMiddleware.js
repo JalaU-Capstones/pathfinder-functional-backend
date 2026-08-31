@@ -53,13 +53,13 @@ const verifyToken = (token) => {
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       throw createAppError(
-        'Your session has expired. Please log in again.',
-        'UNAUTHORIZED', 401
+        'UNAUTHORIZED',
+        'Your session has expired. Please log in again.'
       );
     }
     throw createAppError(
-      'Invalid authentication token.',
-      'UNAUTHORIZED', 401
+      'UNAUTHORIZED',
+      'Invalid authentication token.'
     );
   }
 };
@@ -79,9 +79,8 @@ const authMiddleware = (req, res, next) => {
 
     if (!token) {
       return next(createAppError(
-        'Authentication required. ' +
-        'Provide Authorization: Bearer <token> header.',
-        'UNAUTHORIZED', 401
+        'UNAUTHORIZED',
+        'Authentication required. Provide Authorization: Bearer <token> header.'
       ));
     }
 

@@ -22,13 +22,13 @@ const assertOwnership = async (
   const record = await getRecord();
   if (!record) {
     throw createAppError(
-      `${entityName} not found.`,
-      'NOT_FOUND', 404
+      'NOT_FOUND',
+      `${entityName} not found.`
     );
   }
   throw createAppError(
-    `You do not have permission to modify this ${entityName}.`,
-    'FORBIDDEN', 403
+    'FORBIDDEN',
+    `You do not have permission to modify this ${entityName}.`
   );
 };
 
