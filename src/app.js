@@ -62,21 +62,23 @@ const createApp = () => {
 
   // Public routes — no auth middleware applied
   app.use('/api/auth', authRoutes);
-
-  // Entity routes
   app.use('/api', healthRoutes);
-  app.use('/api/maps', mapRoutes);
-  app.use('/api/obstacles', obstacleRoutes);
-  app.use('/api/waypoints', waypointRoutes);
-  app.use('/api/routes', routeRoutes);
-  app.use('/api/users', userRoutes);
   app.use('/api/validation', validationRoutes);
 
-  // Cache monitoring route (After entity routes)
-  app.use('/api/cache', createCacheRouter(cache));
+  // Protected routes (auth required)
+  const { authMiddleware } = require('./presentation/middlewares/authMiddleware');
+  
+  app.use('/api/maps', authMiddleware, mapRoutes);
+  app.use('/api/obstacles', authMiddleware, obstacleRoutes);
+  app.use('/api/waypoints', authMiddleware, waypointRoutes);
+  app.use('/api/routes', authMiddleware, routeRoutes);
+  app.use('/api/users', authMiddleware, userRoutes);
 
-  // Stats endpoints — kept out of /api to avoid recursive tracking
-  app.use('/stats', statsRoutes);
+  // Cache monitoring (protected)
+  app.use('/api/cache', authMiddleware, createCacheRouter(cache));
+
+  // Stats endpoints — kept out of /api to avoid recursive tracking (protected)
+  app.use('/stats', authMiddleware, statsRoutes);
 
   // 404 Not Found (After routes)
   app.use(notFound);
