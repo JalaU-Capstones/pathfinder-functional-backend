@@ -78,7 +78,7 @@ const fetchMapContext = async ({ routeData, userId }) => {
   const fetchedMap = await mapRepository.getMapById(routeData.mapId, { userId });
   if (!fetchedMap) {
     const anyMap = await mapRepository.getMapById(routeData.mapId);
-    if (anyMap) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Map.`);
+    if (anyMap) throw createAppError(ERROR_TYPES.FORBIDDEN, 'You do not have permission to access this Map.');
     // else let validator throw NOT_FOUND
   }
   
@@ -160,7 +160,7 @@ const getRouteService = async (id, userId) => {
   const route = await routeRepository.getRouteById(id, { userId });
   if (!route) {
     const anyRoute = await routeRepository.getRouteById(id);
-    if (anyRoute) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Route.`);
+    if (anyRoute) throw createAppError(ERROR_TYPES.FORBIDDEN, 'You do not have permission to access this Route.');
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Route with ID ${id} not found.`);
   }
   return toApiShape(route);

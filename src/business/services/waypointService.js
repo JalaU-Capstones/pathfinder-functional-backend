@@ -34,7 +34,7 @@ const validateWaypointInput = async (data, userId) => {
   const mapExists = await mapRepository.getMapById(data.mapId, { userId });
   if (!mapExists) {
     const anyMap = await mapRepository.getMapById(data.mapId);
-    if (anyMap) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Map.`);
+    if (anyMap) throw createAppError(ERROR_TYPES.FORBIDDEN, 'You do not have permission to access this Map.');
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Map with id ${data.mapId} not found.`);
   }
 
@@ -67,7 +67,7 @@ const getWaypointService = async (id, userId) => {
   const waypoint = await waypointRepository.getWaypointById(id, { userId });
   if (!waypoint) {
     const anyWaypoint = await waypointRepository.getWaypointById(id);
-    if (anyWaypoint) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Waypoint.`);
+    if (anyWaypoint) throw createAppError(ERROR_TYPES.FORBIDDEN, 'You do not have permission to access this Waypoint.');
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Waypoint with ID ${id} not found.`);
   }
   return toApiShape(waypoint);

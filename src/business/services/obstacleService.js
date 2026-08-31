@@ -36,7 +36,7 @@ const validateObstacleInput = async (data, userId) => {
   const mapExists = await mapRepository.getMapById(data.mapId, { userId });
   if (!mapExists) {
     const anyMap = await mapRepository.getMapById(data.mapId);
-    if (anyMap) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Map.`);
+    if (anyMap) throw createAppError(ERROR_TYPES.FORBIDDEN, 'You do not have permission to access this Map.');
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Map with id ${data.mapId} not found.`);
   }
 
@@ -69,7 +69,7 @@ const getObstacleService = async (id, userId) => {
   const obstacle = await obstacleRepository.getObstacleById(id, { userId });
   if (!obstacle) {
     const anyObstacle = await obstacleRepository.getObstacleById(id);
-    if (anyObstacle) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Obstacle.`);
+    if (anyObstacle) throw createAppError(ERROR_TYPES.FORBIDDEN, 'You do not have permission to access this Obstacle.');
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Obstacle with ID ${id} not found.`);
   }
   return toApiShape(obstacle);
