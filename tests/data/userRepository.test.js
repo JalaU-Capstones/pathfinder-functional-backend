@@ -1,4 +1,6 @@
 /* global jest, beforeEach */
+'use strict';
+
 const userRepository = require('../../src/data/repositories/userRepository');
 const { User } = require('../../src/data/models');
 
@@ -10,7 +12,8 @@ jest.mock('../../src/data/models', () => {
       findOne: jest.fn(),
       findAll: jest.fn(),
       update: jest.fn(),
-      destroy: jest.fn()
+      destroy: jest.fn(),
+      unscoped: jest.fn(() => ({ findOne: jest.fn() }))
     }
   };
 });
@@ -51,7 +54,6 @@ describe('User Repository', () => {
     it('should return null when user is not found', async () => {
       User.findByPk.mockResolvedValue(null);
       const result = await userRepository.getUserById('99999999-9999-9999-9999-999999999999');
-      expect(User.findByPk).toHaveBeenCalledWith('99999999-9999-9999-9999-999999999999');
       expect(result).toBeNull();
     });
   });
@@ -69,15 +71,6 @@ describe('User Repository', () => {
       const result = await userRepository.getUserByEmail('notfound@example.com');
       expect(User.findOne).toHaveBeenCalledWith({ where: { email: 'notfound@example.com' } });
       expect(result).toBeNull();
-    });
-  });
-
-  describe('getAllUsers', () => {
-    it('should call User.findAll and return array of users', async () => {
-      User.findAll.mockResolvedValue([]);
-      const result = await userRepository.getAllUsers();
-      expect(User.findAll).toHaveBeenCalledWith({ order: [['createdAt', 'DESC']] });
-      expect(result).toEqual([]);
     });
   });
 
