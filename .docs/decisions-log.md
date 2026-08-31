@@ -233,3 +233,11 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Reason:** The tracking middleware is mounted on `/api`. Isolating stats endpoints prevents them from being tracked, avoiding recursive database growth where checking stats artificially inflates the stats.
 - **Decision:** `statsController` delegates all logic to `statsService` and only handles HTTP mapping.
 - **Reason:** Maintains strict layer separation, keeping controllers thin and easily testable with Supertest.
+
+## 2026-08-31 (Phase Auth-3 - Ownership Filtering)
+- **Decision:** Implemented a generic `assertOwnership(rowsAffected, getRecord, entityName)` utility.
+- **Reason:** Centralizes the logic to differentiate between `404 Not Found` (record doesn't exist) and `403 Forbidden` (record exists but user isn't the owner) based on 0 rows affected by an update or delete query with a `{ userId }` filter.
+- **Decision:** Passed `{ userId }` as an explicit option object to Repository functions (e.g., `getMapById(id, { userId })`) instead of adding a mandatory `userId` argument.
+- **Reason:** Allows the same repository functions to be used for non-filtered lookups (like the `getRecord` callback in `assertOwnership`) while enabling `userId` isolation in standard data pipelines.
+- **Decision:** Used `403 Forbidden` instead of `404 Not Found` for ownership check failures on updates and deletes.
+- **Reason:** While `404` obscures existence and is slightly more secure, `403` provides more actionable feedback for debugging, which is acceptable for this project's security model.

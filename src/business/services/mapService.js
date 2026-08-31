@@ -102,7 +102,7 @@ const getMapService = async (id, userId) => {
   const map = await mapRepository.getMapById(id, { userId });
   if (!map) {
     const exists = await mapRepository.getMapById(id);
-    if (exists) throw createAppError(ERROR_TYPES.FORBIDDEN, `You do not have permission to access this Map.`);
+    if (exists) throw createAppError(ERROR_TYPES.FORBIDDEN, 'You do not have permission to access this Map.');
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Map with ID ${id} not found.`);
   }
   return toApiShape(map);
@@ -123,7 +123,7 @@ const updateMapService = async (id, updateData, userId) => {
   }
 
   const dbShape = toDbShape(updateData);
-  const updatedMap = await mapRepository.updateMap(id, dbShape);
+  const updatedMap = await mapRepository.updateMap(id, dbShape, { userId });
   return toApiShape(updatedMap);
 };
 
