@@ -22,11 +22,6 @@ const getUserByEmail = async (email, options = {}) => {
   return await User.findOne(queryOptions);
 };
 
-const getAllUsers = async () => {
-  return await User.findAll({
-    order: [['createdAt', 'DESC']]
-  });
-};
 
 const updateUser = async (id, updateData) => {
   const [updatedRowsCount, updatedRows] = await User.update(updateData, {
@@ -47,7 +42,7 @@ module.exports = {
   createUser,
   getUserById,
   getUserByEmail,
-  getAllUsers,
+
   updateUser,
   deleteUser
 };
