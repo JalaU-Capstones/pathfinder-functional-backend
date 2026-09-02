@@ -1,9 +1,11 @@
 'use strict';
 
 const { Router } = require('express');
+const { authMiddleware } = require('../middlewares/authMiddleware');
 const statsController = require('../controllers/statsController');
 
 const router = Router();
+
 
 /**
  * @swagger
@@ -51,7 +53,7 @@ const router = Router();
  *                         "/api/routes":
  *                           POST: 30
  */
-router.get('/requests', statsController.getRequestStats);
+router.get('/requests', authMiddleware, statsController.getRequestStats);
 
 /**
  * @swagger
@@ -89,6 +91,7 @@ router.get('/requests', statsController.getRequestStats);
  */
 router.get(
   '/response-times',
+  authMiddleware,
   statsController.getResponseTimeStats
 );
 
@@ -121,7 +124,7 @@ router.get(
  *                     "404": 8
  *                     "422": 2
  */
-router.get('/status-codes', statsController.getStatusCodeStats);
+router.get('/status-codes', authMiddleware, statsController.getStatusCodeStats);
 
 /**
  * @swagger
@@ -166,6 +169,7 @@ router.get('/status-codes', statsController.getStatusCodeStats);
  */
 router.get(
   '/popular-endpoints',
+  authMiddleware,
   statsController.getPopularEndpoints
 );
 

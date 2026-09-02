@@ -77,8 +77,8 @@ const createApp = () => {
   // Cache monitoring (protected)
   app.use('/api/cache', authMiddleware, createCacheRouter(cache));
 
-  // Stats endpoints — kept out of /api to avoid recursive tracking (protected)
-  app.use('/stats', authMiddleware, statsRoutes);
+  // Stats endpoints — mounted under /api/stats (protected)
+  app.use('/api/stats', authMiddleware, statsRoutes);
 
   // 404 Not Found (After routes)
   app.use(notFound);
