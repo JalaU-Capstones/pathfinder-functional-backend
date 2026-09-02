@@ -20,7 +20,12 @@
 
 const {
   getAllStats,
+  getRequestStats: getRequestStatsFromRepo,
+  getResponseTimeStats: getResponseTimeStatsFromRepo,
+  getStatusCodeStats: getStatusCodeStatsFromRepo,
+  getPopularEndpoints: getPopularEndpointsFromRepo,
 } = require('../../data/repositories/apiStatRepository');
+
 
 // ─── Pure aggregation helpers ─────────────────────────────────
 
@@ -238,7 +243,42 @@ const getPopularEndpoints = async () => {
   };
 };
 
+
+// ─── userId-filtered service wrappers ────────────────────────
+// These accept userId and delegate to DB-level aggregation in
+// the repository. Used by the stats controller so each user
+// sees only their own data.
+
+/**
+ * getRequestStatsService — filtered to the authenticated user only.
+ * @param {string|null} userId
+ */
+const getRequestStatsService = (userId) =>
+  getRequestStatsFromRepo(userId);
+
+/**
+ * getResponseTimeStatsService — filtered to the authenticated user only.
+ * @param {string|null} userId
+ */
+const getResponseTimeStatsService = (userId) =>
+  getResponseTimeStatsFromRepo(userId);
+
+/**
+ * getStatusCodeStatsService — filtered to the authenticated user only.
+ * @param {string|null} userId
+ */
+const getStatusCodeStatsService = (userId) =>
+  getStatusCodeStatsFromRepo(userId);
+
+/**
+ * getPopularEndpointsService — filtered to the authenticated user only.
+ * @param {string|null} userId
+ */
+const getPopularEndpointsService = (userId) =>
+  getPopularEndpointsFromRepo(userId);
+
 module.exports = {
+  // Original in-memory aggregation functions (kept for backward compat + tests)
   getRequestStats,
   getResponseTimeStats,
   getStatusCodeStats,
@@ -247,4 +287,10 @@ module.exports = {
   groupBy,
   computeResponseTimeStats,
   countByMethod,
+  // New userId-filtered service wrappers used by statsController
+  getRequestStatsService,
+  getResponseTimeStatsService,
+  getStatusCodeStatsService,
+  getPopularEndpointsService,
 };
+
