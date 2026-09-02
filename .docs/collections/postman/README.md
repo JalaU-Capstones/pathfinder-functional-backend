@@ -29,7 +29,7 @@ Run requests **top to bottom** — the scripts handle everything automatically.
 |---|---|---|
 | **A — POST** | 1–7 | Register, Login, Create Map, Create Obstacle, Create Waypoint (Start), Create Waypoint (End), Create Route |
 | **B — GET** | 8–48 | Health, all entity reads, Cache Stats, Stats (4 endpoints), all Validation endpoints |
-| **C — PUT** | 49–53 | Update Route → Waypoint → Obstacle → Map → Profile |
+| **C — PUT** | 49–53 | Update Waypoint → Obstacle → Map → Profile |
 | **D — DELETE** | 54–58 | Delete Route → Waypoint → Obstacle → Map → Account |
 
 > Run in order — no manual edits, no copy-pasting IDs.
@@ -61,7 +61,7 @@ Every request has two scripts automatically applied:
 | `startWaypointId` | POST Create Waypoint (Start) — body `name` contains "start" | POST Route body, GET/PUT/DELETE Waypoint |
 | `endWaypointId` | POST Create Waypoint (End) — body `name` contains "end" | POST Route body |
 | `waypointId` | Any other waypoint creation | Generic waypoint operations |
-| `routeId` | POST Create Route (`data.id`) | GET/PUT/DELETE Route |
+| `routeId` | POST Create Route (`data.id`) | GET/DELETE Route |
 | `baseUrl` | Environment file | All requests |
 
 **How waypoint start/end detection works:** the After Response script reads the
