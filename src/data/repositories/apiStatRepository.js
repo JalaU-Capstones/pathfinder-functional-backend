@@ -12,6 +12,8 @@
  */
 
 const { ApiStat } = require('../models');
+const { Sequelize } = require('sequelize');
+
 
 /**
  * createStat — persists one request tracking record.
@@ -82,10 +84,138 @@ const getStatCount = () => ApiStat.count();
 const clearStats = () =>
   ApiStat.destroy({ where: {}, truncate: true });
 
+
+
+/**
+ * getRequestStats — counts grouped by endpoint+method for a user.
+ *
+ * @param {string|null} userId - The authenticated user's ID, or null.
+ * @returns {Promise<{ total_requests: number, breakdown: Object }>}
+ */
+const getRequestStats = async (userId) => {
+  const where = userId ? { userId } : { userId: null };
+
+  const stats = await ApiStat.findAll({
+    where,
+    attributes: [
+      'endpointAccess',
+      'requestMethod',
+      [Sequelize.fn('COUNT', Sequelize.col('id')), 'count'],
+    ],
+    group: ['endpointAccess', 'requestMethod'],
+    raw: true,
+  });
+
+  const total_requests = stats.reduce(
+    (sum, r) => sum + Number(r.count), 0
+  );
+
+  const breakdown = stats.reduce((acc, s) => {
+    if (!acc[s.endpointAccess]) acc[s.endpointAccess] = {};
+    acc[s.endpointAccess][s.requestMethod] = Number(s.count);
+    return acc;
+  }, {});
+
+  return { total_requests, breakdown };
+};
+
+/**
+ * getResponseTimeStats — avg/min/max per endpoint for a user.
+ *
+ * @param {string|null} userId
+ * @returns {Promise<Object>} Map of endpoint → { avg, min, max }
+ */
+const getResponseTimeStats = async (userId) => {
+  const where = userId ? { userId } : { userId: null };
+
+  const rows = await ApiStat.findAll({
+    where,
+    attributes: [
+      'endpointAccess',
+      [Sequelize.fn('AVG', Sequelize.col('responseTimeMs')), 'avg'],
+      [Sequelize.fn('MIN', Sequelize.col('responseTimeMs')), 'min'],
+      [Sequelize.fn('MAX', Sequelize.col('responseTimeMs')), 'max'],
+    ],
+    group: ['endpointAccess'],
+    raw: true,
+  });
+
+  return rows.reduce((acc, r) => {
+    acc[r.endpointAccess] = {
+      avg: Math.round(Number(r.avg)),
+      min: Number(r.min),
+      max: Number(r.max),
+    };
+    return acc;
+  }, {});
+};
+
+/**
+ * getStatusCodeStats — request count per HTTP status for a user.
+ *
+ * @param {string|null} userId
+ * @returns {Promise<Object>} Map of statusCode (string) → count
+ */
+const getStatusCodeStats = async (userId) => {
+  const where = userId ? { userId } : { userId: null };
+
+  const rows = await ApiStat.findAll({
+    where,
+    attributes: [
+      'statusCode',
+      [Sequelize.fn('COUNT', Sequelize.col('id')), 'count'],
+    ],
+    group: ['statusCode'],
+    raw: true,
+  });
+
+  return rows.reduce((acc, r) => {
+    acc[String(r.statusCode)] = Number(r.count);
+    return acc;
+  }, {});
+};
+
+/**
+ * getPopularEndpoints — endpoints ranked by request count for a user.
+ *
+ * @param {string|null} userId
+ * @returns {Promise<{ most_popular: string, request_count: number, ranked: Array }>}
+ */
+const getPopularEndpoints = async (userId) => {
+  const where = userId ? { userId } : { userId: null };
+
+  const rows = await ApiStat.findAll({
+    where,
+    attributes: [
+      'endpointAccess',
+      [Sequelize.fn('COUNT', Sequelize.col('id')), 'request_count'],
+    ],
+    group: ['endpointAccess'],
+    order: [[Sequelize.fn('COUNT', Sequelize.col('id')), 'DESC']],
+    raw: true,
+  });
+
+  const ranked = rows.map((r) => ({
+    endpoint: r.endpointAccess,
+    request_count: Number(r.request_count),
+  }));
+
+  return {
+    most_popular: ranked[0]?.endpoint || 'None yet',
+    request_count: ranked[0]?.request_count || 0,
+    ranked,
+  };
+};
+
 module.exports = {
   createStat,
   getAllStats,
   getStatsByEndpoint,
   getStatCount,
   clearStats,
+  getRequestStats,
+  getResponseTimeStats,
+  getStatusCodeStats,
+  getPopularEndpoints,
 };
+
