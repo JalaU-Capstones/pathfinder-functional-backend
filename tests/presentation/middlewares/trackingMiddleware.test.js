@@ -79,11 +79,11 @@ describe('buildStatPayload', () => {
     }
   );
 
-  it('should extract userId from req.user.id if present', () => {
+  it('should extract userId from req.user.userId if present', () => {
     const req = {
       originalUrl: '/api/maps',
       method: 'POST',
-      user: { id: 'user-uuid-123' },
+      user: { userId: 'user-uuid-123' },
     };
     const result = buildStatPayload(req, 201, 80);
     expect(result.userId).toBe('user-uuid-123');

@@ -1,5 +1,15 @@
 # Changelog
 
+- **2026-09-02 (Stats userId Isolation Fix):**
+  - fix(tracking): inject `userId` from `req.user.userId` into `ApiStat` records — previously stored `null` for all authenticated requests because `buildStatPayload` read `req.user?.id` instead of `req.user?.userId`.
+  - fix(repo): add four userId-filtered aggregate functions to `apiStatRepository` (`getRequestStats`, `getResponseTimeStats`, `getStatusCodeStats`, `getPopularEndpoints`) using Sequelize `fn()` for DB-level aggregation.
+  - fix(service): add four `*Service` wrappers in `statsService` that accept `userId` and delegate to the new repository functions; original in-memory aggregation functions preserved for backward compatibility.
+  - fix(controller): extract `userId` from `req.user?.userId` in all four stats controller actions and pass it to the new service wrappers — users now see only their own statistics.
+  - fix(routes): apply `authMiddleware` at route level in `statsRoutes.js` (defense-in-depth) in addition to the global app-level guard.
+  - fix(app): mount stats routes at `/api/stats` instead of `/stats` — resolves 404 on all `/api/stats/*` endpoints.
+  - test(tracking): update `buildStatPayload` test to use `user.userId` instead of `user.id`.
+  - test(controller): update `statsController.test.js` to use `/api/stats/*` paths and `*Service` mock names.
+
 - **2026-08-31 (Phase Auth-4 - Bug Fixes & Postman):**
   - fix(repositories): pass `userId` through `createMapWithRelations` to `Map.create` to fix 403 Forbidden bug on map creation.
   - test(services): update mock assertions in map, obstacle, waypoint, and route service tests to include `userId`.
