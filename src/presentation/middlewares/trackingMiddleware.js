@@ -74,7 +74,7 @@ const buildStatPayload = (req, statusCode, responseTimeMs) => ({
   requestMethod: req.method,
   statusCode,
   responseTimeMs,
-  userId: req.user?.id || null,
+  userId: req.user?.userId || null,
   timestamp: new Date(),
 });
 
