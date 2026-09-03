@@ -1,5 +1,22 @@
 # Changelog
 
+- **2026-09-02 (Phase Lab9A - E2E Tests):**
+  - test(e2e): add five end-to-end test workflows using\
+    Jest and native fetch against the real server
+  - test(e2e): workflow 1 - authentication register, login,\
+    profile access, update and user enumeration prevention
+  - test(e2e): workflow 2 - map CRUD and data isolation\
+    between two concurrent users
+  - test(e2e): workflow 3 - full A* pathfinding pipeline\
+    including obstacle avoidance verification
+  - test(e2e): workflow 4 - validation endpoints covering\
+    UUID, map existence, dimensions, same-point and\
+    cyclic dependency detection
+  - test(e2e): workflow 5 - API tracking middleware and all\
+    four stats aggregation endpoints
+  - chore: add test:e2e npm script with runInBand and\
+    30 second timeout
+
 - **2026-09-02 (Stats userId Isolation Fix):**
   - fix(tracking): inject `userId` from `req.user.userId` into `ApiStat` records — previously stored `null` for all authenticated requests because `buildStatPayload` read `req.user?.id` instead of `req.user?.userId`.
   - fix(repo): add four userId-filtered aggregate functions to `apiStatRepository` (`getRequestStats`, `getResponseTimeStats`, `getStatusCodeStats`, `getPopularEndpoints`) using Sequelize `fn()` for DB-level aggregation.
