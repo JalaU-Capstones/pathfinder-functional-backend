@@ -223,6 +223,8 @@ Progress reports are generated at the end of each assignment period, documenting
 | Assignment 7.4 | Aug 17-18, 2026 | Filters, accumulators, memoization. Seven new validation endpoints. Swagger YAML fix. CI/CD pipelines for GitHub Actions and GitLab. | [View report](.docs/reports/assignments/7/progress-report.md) |
 | Lab Week 7 | Aug 19, 2026 | LRU memoization middleware with configurable max size and TTL. Implements LRU eviction, TTL reset on access, and uses functional filters, accumulators, and pipes. | [View report](.docs/reports/lab/week7-lru-cache-lab-report.md) |
 | Lab Week 8 | Aug 28, 2026 | API usage tracking middleware. Non-blocking DB persistence. Data aggregated via HOF, reduce, filter, and map techniques across 4 new Stats endpoints. | [View report](.docs/reports/lab/week8-tracking-middleware.md) |
+| Lab Week 9 | Sep 03, 2026 | End-to-end tests with Jest and native fetch. Five workflows: auth, map CRUD with data isolation, A* pathfinding, validation, and stats tracking. | [View report](.docs/reports/lab/week9-e2e-tests.md) |
+| Assignment 9.4 / Final | Sep 03, 2026 | Final delivery: backend, frontend, unit tests, E2E tests, Postman, JMeter, video guide. | [View report](.docs/reports/assignments/9/progress-report.md) |
 
 ## License
 

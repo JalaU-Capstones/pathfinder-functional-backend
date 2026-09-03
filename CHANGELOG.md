@@ -1,5 +1,15 @@
 # Changelog
 
+- **2026-09-03 (Phase Lab9B - E2E Documentation and JMeter):**
+  - docs(jmeter): commit JMeter test plan and add README
+  - docs(lab): add week 9 E2E test lab report with all
+    five workflow descriptions and test case tables
+  - docs(reports): add assignment 9.4 progress report
+    covering all weeks 2-9 implementations
+  - docs(reports): add video guide with 5-minute segment
+    plan covering tarea 9.4 and evaluacion final
+  - docs: update readme with lab week 9 and final report rows
+
 - **2026-09-02 (Phase Lab9A - E2E Tests):**
   - test(e2e): add five end-to-end test workflows using\
     Jest and native fetch against the real server
