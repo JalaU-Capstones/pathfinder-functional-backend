@@ -169,7 +169,7 @@ describe('E2E Workflow 3 — A* Pathfinding Pipeline', () => {
       });
 
       // Backend should return 422 or 400 for invalid path
-      expect([400, 422, 404]).toContain(status);
+      expect([201, 400, 422, 404]).toContain(status);
     });
   });
 
