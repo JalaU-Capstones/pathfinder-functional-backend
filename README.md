@@ -178,10 +178,14 @@ Swagger UI is available at `http://localhost:3000/api-docs` when running in deve
 
 ### Run tests
 
+> Unit tests run with `npm run test` — no server required.
+> E2E tests run with `npm run test:e2e` — requires PostgreSQL and `npm run dev` running on port 3000 first.
+
 ```bash
-npm test                  # Run the test suite without coverage
-npm run test:coverage     # Run tests with full coverage report
+npm run test              # Run unit tests without coverage
+npm run test:coverage     # Run unit tests with full coverage report
 npm run test:ci           # CI mode: strict enforcement, force exit
+npm run test:e2e          # Run E2E tests
 ```
 
 ### Coverage thresholds

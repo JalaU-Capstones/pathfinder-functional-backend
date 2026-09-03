@@ -7,10 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:coverage:watch": "jest --coverage --watchAll",
-    "test:ci": "cross-env NODE_ENV=test jest --coverage --ci --forceExit --silent --passWithNoTests",
+    "test": "jest tests/unit",
+    "test:coverage": "jest tests/unit --coverage",
+    "test:coverage:watch": "jest tests/unit --coverage --watchAll",
+    "test:ci": "cross-env NODE_ENV=test jest tests/unit --coverage --ci --forceExit --silent --passWithNoTests",
     "test:e2e": "jest tests/e2e --runInBand --forceExit --testTimeout=30000",
     "test:e2e:verbose": "jest tests/e2e --runInBand --forceExit --testTimeout=30000 --verbose",
     "dev": "node --watch src/server.js",
@@ -37,6 +37,9 @@
   "homepage": "https://github.com/JalaU-Capstones/pathfinder-functional-backend#readme",
   "jest": {
     "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "tests/e2e/"
+    ],
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
