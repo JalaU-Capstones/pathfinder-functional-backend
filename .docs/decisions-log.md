@@ -241,3 +241,9 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Reason:** Allows the same repository functions to be used for non-filtered lookups (like the `getRecord` callback in `assertOwnership`) while enabling `userId` isolation in standard data pipelines.
 - **Decision:** Used `403 Forbidden` instead of `404 Not Found` for ownership check failures on updates and deletes.
 - **Reason:** While `404` obscures existence and is slightly more secure, `403` provides more actionable feedback for debugging, which is acceptable for this project's security model.
+
+## 2026-09-02 (Phase Lab9A - E2E Testing Architecture)
+- **Decision to use Jest + native fetch over supertest for E2E tests:** supertest injects directly into the Express app without a real network layer. True E2E tests send real HTTP requests over TCP to a running server, testing the complete stack including network, Express, middleware chain, service, repository, and PostgreSQL.
+- **Decision to run E2E tests with --runInBand (serial, not parallel):** parallel E2E test suites share a real database and would cause race conditions. Serial execution ensures predictable test order and clean data isolation.
+- **Decision to use unique email suffixes (timestamp + random) for test user registration:** eliminates test data conflicts across multiple runs and prevents brittle "email already exists" failures.
+- **Decision to clean up all created data in afterAll:** E2E tests must not pollute the database between runs. Each suite creates exactly what it needs and removes it on completion.
