@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased] - 2026-09-04
+### Added
+- feat(repository): update Obstacle repository to rectangular schema (Obs-3)
+- feat(seeders): update demo obstacles to rectangular schema (Obs-3)
+- test(e2e): update obstacle tests and add rectangle cases (Obs-3)
+- chore(docs): update Postman and JMeter collections for rectangular obstacles (Obs-3)
+- docs: finalize Phase Obs-3 rectangular obstacles migration
 ### Fixed
 - **CRITICAL CACHE BUG:** Invalidate GET cache after every POST/PUT/DELETE
   - Before: newly created items invisible until cache expired/minutes later
