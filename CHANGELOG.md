@@ -1,6 +1,10 @@
 # Changelog
 
 ## [Unreleased] - 2026-09-04
+### Added
+- Age validation range: must be between 0 and 90 years
+- Tests: boundary values verified (0 and 90 allowed; -1/91 rejected)
+
 ### Security
 - **CRITICAL FIX:** Enforce JWT expiration validation in authMiddleware
   - Expired tokens are now properly rejected with 401 "Session expired"

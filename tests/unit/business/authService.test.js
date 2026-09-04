@@ -101,6 +101,54 @@ describe('authService.register', () => {
     })).rejects.toMatchObject({ type: 'VALIDATION_ERROR' });
   });
 
+  describe('Age validation', () => {
+    const getValidInput = (age) => ({
+      name: 'Test',
+      email: 'test@example.com',
+      password: 'password123',
+      age,
+    });
+
+    it('should reject age -1 (below minimum)', async () => {
+      await expect(register(getValidInput(-1))).rejects.toMatchObject({ message: 'Age must be a number between 0 and 90.' });
+    });
+
+    it('should accept age 0 (valid minimum)', async () => {
+      userRepository.getUserByEmail.mockResolvedValue(null);
+      bcrypt.hash.mockResolvedValue('hash');
+      userRepository.createUser.mockResolvedValue(mockUser);
+      jwt.sign.mockReturnValue('token');
+      
+      await expect(register(getValidInput(0))).resolves.toBeDefined();
+    });
+
+    it('should accept age 25 (normal case)', async () => {
+      userRepository.getUserByEmail.mockResolvedValue(null);
+      bcrypt.hash.mockResolvedValue('hash');
+      userRepository.createUser.mockResolvedValue(mockUser);
+      jwt.sign.mockReturnValue('token');
+      
+      await expect(register(getValidInput(25))).resolves.toBeDefined();
+    });
+
+    it('should accept age 90 (valid maximum)', async () => {
+      userRepository.getUserByEmail.mockResolvedValue(null);
+      bcrypt.hash.mockResolvedValue('hash');
+      userRepository.createUser.mockResolvedValue(mockUser);
+      jwt.sign.mockReturnValue('token');
+      
+      await expect(register(getValidInput(90))).resolves.toBeDefined();
+    });
+
+    it('should reject age 91 (above maximum)', async () => {
+      await expect(register(getValidInput(91))).rejects.toMatchObject({ message: 'Age must be a number between 0 and 90.' });
+    });
+
+    it('should reject age 150 (unrealistic)', async () => {
+      await expect(register(getValidInput(150))).rejects.toMatchObject({ message: 'Age must be a number between 0 and 90.' });
+    });
+  });
+
   it('should never include password in response', async () => {
     userRepository.getUserByEmail.mockResolvedValue(null);
     bcrypt.hash.mockResolvedValue('$2b$12$hashed');

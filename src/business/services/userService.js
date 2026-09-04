@@ -40,8 +40,8 @@ const validateUserUpdate = (data) => {
     }
   }
   if (data.age !== undefined) {
-    if (!Number.isInteger(data.age) || data.age <= 0) {
-      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Age must be a positive integer.');
+    if (!Number.isInteger(data.age) || data.age < 0 || data.age > 90) {
+      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Age must be a number between 0 and 90.');
     }
   }
   if (data.email !== undefined) {

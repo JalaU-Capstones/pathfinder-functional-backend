@@ -124,9 +124,10 @@ const validateRegistrationInput = ({ name, email, password, age }) => {
       'VALIDATION_ERROR', 'Password must be at least 8 characters.'
     );
   }
-  if (!Number.isInteger(Number(age)) || Number(age) < 1) {
+  const ageNum = Number(age);
+  if (!Number.isInteger(ageNum) || ageNum < 0 || ageNum > 90) {
     throw createAppError(
-      'VALIDATION_ERROR', 'Age must be a positive integer.'
+      'VALIDATION_ERROR', 'Age must be a number between 0 and 90.'
     );
   }
 };
