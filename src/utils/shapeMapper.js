@@ -6,13 +6,25 @@
  * @returns {Object|null} - The nested { x, y } position object, or null if coordinates are missing.
  */
 const toApiPosition = (dbObj) => {
-  if (!dbObj || dbObj.positionX === undefined || dbObj.positionY === undefined) {
+  if (!dbObj) {
     return null;
   }
-  return {
-    x: dbObj.positionX,
-    y: dbObj.positionY
-  };
+  const raw = dbObj.toJSON ? dbObj.toJSON() : dbObj;
+  if (raw.positionX !== undefined && raw.positionY !== undefined) {
+    return {
+      x: raw.positionX,
+      y: raw.positionY
+    };
+  }
+  if (raw.startX !== undefined && raw.startY !== undefined) {
+    return {
+      startX: raw.startX,
+      startY: raw.startY,
+      endX: raw.endX !== undefined ? raw.endX : raw.startX,
+      endY: raw.endY !== undefined ? raw.endY : raw.startY
+    };
+  }
+  return null;
 };
 
 /**
