@@ -247,3 +247,10 @@ A chronological log of major architectural, tooling, and design decisions made t
 - **Decision to run E2E tests with --runInBand (serial, not parallel):** parallel E2E test suites share a real database and would cause race conditions. Serial execution ensures predictable test order and clean data isolation.
 - **Decision to use unique email suffixes (timestamp + random) for test user registration:** eliminates test data conflicts across multiple runs and prevents brittle "email already exists" failures.
 - **Decision to clean up all created data in afterAll:** E2E tests must not pollute the database between runs. Each suite creates exactly what it needs and removes it on completion.
+
+## 2026-09-04 (Phase Obs-1 - Obstacle Model Migration)
+- Decision to replace JSONB position with four scalar INTEGER columns (startX, startY, endX, endY): scalar columns support SQL range queries with proper indexes, while JSONB requires full table scans for coordinate range checks. The pathfinder cell-in-rectangle check (startX <= x <= endX) is an indexed range scan on scalar columns.
+- Decision that endX and endY default to startX and startY when not provided: this preserves backward compatibility — a single-cell obstacle `{x, y}` is just a rectangle where start equals end. No breaking API change is needed for callers using single-cell coordinates.
+- Decision that size is now a system-calculated field: size = (endX-startX+1)*(endY-startY+1). Storing it redundantly avoids recalculating it on every read. It is validated at write time to equal the formula result — inconsistency is impossible if the service always calculates it.
+- Decision to add indexes on (startX, endX) and (startY, endY) pairs: the A* obstacle expansion query filters on both pairs simultaneously. Composite indexes on the coordinate pairs are more efficient than four separate single-column indexes for this query pattern.
+- Decision to remove the `positionX` and `positionY` columns entirely rather than keeping them alongside the new columns: having both would require keeping them in sync, which is error-prone. A clean migration with data transfer is the correct approach.
