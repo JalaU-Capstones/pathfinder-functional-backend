@@ -74,7 +74,19 @@ const calculateSinglePath = (grid, start, end, obstacles) => {
 
   // Convert obstacles to a Set of string coordinates for O(1) lookup
   // Why: Checking an array of objects `[{x, y}]` is O(N). A Set of 'x,y' strings is O(1).
-  const obstacleSet = new Set(obstacles.map(o => `${o.x},${o.y}`));
+  const obstacleSet = new Set();
+  for (const obs of obstacles) {
+    const startX = obs.startX !== undefined ? obs.startX : obs.x;
+    const startY = obs.startY !== undefined ? obs.startY : obs.y;
+    const endX = obs.endX !== undefined ? obs.endX : startX;
+    const endY = obs.endY !== undefined ? obs.endY : startY;
+
+    for (let x = startX; x <= endX; x++) {
+      for (let y = startY; y <= endY; y++) {
+        obstacleSet.add(`${x},${y}`);
+      }
+    }
+  }
 
   // The set of discovered nodes that may need to be (re-)expanded.
   // We use a simple array because the map sizes are small (<= 100x100).

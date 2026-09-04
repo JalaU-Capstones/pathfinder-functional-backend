@@ -9,6 +9,14 @@
   - Failed operations (4xx/5xx): do NOT clear cache — preserve valid cache
 
 ### Added
+- feat(obstacles): add validation and normalization logic for rectangular API inputs (Obs-2)
+- feat(pathfinder): update A* algorithm to expand rectangular obstacles into grid cells (Obs-2)
+- test(obstacles+pathfinder): rewrite tests for rectangular validation and pathfinder logic (Obs-2)
+- feat(database): replace obstacle position JSONB with startX, startY, endX, endY scalar columns for rectangular obstacle support
+- feat(database): make obstacle size a calculated field (endX-startX+1)*(endY-startY+1) stored by the system
+- feat(models): update Obstacle model to rectangular schema
+- feat(seeders): update demo obstacle data to new schema
+- docs(database): update data-model.md with rectangular obstacle geometry documentation
 - Age validation range: must be between 0 and 90 years
 - Tests: boundary values verified (0 and 90 allowed; -1/91 rejected)
 

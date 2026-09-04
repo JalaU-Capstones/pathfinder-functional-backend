@@ -25,13 +25,65 @@ Users are standalone entities and are not directly related to Maps in this phase
 - `height`: INTEGER (Required)
 - `createdAt` / `updatedAt`: DATE
 
-#### 3. Obstacles
-- `id`: INTEGER (PK, Auto-increment)
-- `mapId`: INTEGER (FK -> Maps.id, CASCADE DELETE)
-- `positionX`: INTEGER (Required)
-- `positionY`: INTEGER (Required)
-- `size`: INTEGER (Required)
-- `createdAt` / `updatedAt`: DATE
+## Obstacles Table (Updated: September 4, 2026)
+
+### Schema
+| Column | Type | Nullable | Description |
+|---|---|---|---|
+| id | UUID (PK) | No | Auto-generated UUID v4 |
+| mapId | UUID (FK) | No | References Maps.id, CASCADE on delete |
+| userId | UUID (FK) | Yes | References Users.id, SET NULL on delete |
+| startX | INTEGER | No | Top-left X of obstacle rectangle |
+| startY | INTEGER | No | Top-left Y of obstacle rectangle |
+| endX | INTEGER | No | Bottom-right X (= startX for 1-cell) |
+| endY | INTEGER | No | Bottom-right Y (= startY for 1-cell) |
+| size | INTEGER | No | Cells occupied: (endX-startX+1)*(endY-startY+1) |
+| createdAt | DATE | No | Sequelize auto timestamp |
+| updatedAt | DATE | No | Sequelize auto timestamp |
+
+### Indexes
+- Primary key on id
+- Foreign key index on mapId
+- Foreign key index on userId
+- `obstacles_start_end_x_idx` on (startX, endX)
+- `obstacles_start_end_y_idx` on (startY, endY)
+
+### Geometry model
+An obstacle is a rectangle defined by two corner points:
+(startX, startY) is the top-left corner.
+(endX, endY) is the bottom-right corner.
+
+For a single-cell obstacle: startX = endX, startY = endY.
+For a rectangular obstacle: endX >= startX, endY >= startY.
+
+The size field is calculated: (endX-startX+1)*(endY-startY+1)
+and is always computed by the service layer. Users never
+provide the size value directly.
+
+### Cell blocking rule
+A grid cell at (x, y) is blocked if:
+  startX <= x <= endX  AND  startY <= y <= endY
+
+The A* pathfinder expands each obstacle record into its
+full set of blocked cells using this rule.
+
+### API input formats
+Users can create obstacles in two ways:
+
+Single cell:
+{ "x": 10, "y": 20 }
+
+Rectangle by opposite corners:
+{ "x": 5, "y": 10, "endX": 10, "endY": 15 }
+
+The system derives startX, startY, endX, endY and
+calculates size automatically.
+
+### Previous schema (removed)
+The previous schema used a JSONB position column {x, y}
+and a user-provided size integer that had no effect on
+the map grid. Both were replaced in migration
+20260904000001-update-obstacles-rectangular.js.
 
 #### 4. Waypoints
 - `id`: INTEGER (PK, Auto-increment)

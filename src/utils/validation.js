@@ -19,11 +19,17 @@ const isValidObstacle = (obstacle) => {
   if (!obstacle || typeof obstacle !== 'object') return false;
   if (!obstacle.position || typeof obstacle.position !== 'object') return false;
   
-  const { x, y } = obstacle.position;
+  const { x, y, endX, endY } = obstacle.position;
   if (!Number.isInteger(x) || x < 0) return false;
   if (!Number.isInteger(y) || y < 0) return false;
   
-  if (!Number.isInteger(obstacle.size) || obstacle.size <= 0) return false;
+  if (endX !== undefined) {
+    if (!Number.isInteger(endX) || endX < x) return false;
+  }
+  
+  if (endY !== undefined) {
+    if (!Number.isInteger(endY) || endY < y) return false;
+  }
   
   return true;
 };
