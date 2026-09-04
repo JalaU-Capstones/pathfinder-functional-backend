@@ -7,22 +7,13 @@ const toApiShape = (dbObstacle) => {
   if (!dbObstacle) return null;
   const raw = dbObstacle.toJSON ? dbObstacle.toJSON() : dbObstacle;
   
-  // Backward compatibility: If it's a single cell, return just x and y
-  // Otherwise, return x, y, endX, endY
-  const position = {
-    x: raw.startX,
-    y: raw.startY
-  };
-  
-  if (raw.endX !== undefined && raw.endY !== undefined && (raw.endX !== raw.startX || raw.endY !== raw.startY)) {
-    position.endX = raw.endX;
-    position.endY = raw.endY;
-  }
-  
   return {
     id: raw.id,
     mapId: raw.mapId,
-    position,
+    startX: raw.startX,
+    startY: raw.startY,
+    endX: raw.endX,
+    endY: raw.endY,
     size: raw.size,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt
@@ -30,10 +21,10 @@ const toApiShape = (dbObstacle) => {
 };
 
 const toDbShape = (apiData) => {
-  const x = apiData.position.x;
-  const y = apiData.position.y;
-  const endX = apiData.position.endX !== undefined ? apiData.position.endX : x;
-  const endY = apiData.position.endY !== undefined ? apiData.position.endY : y;
+  const x = apiData.startX;
+  const y = apiData.startY;
+  const endX = apiData.endX !== undefined ? apiData.endX : x;
+  const endY = apiData.endY !== undefined ? apiData.endY : y;
   const size = (endX - x + 1) * (endY - y + 1);
 
   return {
@@ -59,11 +50,14 @@ const validateObstacleInput = async (data, userId) => {
     throw createAppError(ERROR_TYPES.NOT_FOUND, `Map with id ${data.mapId} not found.`);
   }
 
-  if (!data.position || typeof data.position !== 'object') {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Position object is required.');
-  }
+  const x = data.startX;
+  const y = data.startY;
+  const endX = data.endX;
+  const endY = data.endY;
 
-  const { x, y, endX, endY } = data.position;
+  if (x === undefined || y === undefined) {
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'startX and startY are required.');
+  }
 
   if (!Number.isInteger(x) || x < 0) {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Position x must be a non-negative integer.');

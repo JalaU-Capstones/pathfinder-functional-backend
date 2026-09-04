@@ -207,11 +207,14 @@ npm run test:e2e          # Run E2E tests
 
 ### Coverage thresholds
 
-Jest enforces minimum coverage thresholds on all metrics. The test run fails if any metric drops below the configured threshold. Current coverage: **Statements: 94.93%, Branches: 89.17%, Functions: 94.36%, Lines: 96.13%** — across **48 test suites and 568 unit tests**.
+Jest enforces minimum coverage thresholds on all metrics. The test run fails if any metric drops below the configured threshold. Current coverage: **Statements: 94.38%, Branches: 87.20%, Functions: 94.24%, Lines: 95.59%** — across **48 test suites and 587 unit tests**.
 
 ### Coverage report
 
 After running `npm run test:coverage`, open `coverage/index.html` in a browser for an interactive file-by-file breakdown.
+
+### Rectangular Obstacles
+As of Phase Obs-3, the `Obstacles` table stores dimensions as rectangular regions `{ startX, startY, endX, endY }` instead of single points. The pathfinding algorithm and map services are fully updated to treat these rectangular areas as blocked.
 
 ## Pathfinding Algorithm
 

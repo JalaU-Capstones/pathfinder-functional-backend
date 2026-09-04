@@ -54,7 +54,7 @@ describe('E2E Workflow 3 — A* Pathfinding Pipeline', () => {
                 headers: authHeader(token),
                 body: JSON.stringify({
                   mapId,
-                  position: pos,
+                  startX: pos.x, startY: pos.y,
                   size: 1,
                 }),
               }
