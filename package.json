@@ -76,7 +76,7 @@
     "sequelize": "^6.37.8",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
-    "uuid": "^14.0.1",
+    "uuid": "^10.0.0",
     "validator": "^13.15.35",
     "winston": "^3.19.0"
   },
@@ -92,6 +92,6 @@
     "lodash": "^4.17.21",
     "validator": "^13.15.35",
     "dottie": "^2.0.7",
-    "uuid": "^14.0.1"
+    "uuid": "^10.0.0"
   }
 }
