@@ -7,10 +7,23 @@ const { toApiPosition, toDbPosition } = require('../../utils/shapeMapper');
 const toApiShape = (dbObstacle) => {
   if (!dbObstacle) return null;
   const raw = dbObstacle.toJSON ? dbObstacle.toJSON() : dbObstacle;
+  
+  // Backward compatibility: If it's a single cell, return just x and y
+  // Otherwise, return x, y, endX, endY
+  const position = {
+    x: raw.startX,
+    y: raw.startY
+  };
+  
+  if (raw.endX !== undefined && raw.endY !== undefined && (raw.endX !== raw.startX || raw.endY !== raw.startY)) {
+    position.endX = raw.endX;
+    position.endY = raw.endY;
+  }
+  
   return {
     id: raw.id,
     mapId: raw.mapId,
-    position: toApiPosition(raw),
+    position,
     size: raw.size,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt
@@ -18,12 +31,19 @@ const toApiShape = (dbObstacle) => {
 };
 
 const toDbShape = (apiData) => {
-  const { positionX, positionY } = toDbPosition(apiData.position);
+  const x = apiData.position.x;
+  const y = apiData.position.y;
+  const endX = apiData.position.endX !== undefined ? apiData.position.endX : x;
+  const endY = apiData.position.endY !== undefined ? apiData.position.endY : y;
+  const size = (endX - x + 1) * (endY - y + 1);
+
   return {
     mapId: apiData.mapId,
-    positionX,
-    positionY,
-    size: apiData.size
+    startX: x,
+    startY: y,
+    endX,
+    endY,
+    size
   };
 };
 
@@ -44,16 +64,26 @@ const validateObstacleInput = async (data, userId) => {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Position object is required.');
   }
 
-  if (!Number.isInteger(data.position.x) || data.position.x < 0) {
+  const { x, y, endX, endY } = data.position;
+
+  if (!Number.isInteger(x) || x < 0) {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Position x must be a non-negative integer.');
   }
 
-  if (!Number.isInteger(data.position.y) || data.position.y < 0) {
+  if (!Number.isInteger(y) || y < 0) {
     throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Position y must be a non-negative integer.');
   }
 
-  if (!Number.isInteger(data.size) || data.size <= 0) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Size must be a positive integer.');
+  if (endX !== undefined) {
+    if (!Number.isInteger(endX) || endX < x) {
+      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'endX must be an integer greater than or equal to x.');
+    }
+  }
+
+  if (endY !== undefined) {
+    if (!Number.isInteger(endY) || endY < y) {
+      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'endY must be an integer greater than or equal to y.');
+    }
   }
 };
 
