@@ -166,7 +166,7 @@ module.exports = {
     const end = { x: 99, y: 99 };
 
     // Build obstacles array in the format the pathfinder expects
-    const obstaclePositions = obstacles.map(o => ({ x: o.startX, y: o.startY }));
+    const obstaclePositions = obstacles.map(o => ({ startX: o.startX, startY: o.startY, endX: o.endX, endY: o.endY }));
 
     // Run A* algorithm – no DB calls, no transaction conflicts
     const { path: optimalPath, distance } = calculatePath(
