@@ -34,7 +34,7 @@ describe('Obstacle Repository', () => {
     it('should call Obstacle.findOne', async () => {
       Obstacle.findOne.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       const result = await obstacleRepository.getObstacleById('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(Obstacle.findOne).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' } });
+      expect(Obstacle.findOne).toHaveBeenCalledWith({ where: { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }, attributes: ['id', 'mapId', 'userId', 'startX', 'startY', 'endX', 'endY', 'size', 'createdAt', 'updatedAt'] });
       expect(result.mapId).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });
   });
@@ -43,14 +43,14 @@ describe('Obstacle Repository', () => {
     it('should call Obstacle.findAll without filter', async () => {
       Obstacle.findAll.mockResolvedValue([]);
       await obstacleRepository.getAllObstacles();
-      expect(Obstacle.findAll).toHaveBeenCalledWith({ order: [['createdAt', 'DESC']] });
+      expect(Obstacle.findAll).toHaveBeenCalledWith({ order: [['createdAt', 'DESC']], attributes: ['id', 'mapId', 'userId', 'startX', 'startY', 'endX', 'endY', 'size', 'createdAt', 'updatedAt'] });
     });
 
     it('should call Obstacle.findAll with mapId filter', async () => {
       Obstacle.findAll.mockResolvedValue([]);
       await obstacleRepository.getAllObstacles('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
       expect(Obstacle.findAll).toHaveBeenCalledWith({ 
-        order: [['createdAt', 'DESC']],
+        order: [['createdAt', 'DESC']], attributes: ['id', 'mapId', 'userId', 'startX', 'startY', 'endX', 'endY', 'size', 'createdAt', 'updatedAt'],
         where: { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }
       });
     });

@@ -16,7 +16,7 @@ describe('Obstacle Service', () => {
     it('should create a single-cell obstacle when input is valid', async () => {
       const input = {
         mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
-        position: { x: 10, y: 15 } // No size, no endX/Y
+        startX: 10, startY: 15 // No size, no endX/Y
       };
 
       const mockDbResponse = {
@@ -48,15 +48,16 @@ describe('Obstacle Service', () => {
         userId: undefined
       });
       expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(result.position.x).toBe(10);
-      expect(result.position.y).toBe(15);
-      expect(result.position.endX).toBeUndefined(); // Backward compatibility API shape
+      expect(result.startX).toBe(10);
+      expect(result.startY).toBe(15);
+      expect(result.endX).toBe(10);
+      expect(result.endY).toBe(15);
     });
 
     it('should create a rectangular obstacle and calculate size correctly', async () => {
       const input = {
         mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
-        position: { x: 5, y: 10, endX: 10, endY: 15 },
+        startX: 5, startY: 10, endX: 10, endY: 15,
         size: 999 // User size should be ignored
       };
 
@@ -67,7 +68,7 @@ describe('Obstacle Service', () => {
         startY: 10,
         endX: 10,
         endY: 15,
-        size: 36, // (10-5+1) * (15-10+1) = 6 * 6 = 36
+        size: 36,
         createdAt: '2026-07-21T00:00:00.000Z',
         updatedAt: '2026-07-21T00:00:00.000Z',
         toJSON: function() { return this; }
@@ -87,14 +88,14 @@ describe('Obstacle Service', () => {
         size: 36,
         userId: undefined
       });
-      expect(result.position).toEqual({ x: 5, y: 10, endX: 10, endY: 15 });
+      expect(result.startX).toBe(5);
       expect(result.size).toBe(36);
     });
 
     it('should default endX to x and endY to y if omitted', async () => {
       const input = {
         mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799',
-        position: { x: 5, y: 10, endX: 10 } // endY omitted
+        startX: 5, startY: 10, endX: 10 // endY omitted
       };
 
       const mockDbResponse = {
@@ -128,7 +129,7 @@ describe('Obstacle Service', () => {
     it('should throw NOT_FOUND error if map does not exist', async () => {
       const input = {
         mapId: '99999999-9999-9999-9999-999999999999',
-        position: { x: 10, y: 15 }
+        startX: 10, startY: 15
       };
       
       mapRepository.getMapById.mockResolvedValue(null);
@@ -139,7 +140,7 @@ describe('Obstacle Service', () => {
     });
 
     it('should throw VALIDATION_ERROR if position x is negative', async () => {
-      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: -10, y: 15 } };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: -10, startY: 15 };
       mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       await expect(obstacleService.createObstacleService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
@@ -148,7 +149,7 @@ describe('Obstacle Service', () => {
     });
 
     it('should throw VALIDATION_ERROR if endX < x', async () => {
-      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: 15, endX: 5 } };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 10, startY: 15, endX: 5 };
       mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       await expect(obstacleService.createObstacleService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
@@ -157,7 +158,7 @@ describe('Obstacle Service', () => {
     });
 
     it('should throw VALIDATION_ERROR if endY < y', async () => {
-      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: 15, endY: 5 } };
+      const input = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 10, startY: 15, endY: 5 };
       mapRepository.getMapById.mockResolvedValue({ id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' });
       await expect(obstacleService.createObstacleService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
@@ -183,7 +184,7 @@ describe('Obstacle Service', () => {
 
       const result = await obstacleService.getObstacleService(1);
       expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(result.position.x).toBe(10);
+      expect(result.startX).toBe(10);
     });
   });
 
@@ -204,14 +205,14 @@ describe('Obstacle Service', () => {
       const input = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 10, startY: 10, endX: 10, endY: 10, size: 1 };
       const result = obstacleService.toApiShape(input);
       expect(result.id).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
-      expect(result.position).toEqual({ x: 10, y: 10 });
+      expect(result.startX).toBe(10);
     });
   });
 
   describe('updateObstacleService', () => {
     it('should update an obstacle and normalize input', async () => {
       const existingObstacle = { id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 5, startY: 5, endX: 5, endY: 5, size: 1 };
-      const updateData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', position: { x: 10, y: 10, endX: 12, endY: 12 } };
+      const updateData = { mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 10, startY: 10, endX: 12, endY: 12 };
       const updatedMock = {
         id: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', startX: 10, startY: 10, endX: 12, endY: 12, size: 9, toJSON: function() { return this; }
       };
