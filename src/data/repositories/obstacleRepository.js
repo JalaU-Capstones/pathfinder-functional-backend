@@ -7,11 +7,17 @@ const createObstacle = async (obstacleData) => {
 const getObstacleById = async (id, options = {}) => {
   const where = { id };
   if (options.userId) where.userId = options.userId;
-  return await Obstacle.findOne({ where });
+  return await Obstacle.findOne({ 
+    where,
+    attributes: ['id', 'mapId', 'userId', 'startX', 'startY', 'endX', 'endY', 'size', 'createdAt', 'updatedAt']
+  });
 };
 
 const getAllObstacles = async (mapId = null, options = {}) => {
-  const query = { order: [['createdAt', 'DESC']] };
+  const query = { 
+    order: [['createdAt', 'DESC']],
+    attributes: ['id', 'mapId', 'userId', 'startX', 'startY', 'endX', 'endY', 'size', 'createdAt', 'updatedAt']
+  };
   query.where = {};
   if (mapId) query.where.mapId = mapId;
   if (options.userId) query.where.userId = options.userId;
