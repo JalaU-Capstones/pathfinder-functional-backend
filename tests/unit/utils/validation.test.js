@@ -22,8 +22,12 @@ describe('validation utils', () => {
   });
 
   describe('isValidObstacle', () => {
-    it('should return true for a valid obstacle', () => {
-      expect(isValidObstacle({ position: { x: 10, y: 20 }, size: 5 })).toBe(true);
+    it('should return true for a valid single-cell obstacle', () => {
+      expect(isValidObstacle({ position: { x: 10, y: 20 } })).toBe(true);
+    });
+
+    it('should return true for a valid rectangular obstacle', () => {
+      expect(isValidObstacle({ position: { x: 10, y: 20, endX: 15, endY: 25 } })).toBe(true);
     });
 
     it('should return false if obstacle is not an object', () => {
@@ -32,27 +36,30 @@ describe('validation utils', () => {
     });
 
     it('should return false if position is missing or invalid', () => {
-      expect(isValidObstacle({ size: 5 })).toBe(false);
-      expect(isValidObstacle({ position: 'invalid', size: 5 })).toBe(false);
+      expect(isValidObstacle({})).toBe(false);
+      expect(isValidObstacle({ position: 'invalid' })).toBe(false);
     });
 
     it('should return false if position.x is missing or invalid', () => {
-      expect(isValidObstacle({ position: { y: 20 }, size: 5 })).toBe(false);
-      expect(isValidObstacle({ position: { x: -1, y: 20 }, size: 5 })).toBe(false);
-      expect(isValidObstacle({ position: { x: '10', y: 20 }, size: 5 })).toBe(false);
+      expect(isValidObstacle({ position: { y: 20 } })).toBe(false);
+      expect(isValidObstacle({ position: { x: -1, y: 20 } })).toBe(false);
+      expect(isValidObstacle({ position: { x: '10', y: 20 } })).toBe(false);
     });
 
     it('should return false if position.y is missing or invalid', () => {
-      expect(isValidObstacle({ position: { x: 10 }, size: 5 })).toBe(false);
-      expect(isValidObstacle({ position: { x: 10, y: -20 }, size: 5 })).toBe(false);
-      expect(isValidObstacle({ position: { x: 10, y: '20' }, size: 5 })).toBe(false);
+      expect(isValidObstacle({ position: { x: 10 } })).toBe(false);
+      expect(isValidObstacle({ position: { x: 10, y: -20 } })).toBe(false);
+      expect(isValidObstacle({ position: { x: 10, y: '20' } })).toBe(false);
     });
 
-    it('should return false if size is missing or invalid', () => {
-      expect(isValidObstacle({ position: { x: 10, y: 20 } })).toBe(false);
-      expect(isValidObstacle({ position: { x: 10, y: 20 }, size: -5 })).toBe(false);
-      expect(isValidObstacle({ position: { x: 10, y: 20 }, size: 0 })).toBe(false);
-      expect(isValidObstacle({ position: { x: 10, y: 20 }, size: '5' })).toBe(false);
+    it('should return false if endX is invalid', () => {
+      expect(isValidObstacle({ position: { x: 10, y: 20, endX: 5 } })).toBe(false);
+      expect(isValidObstacle({ position: { x: 10, y: 20, endX: '15' } })).toBe(false);
+    });
+
+    it('should return false if endY is invalid', () => {
+      expect(isValidObstacle({ position: { x: 10, y: 20, endY: 10 } })).toBe(false);
+      expect(isValidObstacle({ position: { x: 10, y: 20, endY: '25' } })).toBe(false);
     });
   });
 

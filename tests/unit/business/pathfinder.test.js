@@ -176,4 +176,93 @@ describe('A* Pathfinder Algorithm', () => {
     mapSpy.mockRestore();
     expect(result.distance).toBe(1);
   });
+
+  describe('Rectangle Obstacle Expansion', () => {
+    it('should treat single-cell obstacles (no endX/endY) as 1x1 block', () => {
+      const grid = { width: 3, height: 3 };
+      const start = { x: 0, y: 0 };
+      const end = { x: 2, y: 0 };
+      // Block (1,0) only. Path goes (0,0) -> (0,1) -> (1,1) -> (2,1) -> (2,0)
+      const obstacles = [{ x: 1, y: 0 }];
+      const result = calculatePath(grid, start, end, obstacles, []);
+      expect(result.distance).toBe(4);
+    });
+
+    it('should expand a 2x2 rectangular obstacle', () => {
+      const grid = { width: 5, height: 5 };
+      const start = { x: 0, y: 0 };
+      const end = { x: 4, y: 0 };
+      // 2x2 rectangle from (1,0) to (2,1)
+      const obstacles = [{ startX: 1, startY: 0, endX: 2, endY: 1 }];
+      
+      const result = calculatePath(grid, start, end, obstacles, []);
+      // Path goes down to y=2, across to x=3, up to y=0 => distance 8
+      expect(result.distance).toBe(8);
+    });
+
+    it('should expand a rectangle that spans the grid (blocking path)', () => {
+      const grid = { width: 5, height: 5 };
+      const start = { x: 0, y: 0 };
+      const end = { x: 0, y: 4 };
+      // Wall across the entire y=2 row: from (0,2) to (4,2)
+      const obstacles = [{ startX: 0, startY: 2, endX: 4, endY: 2 }];
+      
+      const result = calculatePath(grid, start, end, obstacles, []);
+      // Completely blocks the start from the end
+      expect(result.distance).toBe(-1);
+    });
+
+    it('should handle rectangle with equal start and end as single cell', () => {
+      const grid = { width: 3, height: 3 };
+      const start = { x: 0, y: 0 };
+      const end = { x: 2, y: 0 };
+      const obstacles = [{ startX: 1, startY: 0, endX: 1, endY: 0 }];
+      const result = calculatePath(grid, start, end, obstacles, []);
+      expect(result.distance).toBe(4);
+    });
+
+    it('should correctly expand adjacent rectangles', () => {
+      const grid = { width: 5, height: 5 };
+      const start = { x: 0, y: 0 };
+      const end = { x: 4, y: 4 };
+      // Two horizontal walls with gaps on opposite sides to force a snake path
+      const obstacles = [
+        { startX: 0, startY: 1, endX: 3, endY: 1 }, // blocks y=1 from x=0..3 (gap at x=4)
+        { startX: 1, startY: 3, endX: 4, endY: 3 }  // blocks y=3 from x=1..4 (gap at x=0)
+      ];
+      const result = calculatePath(grid, start, end, obstacles, []);
+      // Needs to route through gap at x=4, then back to gap at x=0, then to (4,4)
+      expect(result.distance).toBeGreaterThan(0);
+      
+      const pathSet = new Set(result.path.map(p => `${p.x},${p.y}`));
+      // Verify no intersection with first rect
+      for(let x=0; x<=3; x++) {
+        expect(pathSet.has(`${x},1`)).toBe(false);
+      }
+      // Verify no intersection with second rect
+      for(let x=1; x<=4; x++) {
+        expect(pathSet.has(`${x},3`)).toBe(false);
+      }
+    });
+
+    it('should expand a 6x6 rectangle (boundaries verified)', () => {
+      const grid = { width: 20, height: 20 };
+      const start = { x: 4, y: 13 };
+      const end = { x: 11, y: 13 };
+      // 6x6 rectangle from (5,10) to (10,15)
+      const obstacles = [{ startX: 5, startY: 10, endX: 10, endY: 15 }];
+      
+      const result = calculatePath(grid, start, end, obstacles, []);
+      
+      // Should go around the 6x6 block
+      expect(result.distance).toBeGreaterThan(7);
+      
+      const pathSet = new Set(result.path.map(p => `${p.x},${p.y}`));
+      for(let x=5; x<=10; x++) {
+        for(let y=10; y<=15; y++) {
+          expect(pathSet.has(`${x},${y}`)).toBe(false);
+        }
+      }
+    });
+  });
 });
