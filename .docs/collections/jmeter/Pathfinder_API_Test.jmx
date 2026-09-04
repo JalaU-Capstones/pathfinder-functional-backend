@@ -231,7 +231,7 @@ try {
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;mapId&quot;: &quot;${mapId}&quot;, &quot;position&quot;: { &quot;x&quot;: 10, &quot;y&quot;: 20 }, &quot;size&quot;: 5}</stringProp>
+                <stringProp name="Argument.value">{&quot;mapId&quot;: &quot;${mapId}&quot;, &quot;startX&quot;: 10, &quot;startY&quot;: 20, &quot;size&quot;: 5}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -905,7 +905,7 @@ try {
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;mapId&quot;: &quot;${mapId}&quot;, &quot;mapConfig&quot;: { &quot;obstacles&quot;: [{ &quot;position&quot;: { &quot;x&quot;: 10, &quot;y&quot;: 20 } }], &quot;waypoints&quot;: [{ &quot;position&quot;: { &quot;x&quot;: 50, &quot;y&quot;: 60 } }] }}</stringProp>
+                <stringProp name="Argument.value">{&quot;mapId&quot;: &quot;${mapId}&quot;, &quot;mapConfig&quot;: { &quot;obstacles&quot;: [{ &quot;startX&quot;: 10, &quot;startY&quot;: 20 }], &quot;waypoints&quot;: [{ &quot;position&quot;: { &quot;x&quot;: 50, &quot;y&quot;: 60 } }] }}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -1525,7 +1525,7 @@ try {
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;mapId&quot;: &quot;${mapId}&quot;, &quot;position&quot;: { &quot;x&quot;: 15, &quot;y&quot;: 25 }, &quot;size&quot;: 8}</stringProp>
+                <stringProp name="Argument.value">{&quot;mapId&quot;: &quot;${mapId}&quot;, &quot;startX&quot;: 15, &quot;startY&quot;: 25, &quot;size&quot;: 8}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>

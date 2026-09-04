@@ -664,7 +664,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"position\": { \"x\": 10, \"y\": 20 },\n  \"size\": 5\n}"
+          "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"startX\": 10, \"startY\": 20,\n  \"size\": 5\n}"
         },
         "url": {
           "raw": "{{baseUrl}}/api/obstacles",
@@ -4892,7 +4892,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"mapConfig\": {\n    \"obstacles\": [\n      { \"position\": { \"x\": 10, \"y\": 20 } }\n    ],\n    \"waypoints\": [\n      { \"position\": { \"x\": 50, \"y\": 60 } }\n    ]\n  }\n}"
+          "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"mapConfig\": {\n    \"obstacles\": [\n      { \"startX\": 10, \"startY\": 20 }\n    ],\n    \"waypoints\": [\n      { \"position\": { \"x\": 50, \"y\": 60 } }\n    ]\n  }\n}"
         },
         "url": {
           "raw": "{{baseUrl}}/api/validation/map-config",
@@ -8272,7 +8272,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"position\": { \"x\": 15, \"y\": 25 },\n  \"size\": 8\n}"
+          "raw": "{\n  \"mapId\": \"{{mapId}}\",\n  \"startX\": 15, \"startY\": 25,\n  \"size\": 8\n}"
         },
         "url": {
           "raw": "{{baseUrl}}/api/obstacles/{{obstacleId}}",
