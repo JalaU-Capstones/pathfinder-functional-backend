@@ -114,8 +114,10 @@ function buildMazeObstacles(mapId, userId, now) {
     return {
       id,
       mapId,
-      positionX: x,
-      positionY: y,
+      startX: x,
+      startY: y,
+      endX: x,
+      endY: y,
       size: 1,
       userId,
       createdAt: now,
@@ -164,7 +166,7 @@ module.exports = {
     const end = { x: 99, y: 99 };
 
     // Build obstacles array in the format the pathfinder expects
-    const obstaclePositions = obstacles.map(o => ({ x: o.positionX, y: o.positionY }));
+    const obstaclePositions = obstacles.map(o => ({ x: o.startX, y: o.startY }));
 
     // Run A* algorithm – no DB calls, no transaction conflicts
     const { path: optimalPath, distance } = calculatePath(
