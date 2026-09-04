@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+const { env } = require('./config/env');
 const swaggerUi = require('swagger-ui-express');
 const { swaggerSpec } = require('./config/swagger');
 const healthRoutes = require('./presentation/routes/health.routes');
@@ -31,6 +33,34 @@ const cacheMiddleware = createCacheMiddleware(CACHE_CONFIG);
 
 const createApp = () => {
   const app = express();
+
+  // CORS configuration
+  const corsOptions = {
+    origin: (origin, callback) => {
+      // In development or no origin configured → allow all
+      if (process.env.NODE_ENV !== 'production' || !env.allowedOrigin) {
+        return callback(null, true);
+      }
+
+      // In production → allow ONLY the configured origin
+      const allowed = env.allowedOrigin.trim().replace(/\/$/, '');
+      const requestOrigin = (origin || '').replace(/\/$/, '');
+
+      if (!requestOrigin || requestOrigin === allowed) {
+        return callback(null, true);
+      }
+
+      // Reject any other origin
+      const error = new Error('Not allowed by CORS policy');
+      error.status = 403;
+      return callback(error, false);
+    },
+    credentials: false,
+    optionsSuccessStatus: 200
+  };
+
+  // Apply BEFORE all routes
+  app.use(cors(corsOptions));
 
   // Middleware
   app.use(express.json());

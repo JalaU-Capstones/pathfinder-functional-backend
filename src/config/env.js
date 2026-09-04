@@ -7,6 +7,7 @@ const env = {
   dbUser: process.env.DB_USER || 'pathfinder_user',
   dbPassword: process.env.DB_PASSWORD || 'pathfinder_pass',
   dbName: process.env.DB_NAME || 'pathfinder_db',
+  allowedOrigin: process.env.ALLOWED_ORIGIN || '',
 };
 
 let JWT_SECRET = process.env.JWT_SECRET;

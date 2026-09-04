@@ -37,21 +37,29 @@ cd pathfinder-functional-backend
 npm install
 ```
 
-### Configure environment variables
+### Environment Variables
 
-Linux/macOS:
+Copy `.env.example` to `.env` and configure these values:
 
-```bash
-cp .env.example .env
-```
-
-Windows (PowerShell):
-
-```powershell
-Copy-Item .env.example .env
-```
+| Variable | Description | Required |
+|---|---|---|
+| `DB_HOST` | PostgreSQL host address | Yes |
+| `DB_PORT` | PostgreSQL port | Yes |
+| `DB_NAME` | Database name | Yes |
+| `DB_USER` | Database username | Yes |
+| `DB_PASSWORD` | Database password | Yes |
+| `JWT_SECRET` | Secret key for signing tokens | Yes |
+| `JWT_EXPIRES_IN` | Token expiration (e.g., `24h`) | Yes |
+| `ALLOWED_ORIGIN` | Frontend URL for CORS restriction (production only) | No |
 
 When connecting to an external or cloud database (non-localhost), SSL/TLS is enabled automatically. No additional configuration is needed beyond setting `DB_HOST` to your database provider hostname.
+
+### Deploying Your Own Instance
+To deploy this backend in production:
+1. Set `ALLOWED_ORIGIN=https://your-frontend-domain.com` in your environment variables
+2. Set `NODE_ENV=production`
+3. The backend will automatically reject requests from any origin other than the configured value
+4. In development or when `ALLOWED_ORIGIN` is empty, all origins are permitted
 
 ### Start the database
 
