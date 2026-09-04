@@ -51,6 +51,8 @@ Windows (PowerShell):
 Copy-Item .env.example .env
 ```
 
+When connecting to an external or cloud database (non-localhost), SSL/TLS is enabled automatically. No additional configuration is needed beyond setting `DB_HOST` to your database provider hostname.
+
 ### Start the database
 
 ```bash
