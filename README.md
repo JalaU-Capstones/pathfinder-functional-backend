@@ -69,6 +69,10 @@ npm run db:migrate
 npm run db:seed
 ```
 
+Seeds a complete demo workflow: creates a user account, a 100×100 map, and generates a full maze layout with perimeter walls and internal dividing walls (over 300 obstacles). Places two waypoints (Start at top-left, End at bottom-right) and automatically calculates the optimal route using the A* pathfinding algorithm, which navigates around obstacles to find the shortest path.
+
+Demo seeding automatically generates a maze layout and computes the route using A* — no hardcoded paths or distances.
+
 ### Start the development server
 
 ```bash
@@ -94,6 +98,7 @@ The server starts on the port configured in `.env` (default: 3000).
 | `npm run db:seed:undo` | Revert all seeders |
 | `npm run db:reset` | Revert all migrations, re-migrate, and re-seed |
 | `npm run db:test-connection` | Verify connectivity to the PostgreSQL database |
+| `npm run test:e2e` | Run end-to-end workflow tests against real server |
 
 ## API Documentation
 
@@ -190,7 +195,7 @@ npm run test:e2e          # Run E2E tests
 
 ### Coverage thresholds
 
-Jest enforces minimum coverage thresholds on all metrics. The test run fails if any metric drops below the configured threshold. Current coverage: 99%+ statements, branches, functions, and lines.
+Jest enforces minimum coverage thresholds on all metrics. The test run fails if any metric drops below the configured threshold. Current coverage: **Statements: 94.93%, Branches: 89.17%, Functions: 94.36%, Lines: 96.13%** — across **48 test suites and 568 unit tests**.
 
 ### Coverage report
 
