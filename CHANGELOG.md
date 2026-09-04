@@ -1,6 +1,13 @@
 # Changelog
 
 ## [Unreleased] - 2026-09-04
+### Fixed
+- **CRITICAL CACHE BUG:** Invalidate GET cache after every POST/PUT/DELETE
+  - Before: newly created items invisible until cache expired/minutes later
+  - After: GET automatically fetches fresh data immediately after mutation
+  - Granular invalidation: only affected entity list cleared, not all cache
+  - Failed operations (4xx/5xx): do NOT clear cache — preserve valid cache
+
 ### Added
 - Age validation range: must be between 0 and 90 years
 - Tests: boundary values verified (0 and 90 allowed; -1/91 rejected)

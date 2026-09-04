@@ -281,6 +281,21 @@ const createLRUCache = ({ max, maxAge }) => {
     );
 
   /**
+   * keys — returns all non-expired cache key strings.
+   * Used by cache invalidation logic to find entries that
+   * match a given entity path prefix and remove them.
+   *
+   * Filter technique: selects only non-expired entries
+   * and extracts their keys.
+   *
+   * @returns {string[]} Array of valid (non-expired) cache keys.
+   */
+  const keys = () =>
+    [...store.entries()]
+      .filter(([, entry]) => !isExpired(entry))
+      .map(([key]) => key);
+
+  /**
    * stats — returns a snapshot of cache state.
    * Useful for the monitoring endpoint in Phase Lab7B
    * without coupling the cache to HTTP concerns.
@@ -298,7 +313,7 @@ const createLRUCache = ({ max, maxAge }) => {
     };
   };
 
-  return Object.freeze({ set, get, has, delete: del, clear, size, stats });
+  return Object.freeze({ set, get, has, delete: del, clear, size, keys, stats });
 };
 
 module.exports = { createLRUCache };

@@ -376,4 +376,153 @@ describe('createCacheMiddleware', () => {
       expect(next2).not.toHaveBeenCalled();
     });
   });
+
+  // --------------- cache invalidation after mutations ---------------
+
+  describe('cache invalidation after successful mutations', () => {
+    /**
+     * Helper: seeds a GET cache entry for the given URL.
+     */
+    const seedCache = (middleware, url, body) => {
+      const req = { method: 'GET', originalUrl: url };
+      const res = { statusCode: 200, setHeader: jest.fn(), json: jest.fn() };
+      middleware(req, res, jest.fn());
+      res.json(body);
+    };
+
+    /**
+     * Helper: simulate a mutating request completing successfully.
+     */
+    const simulateMutation = (middleware, method, url, statusCode = 201) => {
+      const req = { method, originalUrl: url };
+      const res = {
+        statusCode,
+        setHeader: jest.fn(),
+        json: jest.fn(),
+      };
+      const next = jest.fn();
+      middleware(req, res, next);
+      // Simulate route handler calling res.json after next()
+      res.json({ success: true });
+    };
+
+    it('POST /api/maps (201) → GET /api/maps becomes a MISS', () => {
+      const middleware = createCacheMiddleware({ max: 10, maxAge: 60000 });
+      seedCache(middleware, '/api/maps', { success: true, data: [] });
+
+      // Confirm it's a HIT before the mutation
+      const preReq = { method: 'GET', originalUrl: '/api/maps' };
+      const preRes = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+      middleware(preReq, preRes, jest.fn());
+      expect(preRes.setHeader).toHaveBeenCalledWith('X-Cache', 'HIT');
+
+      // Perform successful POST
+      simulateMutation(middleware, 'POST', '/api/maps', 201);
+
+      // GET should now be a MISS
+      const postReq = { method: 'GET', originalUrl: '/api/maps' };
+      const postRes = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+      const next = jest.fn();
+      middleware(postReq, postRes, next);
+
+      expect(postRes.setHeader).toHaveBeenCalledWith('X-Cache', 'MISS');
+      expect(next).toHaveBeenCalled();
+    });
+
+    it('PUT /api/maps/:id (200) → GET /api/maps becomes a MISS', () => {
+      const middleware = createCacheMiddleware({ max: 10, maxAge: 60000 });
+      seedCache(middleware, '/api/maps', { success: true, data: [{ id: '1' }] });
+
+      simulateMutation(middleware, 'PUT', '/api/maps/uuid-123', 200);
+
+      const req = { method: 'GET', originalUrl: '/api/maps' };
+      const res = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+      const next = jest.fn();
+      middleware(req, res, next);
+
+      expect(res.setHeader).toHaveBeenCalledWith('X-Cache', 'MISS');
+      expect(next).toHaveBeenCalled();
+    });
+
+    it('DELETE /api/maps/:id (200) → GET /api/maps becomes a MISS', () => {
+      const middleware = createCacheMiddleware({ max: 10, maxAge: 60000 });
+      seedCache(middleware, '/api/maps', { success: true, data: [{ id: '1' }] });
+
+      simulateMutation(middleware, 'DELETE', '/api/maps/uuid-123', 200);
+
+      const req = { method: 'GET', originalUrl: '/api/maps' };
+      const res = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+      const next = jest.fn();
+      middleware(req, res, next);
+
+      expect(res.setHeader).toHaveBeenCalledWith('X-Cache', 'MISS');
+      expect(next).toHaveBeenCalled();
+    });
+
+    it('POST /api/maps also clears /api/maps?page=1 (query-string variant)', () => {
+      const middleware = createCacheMiddleware({ max: 10, maxAge: 60000 });
+      seedCache(middleware, '/api/maps?page=1', { success: true, data: [] });
+      seedCache(middleware, '/api/maps?page=2', { success: true, data: [] });
+
+      simulateMutation(middleware, 'POST', '/api/maps', 201);
+
+      // Both query-string variants should be MISSes
+      ['page=1', 'page=2'].forEach((qs) => {
+        const req = { method: 'GET', originalUrl: `/api/maps?${qs}` };
+        const res = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+        const next = jest.fn();
+        middleware(req, res, next);
+        expect(res.setHeader).toHaveBeenCalledWith('X-Cache', 'MISS');
+        expect(next).toHaveBeenCalled();
+      });
+    });
+
+    it('POST /api/maps does NOT clear /api/obstacles cache (granular)', () => {
+      const middleware = createCacheMiddleware({ max: 10, maxAge: 60000 });
+      seedCache(middleware, '/api/obstacles', { success: true, data: [] });
+
+      simulateMutation(middleware, 'POST', '/api/maps', 201);
+
+      // /api/obstacles cache must remain a HIT
+      const req = { method: 'GET', originalUrl: '/api/obstacles' };
+      const res = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+      middleware(req, res, jest.fn());
+
+      expect(res.setHeader).toHaveBeenCalledWith('X-Cache', 'HIT');
+    });
+
+    it('failed POST (400) → cache NOT cleared', () => {
+      const middleware = createCacheMiddleware({ max: 10, maxAge: 60000 });
+      seedCache(middleware, '/api/maps', { success: true, data: [{ id: '1' }] });
+
+      // Simulate failed POST (400)
+      const req = { method: 'POST', originalUrl: '/api/maps' };
+      const res = { statusCode: 400, setHeader: jest.fn(), json: jest.fn() };
+      middleware(req, res, jest.fn());
+      res.json({ success: false, error: 'Bad request' });
+
+      // Cache should still be a HIT
+      const getReq = { method: 'GET', originalUrl: '/api/maps' };
+      const getRes = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+      middleware(getReq, getRes, jest.fn());
+
+      expect(getRes.setHeader).toHaveBeenCalledWith('X-Cache', 'HIT');
+    });
+
+    it('failed POST (401) → cache NOT cleared', () => {
+      const middleware = createCacheMiddleware({ max: 10, maxAge: 60000 });
+      seedCache(middleware, '/api/maps', { success: true, data: [] });
+
+      const req = { method: 'POST', originalUrl: '/api/maps' };
+      const res = { statusCode: 401, setHeader: jest.fn(), json: jest.fn() };
+      middleware(req, res, jest.fn());
+      res.json({ success: false, error: 'Unauthorized' });
+
+      const getReq = { method: 'GET', originalUrl: '/api/maps' };
+      const getRes = { statusCode: 200, setHeader: jest.fn(), json: jest.fn(), status: jest.fn().mockReturnThis() };
+      middleware(getReq, getRes, jest.fn());
+
+      expect(getRes.setHeader).toHaveBeenCalledWith('X-Cache', 'HIT');
+    });
+  });
 });

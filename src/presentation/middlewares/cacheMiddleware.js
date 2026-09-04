@@ -74,15 +74,83 @@ const createCacheMiddleware = ({ max, maxAge }) => {
   const isCacheable = (req) => req.method === 'GET';
 
   /**
+   * isMutating -- pure predicate.
+   * Returns true for HTTP methods that change server state.
+   * These are the methods that must trigger cache invalidation
+   * after a successful response.
+   *
+   * @param {Object} req - Express request object.
+   * @returns {boolean}
+   */
+  const MUTATING_METHODS = Object.freeze(
+    new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
+  );
+  const isMutating = (req) => MUTATING_METHODS.has(req.method);
+
+  /**
+   * getEntityPrefix -- pure function.
+   * Extracts the entity-level GET cache key prefix from a URL.
+   * Used to find and delete all cached GET responses for a
+   * given entity after a mutation.
+   *
+   * Examples:
+   *   "/api/maps"           → "GET:/api/maps"
+   *   "/api/maps/uuid-123"  → "GET:/api/maps"
+   *   "/api/maps?page=1"    → "GET:/api/maps"
+   *   "/api/obstacles"      → "GET:/api/obstacles"
+   *
+   * @param {string} url - The request's originalUrl.
+   * @returns {string|null} Cache key prefix, or null for
+   *   paths that do not match /api/<entity>.
+   */
+  const getEntityPrefix = (url) => {
+    const match = url.match(/^(\/api\/[^/?]+)/);
+    return match ? `GET:${match[1]}` : null;
+  };
+
+  /**
+   * invalidateEntityCache -- side-effecting function.
+   * Removes all GET cache entries whose key starts with
+   * the entity prefix derived from the given URL.
+   * Called only after a successful (2xx) mutating request.
+   *
+   * @param {string} url - The mutating request's originalUrl.
+   * @returns {void}
+   */
+  const invalidateEntityCache = (url) => {
+    const prefix = getEntityPrefix(url);
+    if (!prefix) return;
+    const matchingKeys = cache.keys().filter((k) => k.startsWith(prefix));
+    matchingKeys.forEach((k) => cache.delete(k));
+    if (matchingKeys.length > 0) {
+      logger.debug('Cache invalidated', { prefix, count: matchingKeys.length });
+    }
+  };
+
+  /**
    * The middleware function.
    * On cache hit: responds immediately with cached data,
    *   adds X-Cache: HIT header.
    * On cache miss: intercepts res.json to capture the
    *   response, caches it, adds X-Cache: MISS header.
-   * Non-GET requests: passes through unchanged.
+   * Mutating requests (POST/PUT/PATCH/DELETE): passes through
+   *   but intercepts res.json to invalidate matching GET
+   *   cache entries on any successful (2xx) response.
+   * Other non-GET requests: passes through unchanged.
    */
   return (req, res, next) => {
     if (!isCacheable(req)) {
+      // Intercept res.json for mutating requests so we can
+      // invalidate stale GET cache entries on success.
+      if (isMutating(req)) {
+        const originalJson = res.json.bind(res);
+        res.json = (body) => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            invalidateEntityCache(req.originalUrl);
+          }
+          return originalJson(body);
+        };
+      }
       return next();
     }
 
