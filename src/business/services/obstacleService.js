@@ -2,7 +2,6 @@ const obstacleRepository = require('../../data/repositories/obstacleRepository')
 const mapRepository = require('../../data/repositories/mapRepository');
 const { ERROR_TYPES, createAppError } = require('../../utils/errors');
 const { assertOwnership } = require('../../utils/ownershipCheck');
-const { toApiPosition, toDbPosition } = require('../../utils/shapeMapper');
 
 const toApiShape = (dbObstacle) => {
   if (!dbObstacle) return null;

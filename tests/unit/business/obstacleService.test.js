@@ -1,4 +1,4 @@
-/* global jest, beforeEach, describe, it, expect */
+/* global jest, beforeEach */
 const obstacleRepository = require('../../../src/data/repositories/obstacleRepository');
 const mapRepository = require('../../../src/data/repositories/mapRepository');
 const obstacleService = require('../../../src/business/services/obstacleService');

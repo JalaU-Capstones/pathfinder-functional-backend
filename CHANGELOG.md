@@ -9,6 +9,9 @@
   - Failed operations (4xx/5xx): do NOT clear cache — preserve valid cache
 
 ### Added
+- feat(obstacles): add validation and normalization logic for rectangular API inputs (Obs-2)
+- feat(pathfinder): update A* algorithm to expand rectangular obstacles into grid cells (Obs-2)
+- test(obstacles+pathfinder): rewrite tests for rectangular validation and pathfinder logic (Obs-2)
 - feat(database): replace obstacle position JSONB with startX, startY, endX, endY scalar columns for rectangular obstacle support
 - feat(database): make obstacle size a calculated field (endX-startX+1)*(endY-startY+1) stored by the system
 - feat(models): update Obstacle model to rectangular schema
