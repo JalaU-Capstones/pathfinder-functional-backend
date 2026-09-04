@@ -47,14 +47,23 @@ const extractToken = (req) => {
  */
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, JWT_SECRET, {
+    const decoded = jwt.verify(token, JWT_SECRET, {
       algorithms: ['HS256'],
     });
+
+    if (!decoded.exp) {
+      throw createAppError(
+        'UNAUTHORIZED',
+        'Invalid authentication token.'
+      );
+    }
+
+    return decoded;
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       throw createAppError(
         'UNAUTHORIZED',
-        'Your session has expired. Please log in again.'
+        'Session expired. Please sign in again.'
       );
     }
     throw createAppError(

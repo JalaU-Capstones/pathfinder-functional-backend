@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - 2026-09-04
+### Security
+- **CRITICAL FIX:** Enforce JWT expiration validation in authMiddleware
+  - Expired tokens are now properly rejected with 401 "Session expired"
+  - Added tests: valid token passes, expired/missing-exp tokens rejected
+  - Previously: tokens accepted indefinitely — **HIGH SEVERITY FIX**
+
 - **2026-09-03 (Phase Lab9B - E2E Documentation and JMeter):**
   - docs(jmeter): commit JMeter test plan and add README
   - docs(lab): add week 9 E2E test lab report with all
