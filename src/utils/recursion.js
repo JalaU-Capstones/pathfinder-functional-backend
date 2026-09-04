@@ -127,17 +127,22 @@ const validateMapConfigStructure = (config, depth = 0) => {
 
   // Depth 1: validate an obstacle or waypoint item
   if (depth === 1) {
-    if (!config.position || typeof config.position !== 'object') {
-      return {
-        valid: false,
-        error: 'Each obstacle and waypoint must have a ' +
-               'position object with x and y coordinates.',
-      };
+    if (config.position && typeof config.position === 'object') {
+      // Recursive case: validate position object
+      return validateMapConfigStructure(
+        config.position, depth + 1
+      );
     }
-    // Recursive case: validate position object
-    return validateMapConfigStructure(
-      config.position, depth + 1
-    );
+    if (config.startX !== undefined && config.startY !== undefined) {
+      // It's a rectangular obstacle, skip to depth 2 validation with synthetic object
+      return validateMapConfigStructure(
+        { x: config.startX, y: config.startY }, depth + 1
+      );
+    }
+    return {
+      valid: false,
+      error: 'Each obstacle and waypoint must have a position object with x and y coordinates, or startX and startY fields.',
+    };
   }
 
   // Depth 2: validate a position object { x, y }
