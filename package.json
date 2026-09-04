@@ -14,6 +14,8 @@
     "test:e2e": "jest tests/e2e --runInBand --forceExit --testTimeout=30000",
     "test:e2e:verbose": "jest tests/e2e --runInBand --forceExit --testTimeout=30000 --verbose",
     "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "prod": "NODE_ENV=production node src/server.js",
     "lint": "eslint .",
     "db:test-connection": "node scripts/test-db.js",
     "db:migrate": "sequelize-cli db:migrate",

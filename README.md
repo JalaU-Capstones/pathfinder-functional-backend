@@ -79,7 +79,7 @@ Demo seeding automatically generates a maze layout and computes the route using 
 npm run dev
 ```
 
-The server starts on the port configured in `.env` (default: 3000).
+The server starts on the port configured in `.env` (default: 3000). Use `npm start` or `npm run prod` in production.
 
 ## Available Scripts
 
@@ -99,6 +99,8 @@ The server starts on the port configured in `.env` (default: 3000).
 | `npm run db:reset` | Revert all migrations, re-migrate, and re-seed |
 | `npm run db:test-connection` | Verify connectivity to the PostgreSQL database |
 | `npm run test:e2e` | Run end-to-end workflow tests against real server |
+| `npm start` | Start the server in production mode |
+| `npm run prod` | Start the server with NODE_ENV=production |
 
 ## API Documentation
 
