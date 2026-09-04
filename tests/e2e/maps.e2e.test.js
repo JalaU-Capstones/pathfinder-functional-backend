@@ -69,17 +69,40 @@ describe('E2E Workflow 2 — Map Management and Data Isolation',
             headers: authHeader(user1Token),
             body: JSON.stringify({
               mapId,
-              position: { x: 5, y: 5 },
+              startX: 5, startY: 5,
               size: 1,
             }),
           }
         );
 
         expect(status).toBe(201);
-        expect(body.data.position.x).toBe(5);
-        expect(body.data.position.y).toBe(5);
+        expect(body.data.startX).toBe(5);
+        expect(body.data.startY).toBe(5);
 
         obstacleId = body.data.id;
+      });
+    });
+
+    describe('POST /api/obstacles — Add rectangular obstacle', () => {
+      it('should add a rectangular obstacle and calculate size correctly', async () => {
+        const { status, body } = await request(
+          '/api/obstacles',
+          {
+            method: 'POST',
+            headers: authHeader(user1Token),
+            body: JSON.stringify({
+              mapId,
+              startX: 10, startY: 10,
+              endX: 12, endY: 12,
+              size: 999, // Should be overridden
+            }),
+          }
+        );
+
+        expect(status).toBe(201);
+        expect(body.data.startX).toBe(10);
+        expect(body.data.endX).toBe(12);
+        expect(body.data.size).toBe(9);
       });
     });
 
@@ -116,14 +139,36 @@ describe('E2E Workflow 2 — Map Management and Data Isolation',
           );
 
           expect(status).toBe(200);
-          expect(body.data.obstacles).toHaveLength(1);
+          expect(body.data.obstacles).toHaveLength(2);
           expect(body.data.waypoints).toHaveLength(1);
-          expect(body.data.obstacles[0].x).toBe(5);
+          expect(body.data.obstacles[0].startX).toBe(5);
           expect(body.data.waypoints[0].name).toBe(
             'E2E Checkpoint'
           );
         }
       );
+    });
+
+    describe('PUT /api/obstacles/:id — Update obstacle', () => {
+      it('should update obstacle to rectangular dimensions', async () => {
+        const { status, body } = await request(
+          `/api/obstacles/${obstacleId}`,
+          {
+            method: 'PUT',
+            headers: authHeader(user1Token),
+            body: JSON.stringify({
+              mapId,
+              startX: 5, startY: 5,
+              endX: 7, endY: 7,
+            }),
+          }
+        );
+
+        expect(status).toBe(200);
+        expect(body.data.startX).toBe(5);
+        expect(body.data.endX).toBe(7);
+        expect(body.data.size).toBe(9);
+      });
     });
 
     // ─── Test 5: Data isolation ─────────────────────────
