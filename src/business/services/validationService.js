@@ -10,6 +10,40 @@ const mapRepository = require('../../data/repositories/mapRepository');
 const { createAppError, ERROR_TYPES } = require('../../utils/errors');
 const logger = require('../../utils/logger');
 
+
+const expandObstacles = (inputObstacles) => {
+  const blockedCells = new Set();
+  for (const obs of (inputObstacles || [])) {
+    let sx, sy, ex, ey;
+    if (obs.startX !== undefined) {
+      sx = obs.startX;
+      sy = obs.startY;
+      ex = obs.endX !== undefined ? obs.endX : obs.startX;
+      ey = obs.endY !== undefined ? obs.endY : obs.startY;
+    } else if (obs && obs.position) {
+      sx = ex = obs.position.x;
+      sy = ey = obs.position.y;
+    } else if (Array.isArray(obs)) {
+      sx = ex = obs[0];
+      sy = ey = obs[1];
+    } else if (obs && obs.x !== undefined) {
+      sx = ex = obs.x;
+      sy = ey = obs.y;
+    } else {
+      throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Invalid obstacle format: missing coordinates');
+    }
+    for (let x = sx; x <= ex; x++) {
+      for (let y = sy; y <= ey; y++) {
+        blockedCells.add(`${x},${y}`);
+      }
+    }
+  }
+  return Array.from(blockedCells).map(coord => {
+    const [x, y] = coord.split(',').map(Number);
+    return { x, y };
+  });
+};
+
 /**
  * Validates UUID format of a map ID (recursive).
  * Does NOT check the database — pure format validation only.
@@ -489,9 +523,7 @@ const checkWaypointReachability = (map) => {
   }
 
   const grid = { width: 1000, height: 1000 };
-  const obstacles = (map.obstacles || []).map(
-    ([x, y]) => ({ x, y })
-  );
+  const obstacles = expandObstacles(map.obstacles);
 
   const result = accumulateReachability(
     map.startingPoint,
@@ -521,9 +553,7 @@ const validateComplexGeometry = (map) => {
   }
 
   const grid = { width: 1000, height: 1000 };
-  const obstacles = (map.obstacles || []).map(
-    ([x, y]) => ({ x, y })
-  );
+  const obstacles = expandObstacles(map.obstacles);
   const start = {
     x: map.startingPoint[0],
     y: map.startingPoint[1],
@@ -558,9 +588,7 @@ const validateAllRoutes = (map) => {
   }
 
   const grid = { width: 1000, height: 1000 };
-  const obstacles = (map.obstacles || []).map(
-    ([x, y]) => ({ x, y })
-  );
+  const obstacles = expandObstacles(map.obstacles);
 
   const result = accumulateAllRoutes(
     map.startingPoint,
@@ -586,9 +614,7 @@ const validateOptimalRoute = (map) => {
   }
 
   const grid = { width: 1000, height: 1000 };
-  const obstacles = (map.obstacles || []).map(
-    ([x, y]) => ({ x, y })
-  );
+  const obstacles = expandObstacles(map.obstacles);
 
   return accumulateOptimalRoute(
     map.startingPoint,
@@ -624,9 +650,7 @@ const validateLargeMap = (map) => {
   }
 
   const grid = { width: 10000, height: 10000 };
-  const obstacles = (map.obstacles || []).map(
-    ([x, y]) => ({ x, y })
-  );
+  const obstacles = expandObstacles(map.obstacles);
 
   return accumulateLargeMapResults(
     map.startingPoint,

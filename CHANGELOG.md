@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased] - 2026-09-04
+### Fixed
+- Validation service: accept new obstacle schema in all 5 endpoints
+- Added dual-format support: startX/startY/endX/endY OR legacy position {x,y}
+- Obstacle rectangle expansion: full area blocked, not just top-left cell
+- All /api/validation/* endpoints now return 200 with new payload format
+
 ### Added
 - feat(repository): update Obstacle repository to rectangular schema (Obs-3)
 - feat(seeders): update demo obstacles to rectangular schema (Obs-3)
