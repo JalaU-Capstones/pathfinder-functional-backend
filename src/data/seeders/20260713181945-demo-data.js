@@ -14,45 +14,34 @@ const { calculatePath } = require('../../business/pathfinder');
 const DEMO_PASSWORD_HASH = bcrypt.hashSync('Demo1234!', 10);
 
 // ------------------------------------------------------------------
-// Maze generation (iterative DFS) for a grid of even size.
-// Returns a Set of obstacle coordinates as strings "x,y".
+// Maze generation (iterative DFS) – returns a Set of blocked cells "x,y"
 // ------------------------------------------------------------------
 function generateMazeObstacles(size) {
-  // All cells initially obstacles (walls)
-  const obstacles = new Set();
+  const blocked = new Set();
   for (let x = 0; x < size; x++) {
     for (let y = 0; y < size; y++) {
-      obstacles.add(`${x},${y}`);
+      blocked.add(`${x},${y}`);
     }
   }
 
-  // Node grid: only odd-odd cells are potential corridors (size/2 x size/2)
   const half = size / 2;
   const visited = Array.from({ length: half }, () => Array(half).fill(false));
   const stack = [];
 
-  // Start at node (0,0) -> coordinates (1,1)
-  const startNode = { i: 0, j: 0 };
   visited[0][0] = true;
-  stack.push(startNode);
+  stack.push({ i: 0, j: 0 });
+  blocked.delete(`${1},${1}`);
 
-  // Remove the start cell from obstacles (it becomes a corridor)
-  obstacles.delete(`${1},${1}`);
-
-  const directions = [
-    { di: -1, dj: 0 }, // up
-    { di: 1, dj: 0 },  // down
-    { di: 0, dj: -1 }, // left
-    { di: 0, dj: 1 }   // right
+  const dirs = [
+    { di: -1, dj: 0 }, { di: 1, dj: 0 },
+    { di: 0, dj: -1 }, { di: 0, dj: 1 }
   ];
 
   while (stack.length > 0) {
-    const current = stack[stack.length - 1];
-    const { i, j } = current;
-
-    // Collect unvisited neighbours
+    const { i, j } = stack[stack.length - 1];
     const neighbours = [];
-    for (const d of directions) {
+
+    for (const d of dirs) {
       const ni = i + d.di;
       const nj = j + d.dj;
       if (ni >= 0 && ni < half && nj >= 0 && nj < half && !visited[ni][nj]) {
@@ -61,64 +50,112 @@ function generateMazeObstacles(size) {
     }
 
     if (neighbours.length > 0) {
-      // Pick a random neighbour
       const chosen = neighbours[Math.floor(Math.random() * neighbours.length)];
       const { i: ni, j: nj } = chosen;
 
-      // Remove the wall between current and chosen neighbour
-      // The wall is at: (2*i + 1 + (ni-i), 2*j + 1 + (nj-j))? Let's compute carefully:
-      // Current corridor cell: (2*i+1, 2*j+1)
-      // Chosen corridor cell: (2*ni+1, 2*nj+1)
-      // Wall is exactly in the middle: (2*i+1 + (ni-i), 2*j+1 + (nj-j))
       const wallX = 2 * i + 1 + (ni - i);
       const wallY = 2 * j + 1 + (nj - j);
-      obstacles.delete(`${wallX},${wallY}`);
+      blocked.delete(`${wallX},${wallY}`);
 
-      // Mark the neighbour as visited and remove its cell from obstacles
       visited[ni][nj] = true;
-      obstacles.delete(`${2*ni+1},${2*nj+1}`);
+      blocked.delete(`${2 * ni + 1},${2 * nj + 1}`);
 
-      // Push the neighbour onto the stack
       stack.push({ i: ni, j: nj });
     } else {
-      // Dead end – backtrack
       stack.pop();
     }
   }
 
-  return obstacles;
+  return blocked;
 }
 
-/**
- * Build the full maze obstacle list for a 100x100 map.
- * The maze is generated using iterative DFS, producing a perfect maze.
- * Obstacles are returned as an array of objects, sorted deterministically.
- * The first two entries receive the fixed UUIDs (OBSTACLE_1_ID, OBSTACLE_2_ID).
- */
-function buildMazeObstacles(mapId, userId, now) {
-  const obstacleSet = generateMazeObstacles(100);
-  // Convert to array and sort for deterministic order
-  const sorted = Array.from(obstacleSet).sort((a, b) => {
-    const [ax, ay] = a.split(',').map(Number);
-    const [bx, by] = b.split(',').map(Number);
-    return ay !== by ? ay - by : ax - bx;
-  });
-
-  return sorted.map((cell, index) => {
+// ------------------------------------------------------------------
+// Compress blocked cells into non‑overlapping rectangles (start/end inclusive)
+// ------------------------------------------------------------------
+function compressObstacles(blockedSet) {
+  const rows = new Map(); // y -> array of x
+  for (const cell of blockedSet) {
     const [x, y] = cell.split(',').map(Number);
-    let id;
-    if (index === 0) id = OBSTACLE_1_ID;
-    else if (index === 1) id = OBSTACLE_2_ID;
-    else id = randomUUID();
+    if (!rows.has(y)) rows.set(y, []);
+    rows.get(y).push(x);
+  }
+
+  const segments = []; // { y, startX, endX }
+  for (const [y, xs] of rows) {
+    xs.sort((a, b) => a - b);
+    let start = xs[0];
+    let end = xs[0];
+    for (let i = 1; i < xs.length; i++) {
+      if (xs[i] === end + 1) {
+        end = xs[i];
+      } else {
+        segments.push({ y, startX: start, endX: end });
+        start = xs[i];
+        end = xs[i];
+      }
+    }
+    segments.push({ y, startX: start, endX: end });
+  }
+
+  const intervalMap = new Map(); // key -> array of y
+  for (const seg of segments) {
+    const key = `${seg.startX},${seg.endX}`;
+    if (!intervalMap.has(key)) intervalMap.set(key, []);
+    intervalMap.get(key).push(seg.y);
+  }
+
+  const rectangles = [];
+  for (const [key, ys] of intervalMap) {
+    const [startX, endX] = key.split(',').map(Number);
+    ys.sort((a, b) => a - b);
+    let startY = ys[0];
+    let endY = ys[0];
+    for (let i = 1; i < ys.length; i++) {
+      if (ys[i] === endY + 1) {
+        endY = ys[i];
+      } else {
+        rectangles.push({ startX, startY, endX, endY });
+        startY = ys[i];
+        endY = ys[i];
+      }
+    }
+    rectangles.push({ startX, startY, endX, endY });
+  }
+
+  return rectangles;
+}
+
+// ------------------------------------------------------------------
+// Build the final obstacle list for a 50x50 map.
+// The first two rectangles (sorted) receive fixed UUIDs.
+// ------------------------------------------------------------------
+function buildMazeObstacles(mapId, userId, now) {
+  const blocked = generateMazeObstacles(50); // 50x50
+  const rectangles = compressObstacles(blocked);
+
+  // Sort deterministically by (startY, startX)
+  rectangles.sort((a, b) =>
+    a.startY !== b.startY ? a.startY - b.startY : a.startX - b.startX
+  );
+
+  return rectangles.map((rect, index) => {
+    const id =
+      index === 0 ? OBSTACLE_1_ID :
+        index === 1 ? OBSTACLE_2_ID :
+          randomUUID();
+
+    const width = rect.endX - rect.startX + 1;
+    const height = rect.endY - rect.startY + 1;
+    const area = width * height;
 
     return {
       id,
       mapId,
-      startX: x,
-      startY: y,
-      endX: x,
-      endY: y,
-      size: 1,
+      startX: rect.startX,
+      startY: rect.startY,
+      endX: rect.endX,
+      endY: rect.endY,
+      size: area,        // area of the rectangle
       userId,
       createdAt: now,
       updatedAt: now
@@ -130,6 +167,7 @@ module.exports = {
   async up(queryInterface) {
     const now = new Date();
 
+    // 1. Create user
     await queryInterface.bulkInsert('Users', [{
       id: USER_ID,
       name: 'Jane Doe',
@@ -140,44 +178,65 @@ module.exports = {
       updatedAt: now
     }]);
 
+    // 2. Create map (50x50)
     await queryInterface.bulkInsert('Maps', [{
       id: MAP_ID,
       name: 'Level 1',
-      width: 100,
-      height: 100,
+      width: 50,
+      height: 50,
       userId: USER_ID,
       createdAt: now,
       updatedAt: now
     }]);
 
-    // Generate the maze obstacles
+    // 3. Generate and insert obstacles (rectangles)
     const obstacles = buildMazeObstacles(MAP_ID, USER_ID, now);
     await queryInterface.bulkInsert('Obstacles', obstacles);
 
-    // Insert waypoints – Start at (1,1) and End at (99,99)
-    // Both are odd-odd, guaranteed to be corridors in the maze.
+    // 4. Insert waypoints: Start (1,1) and End (49,49)
     await queryInterface.bulkInsert('Waypoints', [
-      { id: WAYPOINT_1_ID, mapId: MAP_ID, positionX: 1, positionY: 1, name: 'Start Point', userId: USER_ID, createdAt: now, updatedAt: now },
-      { id: WAYPOINT_2_ID, mapId: MAP_ID, positionX: 99, positionY: 99, name: 'End Point', userId: USER_ID, createdAt: now, updatedAt: now }
+      {
+        id: WAYPOINT_1_ID,
+        mapId: MAP_ID,
+        positionX: 1,
+        positionY: 1,
+        name: 'Start Point',
+        userId: USER_ID,
+        createdAt: now,
+        updatedAt: now
+      },
+      {
+        id: WAYPOINT_2_ID,
+        mapId: MAP_ID,
+        positionX: 49,
+        positionY: 49,
+        name: 'End Point',
+        userId: USER_ID,
+        createdAt: now,
+        updatedAt: now
+      }
     ]);
 
-    // Calculate optimal path using A* pathfinder
+    // 5. Calculate optimal path using A* (pass the same rectangles)
     const start = { x: 1, y: 1 };
-    const end = { x: 99, y: 99 };
+    const end = { x: 49, y: 49 };
 
-    // Build obstacles array in the format the pathfinder expects
-    const obstaclePositions = obstacles.map(o => ({ startX: o.startX, startY: o.startY, endX: o.endX, endY: o.endY }));
+    const obstacleRectangles = obstacles.map(o => ({
+      startX: o.startX,
+      startY: o.startY,
+      endX: o.endX,
+      endY: o.endY
+    }));
 
-    // Run A* algorithm – no DB calls, no transaction conflicts
     const { path: optimalPath, distance } = calculatePath(
-      { width: 100, height: 100 },
+      { width: 50, height: 50 },
       start,
       end,
-      obstaclePositions,
-      []  // no extra blocked cells
+      obstacleRectangles,
+      [] // no extra blocked cells
     );
 
-    // Insert Route directly with fixed UUID – no service call
+    // 6. Insert the computed route
     await queryInterface.bulkInsert('Routes', [{
       id: ROUTE_1_ID,
       mapId: MAP_ID,
