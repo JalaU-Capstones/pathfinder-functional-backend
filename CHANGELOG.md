@@ -2,6 +2,8 @@
 
 ## [Unreleased] - 2026-09-04
 ### Fixed
+- Map repository: injected userId into embedded obstacles and waypoints during bulk insertion, fixing an issue where they were excluded from ownership-filtered fetches
+
 - Map repository: transform embedded obstacles to rectangular schema before bulkInsert
 - Map service validation: accept startX/startY/endX/endY; recalculate size automatically
 - Removed position field from all obstacle creation paths

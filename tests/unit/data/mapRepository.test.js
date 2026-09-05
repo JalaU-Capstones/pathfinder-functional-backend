@@ -59,9 +59,9 @@ describe('Map Repository', () => {
       const result = await mapRepository.createMapWithRelations(data);
       
       expect(sequelize.transaction).toHaveBeenCalled();
-      expect(Map.create).toHaveBeenCalledWith({ name: 'Test', width: 10, height: 10 }, { transaction: mockTransaction });
-      expect(Obstacle.bulkCreate).toHaveBeenCalledWith([{ startX: 1, startY: 1, endX: 1, endY: 1, size: 1, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', userId: null }], { transaction: mockTransaction });
-      expect(Waypoint.bulkCreate).toHaveBeenCalledWith([{ positionX: 2, positionY: 2, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }], { transaction: mockTransaction });
+      expect(Map.create).toHaveBeenCalledWith({ name: 'Test', width: 10, height: 10, userId: undefined }, { transaction: mockTransaction });
+      expect(Obstacle.bulkCreate).toHaveBeenCalledWith([{ startX: 1, startY: 1, endX: 1, endY: 1, size: 1, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', userId: undefined }], { transaction: mockTransaction });
+      expect(Waypoint.bulkCreate).toHaveBeenCalledWith([{ positionX: 2, positionY: 2, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', userId: undefined }], { transaction: mockTransaction });
       expect(mockTransaction.commit).toHaveBeenCalled();
       expect(result).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');
     });

@@ -12,7 +12,7 @@ const createMapWithRelations = async ({ userId, name, width, height, obstacles, 
     if (obstacles && obstacles.length > 0) {
       const dbObstacles = obstacles.map(obs => ({
         mapId: map.id,
-        userId: obs.userId || null,
+        userId: userId,
         startX: obs.startX,
         startY: obs.startY,
         endX: obs.endX !== undefined ? obs.endX : obs.startX,
@@ -27,7 +27,7 @@ const createMapWithRelations = async ({ userId, name, width, height, obstacles, 
     }
 
     if (waypoints && waypoints.length > 0) {
-      const dbWaypoints = waypoints.map(wp => ({ ...wp, mapId: map.id }));
+      const dbWaypoints = waypoints.map(wp => ({ ...wp, mapId: map.id, userId }));
       await Waypoint.bulkCreate(dbWaypoints, { transaction });
     }
 
