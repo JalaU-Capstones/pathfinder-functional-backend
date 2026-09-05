@@ -57,12 +57,23 @@ const validateMapInput = (data) => {
 
 const buildObstacleRecords = (obstacles) => obstacles.map(obs => {
   if (!isValidObstacle(obs)) {
-    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Obstacle must have a valid size and a position object with non-negative integer x and y coordinates.');
+    throw createAppError(ERROR_TYPES.VALIDATION_ERROR, 'Obstacle must have non-negative integers startX and startY. endX and endY default to start values.');
   }
-  return {
-    size: obs.size,
-    ...toDbPosition(obs.position)
-  };
+
+  // New rectangular schema
+  if (obs.startX !== undefined) {
+    const startX = obs.startX;
+    const startY = obs.startY;
+    const endX = obs.endX !== undefined ? obs.endX : startX;
+    const endY = obs.endY !== undefined ? obs.endY : startY;
+    const size = (endX - startX + 1) * (endY - startY + 1);
+    return { startX, startY, endX, endY, size };
+  }
+
+  // Legacy position format — convert internally
+  const startX = obs.position.x;
+  const startY = obs.position.y;
+  return { startX, startY, endX: startX, endY: startY, size: 1 };
 });
 
 const buildWaypointRecords = (waypoints) => waypoints.map(wp => {

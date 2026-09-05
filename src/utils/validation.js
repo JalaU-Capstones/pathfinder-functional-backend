@@ -17,21 +17,36 @@ const isValidEmail = (email) => {
 
 const isValidObstacle = (obstacle) => {
   if (!obstacle || typeof obstacle !== 'object') return false;
-  if (!obstacle.position || typeof obstacle.position !== 'object') return false;
-  
-  const { x, y, endX, endY } = obstacle.position;
-  if (!Number.isInteger(x) || x < 0) return false;
-  if (!Number.isInteger(y) || y < 0) return false;
-  
-  if (endX !== undefined) {
-    if (!Number.isInteger(endX) || endX < x) return false;
+
+  // New rectangular schema: startX and startY are required
+  if (obstacle.startX !== undefined || obstacle.startY !== undefined) {
+    const { startX, startY, endX, endY } = obstacle;
+    if (!Number.isInteger(startX) || startX < 0) return false;
+    if (!Number.isInteger(startY) || startY < 0) return false;
+    if (endX !== undefined) {
+      if (!Number.isInteger(endX) || endX < startX) return false;
+    }
+    if (endY !== undefined) {
+      if (!Number.isInteger(endY) || endY < startY) return false;
+    }
+    return true;
   }
-  
-  if (endY !== undefined) {
-    if (!Number.isInteger(endY) || endY < y) return false;
+
+  // Legacy schema: position object with x and y
+  if (obstacle.position && typeof obstacle.position === 'object') {
+    const { x, y, endX, endY } = obstacle.position;
+    if (!Number.isInteger(x) || x < 0) return false;
+    if (!Number.isInteger(y) || y < 0) return false;
+    if (endX !== undefined) {
+      if (!Number.isInteger(endX) || endX < x) return false;
+    }
+    if (endY !== undefined) {
+      if (!Number.isInteger(endY) || endY < y) return false;
+    }
+    return true;
   }
-  
-  return true;
+
+  return false;
 };
 
 /**

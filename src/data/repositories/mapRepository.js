@@ -10,7 +10,19 @@ const createMapWithRelations = async ({ userId, name, width, height, obstacles, 
     const map = await Map.create({ userId, name, width, height }, { transaction });
 
     if (obstacles && obstacles.length > 0) {
-      const dbObstacles = obstacles.map(obs => ({ ...obs, mapId: map.id }));
+      const dbObstacles = obstacles.map(obs => ({
+        mapId: map.id,
+        userId: obs.userId || null,
+        startX: obs.startX,
+        startY: obs.startY,
+        endX: obs.endX !== undefined ? obs.endX : obs.startX,
+        endY: obs.endY !== undefined ? obs.endY : obs.startY,
+        size: obs.size !== undefined ? obs.size : (
+          (obs.endX !== undefined ? obs.endX : obs.startX) - obs.startX + 1
+        ) * (
+          (obs.endY !== undefined ? obs.endY : obs.startY) - obs.startY + 1
+        ),
+      }));
       await Obstacle.bulkCreate(dbObstacles, { transaction });
     }
 

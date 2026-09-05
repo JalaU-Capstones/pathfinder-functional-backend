@@ -29,10 +29,12 @@ const router = express.Router();
  *               width: 500
  *               height: 500
  *             obstacles:
- *               - position:
- *                   x: 100
- *                   y: 150
- *                 size: 10
+ *               - startX: 100
+ *                 startY: 150
+ *               - startX: 5
+ *                 startY: 10
+ *                 endX: 10
+ *                 endY: 15
  *             waypoints:
  *               - position:
  *                   x: 50

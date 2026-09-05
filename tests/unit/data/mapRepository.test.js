@@ -50,7 +50,7 @@ describe('Map Repository', () => {
     it('should create map with obstacles and waypoints and commit transaction', async () => {
       const data = {
         name: 'Test', width: 10, height: 10,
-        obstacles: [{ positionX: 1, positionY: 1 }],
+        obstacles: [{ startX: 1, startY: 1 }],
         waypoints: [{ positionX: 2, positionY: 2 }]
       };
       
@@ -60,7 +60,7 @@ describe('Map Repository', () => {
       
       expect(sequelize.transaction).toHaveBeenCalled();
       expect(Map.create).toHaveBeenCalledWith({ name: 'Test', width: 10, height: 10 }, { transaction: mockTransaction });
-      expect(Obstacle.bulkCreate).toHaveBeenCalledWith([{ positionX: 1, positionY: 1, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }], { transaction: mockTransaction });
+      expect(Obstacle.bulkCreate).toHaveBeenCalledWith([{ startX: 1, startY: 1, endX: 1, endY: 1, size: 1, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799', userId: null }], { transaction: mockTransaction });
       expect(Waypoint.bulkCreate).toHaveBeenCalledWith([{ positionX: 2, positionY: 2, mapId: '3b47e69f-788d-4b19-b81b-0b4a2fd92799' }], { transaction: mockTransaction });
       expect(mockTransaction.commit).toHaveBeenCalled();
       expect(result).toBe('3b47e69f-788d-4b19-b81b-0b4a2fd92799');

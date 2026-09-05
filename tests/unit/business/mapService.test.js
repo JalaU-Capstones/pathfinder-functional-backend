@@ -97,7 +97,7 @@ describe('Map Service', () => {
         name: 'Test Map',
         width: 100,
         height: 100,
-        obstacles: [{ positionX: 10, positionY: 20, size: 5 }],
+        obstacles: [{ startX: 10, startY: 20, endX: 10, endY: 20, size: 1 }],
         waypoints: [{ positionX: 5, positionY: 5, name: 'Start' }]
       });
 
@@ -113,7 +113,7 @@ describe('Map Service', () => {
       };
       await expect(mapService.createMapService(input)).rejects.toMatchObject({
         type: ERROR_TYPES.VALIDATION_ERROR,
-        message: 'Obstacle must have a valid size and a position object with non-negative integer x and y coordinates.'
+        message: 'Obstacle must have non-negative integers startX and startY. endX and endY default to start values.'
       });
     });
 

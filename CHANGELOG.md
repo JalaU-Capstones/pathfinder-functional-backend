@@ -2,6 +2,13 @@
 
 ## [Unreleased] - 2026-09-04
 ### Fixed
+- Map repository: transform embedded obstacles to rectangular schema before bulkInsert
+- Map service validation: accept startX/startY/endX/endY; recalculate size automatically
+- Removed position field from all obstacle creation paths
+- Updated validation error messages to reference new schema
+- Swagger documentation: updated obstacle format; documented single-cell and rectangle variants
+
+### Fixed
 - Validation service: accept new obstacle schema in all 5 endpoints
 - Added dual-format support: startX/startY/endX/endY OR legacy position {x,y}
 - Obstacle rectangle expansion: full area blocked, not just top-left cell
